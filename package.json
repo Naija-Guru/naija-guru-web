@@ -1,0 +1,28 @@
+{
+  "name": "naija-spell-checker",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
+    "format": "prettier --write ./",
+    "prepare": "husky",
+    "validate": "turbo run validate"
+  },
+  "workspaces": [
+    "website/*",
+    "browser-extensions/*",
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.4.0",
+  "dependencies": {
+    "turbo": "latest"
+  },
+  "devDependencies": {
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
+    "prettier": "3.3.3"
+  }
+}

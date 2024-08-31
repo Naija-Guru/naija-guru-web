@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Naija Spell Checker",
+  "version": "1.0.0",
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "js": ["src/content.tsx"],
+      "matches": ["https://www.notion.so/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "src/assets/images/logo-16.png",
+    "32": "src/assets/images/logo-32.png",
+    "48": "src/assets/images/logo-48.png",
+    "128": "src/assets/images/logo-128.png"
+  },
+  "permissions": ["storage"]
+}
