@@ -12,7 +12,7 @@
     "validate": "turbo run validate"
   },
   "workspaces": [
-    "website/*",
+    "website",
     "browser-extensions/*",
     "packages/*"
   ],
