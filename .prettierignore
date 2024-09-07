@@ -1,8 +1,11 @@
 node_modules
 .next
 .vercel
+.husky
+.yarn
 public
 dist
+.gitignore
 
 # Ignore dependency locks
 pnpm-lock.yaml

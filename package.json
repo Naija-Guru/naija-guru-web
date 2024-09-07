@@ -9,12 +9,11 @@
     "dev": "turbo run dev",
     "format": "prettier --write ./",
     "prepare": "husky",
-    "validate": "turbo run validate"
+    "validate": "lint-staged"
   },
   "workspaces": [
-    "website",
-    "browser-extensions/*",
-    "packages/*"
+    "apps/**",
+    "packages/**"
   ],
   "packageManager": "yarn@4.4.0",
   "dependencies": {
