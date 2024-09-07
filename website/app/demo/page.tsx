@@ -1,7 +1,7 @@
-export default function Home() {
+export default function Demo() {
   return (
     <main className="">
-      Home page
+      Demo page
     </main>
   );
 }
