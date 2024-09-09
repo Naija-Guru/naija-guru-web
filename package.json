@@ -9,7 +9,7 @@
     "dev": "turbo run dev",
     "format": "prettier --write ./",
     "prepare": "husky",
-    "validate": "lint-staged"
+    "validate": "turbo run validate"
   },
   "workspaces": [
     "apps/**",
@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "husky": "^9.1.5",
-    "lint-staged": "^15.2.9",
     "prettier": "3.3.3"
   }
 }
