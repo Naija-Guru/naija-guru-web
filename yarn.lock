@@ -3337,7 +3337,6 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.1.0-rc.0"
     eslint-plugin-react-refresh: "npm:^0.4.9"
     globals: "npm:^15.9.0"
-    lint-staged: "npm:^15.2.10"
     postcss: "npm:^8.4.41"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -6091,6 +6090,7 @@ __metadata:
   resolution: "naija-spell-checker@workspace:."
   dependencies:
     husky: "npm:^9.1.5"
+    lint-staged: "npm:^15.2.10"
     prettier: "npm:3.3.3"
     turbo: "npm:latest"
   languageName: unknown
@@ -8298,7 +8298,6 @@ __metadata:
     clsx: "npm:^2.1.1"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.7"
-    lint-staged: "npm:^15.2.10"
     lucide-react: "npm:^0.439.0"
     next: "npm:14.2.7"
     postcss: "npm:^8"
