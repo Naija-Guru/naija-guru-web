@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={cn(poppins.variable, cabinet_grotesk.variable)}>
         <div className="flex flex-col min-h-screen">
           <Header />
-          {children}
+          <div className="flex-1">{children}</div>
           <Footer />
         </div>
       </body>
