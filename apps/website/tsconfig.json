@@ -19,10 +19,13 @@
       }
     ],
     "paths": {
+      "@/api/*": ["./api/*"],
       "@/components/*": ["./components/*"],
+      "@/constants/*": ["./constants/*"],
       "@/images/*": ["./assets/images/*"],
-      "@/styles/*": ["./styles/*"],
-      "@/lib/*": ["./lib/*"]
+      "@/lib/*": ["./lib/*"],
+      "@/models/*": ["./models/*"],
+      "@/styles/*": ["./styles/*"]
     }
   },
   "include": [
