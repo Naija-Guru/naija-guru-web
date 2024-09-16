@@ -13,18 +13,6 @@ import {
 import { TAlert } from '@/models/alerts';
 
 export default function Demo() {
-  // let ro = new ResizeObserver((entries) => {
-  //   for (let entry of entries) {
-  //     let cs = window.getComputedStyle(entry.target);
-  //     console.log('watching element:', entry.target);
-  //     console.log(entry.contentRect.top, ' is ', cs.paddingTop);
-  //     console.log(entry.contentRect.left, ' is ', cs.paddingLeft);
-  //     console.log(entry.borderBoxSize[0].inlineSize, ' is ', cs.width);
-  //     console.log(entry.borderBoxSize[0].blockSize, ' is ', cs.height);
-  //     if (entry.target.handleResize) entry.target.handleResize(entry);
-  //   }
-  // });
-
   const [highlightMatches, setHighlightMatches] = useState<
     Record<string, TMatch[]>
   >({});
