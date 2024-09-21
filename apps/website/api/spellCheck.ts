@@ -8,17 +8,13 @@ const TSpellCheckResponse = z.object({
 type TSpellCheckResponse = z.infer<typeof TSpellCheckResponse>;
 
 export const getSpellCheck = async (
-  text: string,
-  signal?: AbortSignal
+  text: string
 ): Promise<TSpellCheckResponse> => {
   const res = await fetch(
     `https://spellchecker-1.nl.naija.guru/v2/check?${new URLSearchParams({
       text,
       language: 'pcm-NG',
-    }).toString()}`,
-    {
-      signal,
-    }
+    }).toString()}`
   );
 
   const data = await res.json();
