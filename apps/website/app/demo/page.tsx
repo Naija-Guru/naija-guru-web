@@ -2,11 +2,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import { computePosition } from '@floating-ui/dom';
-import { useFloating } from '@floating-ui/react';
 
 import { getSpellCheck } from '@/api/spellCheck';
-// import { Popover } from '@/components/ui/popover';
+import { Popover, VirtualAnchor } from '@/components/ui/popover';
 import { asyncWrapper, debounce } from '@/lib/utils';
 import { TMatch } from '@/models/match';
 import {
@@ -14,21 +12,26 @@ import {
   HIGHLIGHT_DATA_ATTRIBUTE_ID,
 } from '@/constants/index';
 import { TAlert } from '@/models/alerts';
+import { Button } from '@/components/ui/button';
 
 export default function Demo() {
-  const popoverRef = useRef<HTMLDivElement | null>(null);
   const highlightMatchesRef = useRef<Record<string, TMatch[]>>({});
   const [highlightMatches, setHighlightMatches] = useState<
     Record<string, TMatch[]>
   >({});
+  const [selectedSuggestion, setSelectedSuggestion] = useState<{
+    elementId: string;
+    suggestion: TMatch;
+  } | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const { floatingStyles } = useFloating({
-    open: isPopoverOpen,
-    onOpenChange: setIsPopoverOpen,
-    elements: {
-      floating: popoverRef.current,
-    },
-  });
+  const [anchorRef, setAnchorRef] = useState<VirtualAnchor | null>(null);
+
+  const toggleSuggestionPopover = (open: boolean) => {
+    if (!open) {
+      setSelectedSuggestion(null);
+    }
+    setIsPopoverOpen(open);
+  };
 
   const highlightElementMatches = (elementId: string) => {
     const target = document.querySelector<HTMLDivElement>(
@@ -104,51 +107,74 @@ export default function Demo() {
     });
   };
 
-  const check = useCallback(async (e: Event) => {
-    // @ts-ignore
-    if (e?.target?.tagName === 'DIV' && e.target?.isContentEditable) {
-      const target = e.target as HTMLDivElement;
-      if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
-        target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, uuidv4());
-      }
-
-      const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
-
-      if (!elementId) return;
-
-      const textNode = Array.from(target.childNodes).filter(
-        (n) => n.nodeType === n.TEXT_NODE
-      )[0];
-
-      const text = textNode?.textContent || '';
-
-      const [data] = await asyncWrapper(getSpellCheck(text));
-
-      if (!data) return;
-
-      const matches = data.matches;
-
-      highlightMatchesRef.current = {
-        ...highlightMatchesRef.current,
-        [elementId]: matches,
-      };
-      setHighlightMatches(highlightMatchesRef.current);
-      highlightElementMatches(elementId);
+  const checkContentEditableElement = async (target: HTMLDivElement) => {
+    if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
+      target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, uuidv4());
     }
-  }, []);
+
+    const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+
+    if (!elementId) return;
+
+    const textNode = Array.from(target.childNodes).filter(
+      (n) => n.nodeType === n.TEXT_NODE
+    )[0];
+
+    const text = textNode?.textContent?.trim() || '';
+
+    if (text === '') return;
+
+    const [data] = await asyncWrapper(getSpellCheck(text));
+
+    if (!data) return;
+
+    const matches = data.matches;
+
+    highlightMatchesRef.current = {
+      ...highlightMatchesRef.current,
+      [elementId]: matches,
+    };
+    setHighlightMatches(highlightMatchesRef.current);
+    highlightElementMatches(elementId);
+  };
+
+  const applySuggestion = (elementId: string, suggestion: TMatch) => {
+    toggleSuggestionPopover(false);
+
+    const target = document.querySelector<HTMLDivElement>(
+      `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
+    );
+
+    if (!target) return;
+
+    const textContent = target.textContent || '';
+
+    const newTextContent =
+      textContent.slice(0, suggestion.offset) +
+      suggestion.replacements[0].value +
+      textContent.slice(suggestion.offset + suggestion.length);
+
+    target.textContent = newTextContent;
+
+    checkContentEditableElement(target);
+  };
 
   useEffect(() => {
-    const debouncedCheck = debounce(check, 1000);
-    document.addEventListener('input', (e) => {
-      debouncedCheck(e);
-    });
+    const check = (e: Event) => {
+      // @ts-ignore
+      if (e.target?.tagName === 'DIV' && e.target?.isContentEditable) {
+        const target = e.target as HTMLDivElement;
+        checkContentEditableElement(target);
+      }
+    };
+
+    const debouncedCheck = debounce(check, 500);
+    document.addEventListener('input', debouncedCheck);
 
     return () => {
-      document.removeEventListener('input', (e) => {
-        debouncedCheck(e);
-      });
+      document.removeEventListener('input', debouncedCheck);
     };
-  }, [check]);
+  }, []);
 
   useEffect(() => {
     const updateHighlights = () => {
@@ -158,8 +184,6 @@ export default function Demo() {
     };
 
     const showPopover = (e: MouseEvent) => {
-      if (!popoverRef.current) return;
-
       const target = e.target as HTMLElement;
 
       if (!target) return;
@@ -177,7 +201,7 @@ export default function Demo() {
           (n) => n.nodeType === n.TEXT_NODE
         )[0];
 
-        let rect: DOMRect | undefined;
+        let rect: DOMRect | null = null;
 
         const match = matches.find((match) => {
           const range = document.createRange();
@@ -193,29 +217,28 @@ export default function Demo() {
           );
         });
 
-        if (!match || !popoverRef.current || !rect) return;
+        if (!match || rect === null) return;
 
-        const virtualEl = {
+        setSelectedSuggestion({
+          elementId,
+          suggestion: match,
+        });
+
+        const virtualEl: VirtualAnchor = {
           getBoundingClientRect() {
             return {
-              x: rect.x,
-              y: rect.y,
-              top: rect.top,
-              left: rect.left,
-              bottom: rect.bottom,
-              right: rect.right,
-              width: rect.width,
-              height: rect.height,
+              x: rect?.x || 0,
+              y: rect?.y || 0,
+              top: rect?.top || 0,
+              left: rect?.left || 0,
+              bottom: rect?.bottom || 0,
+              right: rect?.right || 0,
+              width: rect?.width || 0,
+              height: rect?.height || 0,
             };
           },
         };
-
-        computePosition(virtualEl, popoverRef.current).then(({ x, y }) => {
-          Object.assign(popoverRef.current.style, {
-            left: `${x}px`,
-            top: `${y}px`,
-          });
-        });
+        setAnchorRef(virtualEl);
         setIsPopoverOpen(true);
       }
     };
@@ -227,7 +250,7 @@ export default function Demo() {
     return () => {
       window.removeEventListener('scroll', updateHighlights);
       window.removeEventListener('resize', updateHighlights);
-      document.addEventListener('click', showPopover);
+      document.removeEventListener('click', showPopover);
     };
   }, [highlightMatches]);
 
@@ -272,9 +295,33 @@ export default function Demo() {
           </div>
         </div>
       </div>
-      <div ref={popoverRef} style={floatingStyles}>
-        Hello
-      </div>
+      <Popover
+        open={isPopoverOpen && Boolean(selectedSuggestion)}
+        toggleOpen={toggleSuggestionPopover}
+        virtualAnchor={anchorRef}
+      >
+        {selectedSuggestion && (
+          <>
+            <h4 className="mb-2">Suggestion</h4>
+            <p className="text-primary font-bold text-xl mb-2">
+              {selectedSuggestion.suggestion.replacements[0].value}
+            </p>
+            <p className="text-xs mb-4">
+              {selectedSuggestion.suggestion.message}
+            </p>
+            <Button
+              onClick={() =>
+                applySuggestion(
+                  selectedSuggestion.elementId,
+                  selectedSuggestion.suggestion
+                )
+              }
+            >
+              Accept Suggestion
+            </Button>
+          </>
+        )}
+      </Popover>
     </>
   );
 }
