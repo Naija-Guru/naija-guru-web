@@ -1,11 +1,11 @@
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getSpellCheck } from '@/api/spellCheck';
 import { Popover, VirtualAnchor } from '@/components/ui/popover';
-import { asyncWrapper, debounce } from '@/lib/utils';
+import { asyncWrapper, cn, debounce } from '@/lib/utils';
 import { TMatch } from '@/models/match';
 import {
   ELEMENT_DATA_ATTRIBUTE_ID,
@@ -13,10 +13,13 @@ import {
 } from '@/constants/index';
 import { TAlert } from '@/models/alerts';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function Demo() {
-  const highlightMatchesRef = useRef<Record<string, TMatch[]>>({});
-  const [highlightMatches, setHighlightMatches] = useState<
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const highlightSuggestionsRef = useRef<Record<string, TMatch[]>>({});
+  const [highlightSuggestions, setHighlightSuggestions] = useState<
     Record<string, TMatch[]>
   >({});
   const [selectedSuggestion, setSelectedSuggestion] = useState<{
@@ -44,7 +47,7 @@ export default function Demo() {
       (n) => n.nodeType === n.TEXT_NODE
     )[0];
 
-    const matches = highlightMatchesRef.current[elementId];
+    const matches = highlightSuggestionsRef.current[elementId];
 
     if (!matches) return;
 
@@ -73,7 +76,7 @@ export default function Demo() {
       highlights = document.createElement('canvas');
       highlights.setAttribute(HIGHLIGHT_DATA_ATTRIBUTE_ID, elementId);
 
-      target.insertAdjacentElement('beforebegin', highlights);
+      target.insertAdjacentElement('afterend', highlights);
     }
 
     const ctx = highlights.getContext('2d');
@@ -90,17 +93,16 @@ export default function Demo() {
     highlights.width = targetElRect.width; // For canvas drawing coordinates
     highlights.height = targetElRect.height; // For canvas drawing coordinates
 
-    highlights.style.top = target.offsetTop + 'px';
-    highlights.style.left = target.offsetLeft + 'px';
-    highlights.style.zIndex = '1';
+    highlights.style.top = targetElRect.y + 'px';
+    highlights.style.left = targetElRect.x + 'px';
     highlights.style.backgroundColor = 'transparent';
     highlights.style.pointerEvents = 'none';
 
     alerts.forEach((alert) => {
       ctx.fillStyle = 'red';
       ctx.fillRect(
-        alert.left - target.offsetLeft,
-        alert.top + alert.height - 1 - target.offsetTop,
+        alert.left - targetElRect.x,
+        alert.top + alert.height - 1 - targetElRect.y,
         alert.width,
         3
       );
@@ -124,17 +126,18 @@ export default function Demo() {
 
     if (text === '') return;
 
+    setLoadingSuggestions(true);
     const [data] = await asyncWrapper(getSpellCheck(text));
-
+    setLoadingSuggestions(false);
     if (!data) return;
 
     const matches = data.matches;
 
-    highlightMatchesRef.current = {
-      ...highlightMatchesRef.current,
+    highlightSuggestionsRef.current = {
+      ...highlightSuggestionsRef.current,
       [elementId]: matches,
     };
-    setHighlightMatches(highlightMatchesRef.current);
+    setHighlightSuggestions(highlightSuggestionsRef.current);
     highlightElementMatches(elementId);
   };
 
@@ -155,8 +158,9 @@ export default function Demo() {
       textContent.slice(suggestion.offset + suggestion.length);
 
     target.textContent = newTextContent;
-
-    checkContentEditableElement(target);
+    target.dispatchEvent(
+      new Event('input', { bubbles: true, cancelable: true })
+    );
   };
 
   useEffect(() => {
@@ -178,7 +182,7 @@ export default function Demo() {
 
   useEffect(() => {
     const updateHighlights = () => {
-      Object.keys(highlightMatches).forEach((elementId) => {
+      Object.keys(highlightSuggestions).forEach((elementId) => {
         highlightElementMatches(elementId);
       });
     };
@@ -193,7 +197,7 @@ export default function Demo() {
 
         if (!elementId) return;
 
-        const matches = highlightMatches[elementId];
+        const matches = highlightSuggestions[elementId];
 
         if (!matches) return;
 
@@ -252,13 +256,15 @@ export default function Demo() {
       window.removeEventListener('resize', updateHighlights);
       document.removeEventListener('click', showPopover);
     };
-  }, [highlightMatches]);
+  }, [highlightSuggestions]);
 
   return (
     <>
       <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Spell checker demo</h1>
+        <div className="max-w-8xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">
+            Free Online Pidgin English Checker
+          </h1>
           <div className="flex flex-col lg:flex-row gap-6">
             <div
               className="w-full h-[calc(100vh-200px)] p-4 bg-white overflow-auto text-xl"
@@ -276,21 +282,56 @@ export default function Demo() {
               or fast you dey go, as long as you no sidon dey look, you go reach
               where you wan reach.
             </div>
-            <div className="lg:w-1/3 lg:static fixed bottom-0 left-0 right-0 bg-white">
-              <div className="p-4">
-                <h2 className="text-xl font-semibold mb-4">Errors</h2>
-                {Object.entries(highlightMatches).map(([id, matches]) =>
-                  matches.map((match) => (
-                    <li
-                      key={id + match.offset}
-                      className="flex items-start gap-2 text-red-600"
-                    >
-                      <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                      <span>{match.message}</span>
-                    </li>
-                  ))
-                )}
-              </div>
+            <div
+              className={cn(
+                'flex',
+                'flex-col',
+                'lg:w-1/3',
+                'lg:static',
+                'fixed',
+                'bottom-0',
+                'left-0',
+                'right-0',
+                'bg-white',
+                'h-[300px]',
+                'lg:h-[calc(100vh-200px)]',
+                'p-4'
+              )}
+            >
+              <h2 className="text-xl font-semibold mb-4">Review Suggestions</h2>
+              {loadingSuggestions ? (
+                <Spinner className="mx-auto h-20 w-20" />
+              ) : (
+                <ul className="overflow-y-scroll h-7/8">
+                  {Object.entries(highlightSuggestions).map(
+                    ([elementId, suggestions]) =>
+                      suggestions.map((suggestion) => (
+                        <li key={elementId + suggestion.offset}>
+                          <Alert
+                            className="my-4 cursor-pointer"
+                            variant="destructive"
+                          >
+                            <AlertCircle className="h-5 w-" />
+                            <AlertTitle className="font-normal">
+                              {suggestion.message}
+                            </AlertTitle>
+                            <AlertDescription className="font-bold text-xl">
+                              <p>{suggestion.replacements[0].value}</p>
+                              <Button
+                                className="my-4"
+                                onClick={() =>
+                                  applySuggestion(elementId, suggestion)
+                                }
+                              >
+                                Accept Suggestion
+                              </Button>
+                            </AlertDescription>
+                          </Alert>
+                        </li>
+                      ))
+                  )}
+                </ul>
+              )}
             </div>
           </div>
         </div>
