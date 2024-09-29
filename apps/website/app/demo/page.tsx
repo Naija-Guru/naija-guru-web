@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import Editor from 'react-simple-wysiwyg';
 
 import { getSpellCheck } from '@/api/spellCheck';
 import { Popover, VirtualAnchor } from '@/components/ui/popover';
@@ -16,6 +17,52 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Spinner } from '@/components/ui/spinner';
 
+const findTextNodeIndex = (splits: number[], offset: number) => {
+  let left = 0;
+  let right = splits.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const guess = splits[mid];
+    if (guess === offset) {
+      return mid;
+    }
+
+    if (offset < guess && offset > splits[mid - 1]) {
+      return mid;
+    }
+
+    if (guess < offset) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+
+  return left;
+};
+
+const getTextNodes = (el: HTMLElement) => {
+  const nodes = [];
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    nodes.push(walker.currentNode);
+  }
+
+  return nodes;
+};
+
+const getTextNodesSplits = (textNodes: Node[]) => {
+  const splits = textNodes.reduce((acc, node) => {
+    if (acc.length === 0) {
+      return [node.textContent ? node.textContent.length - 1 : 0];
+    }
+    return [...acc, acc[acc.length - 1] + (node.textContent?.length || 0)];
+  }, [] as number[]);
+
+  return splits;
+};
+
 export default function Demo() {
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const highlightSuggestionsRef = useRef<Record<string, TMatch[]>>({});
@@ -28,6 +75,7 @@ export default function Demo() {
   } | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [anchorRef, setAnchorRef] = useState<VirtualAnchor | null>(null);
+  const [editorContent, setEditorContent] = useState('');
 
   const toggleSuggestionPopover = (open: boolean) => {
     if (!open) {
@@ -36,27 +84,41 @@ export default function Demo() {
     setIsPopoverOpen(open);
   };
 
-  const highlightElementMatches = (elementId: string) => {
+  const highlightElementSuggestions = (elementId: string) => {
     const target = document.querySelector<HTMLDivElement>(
       `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
     );
 
     if (!target) return;
 
-    const textNode = Array.from(target.childNodes).filter(
-      (n) => n.nodeType === n.TEXT_NODE
-    )[0];
+    const suggestions = highlightSuggestionsRef.current[elementId];
 
-    const matches = highlightSuggestionsRef.current[elementId];
-
-    if (!matches) return;
+    if (!suggestions) return;
 
     const alerts: TAlert[] = [];
 
-    matches.forEach((match) => {
+    const textNodes = getTextNodes(target);
+
+    const splits = getTextNodesSplits(textNodes);
+
+    suggestions.forEach((suggestion) => {
       const range = document.createRange();
-      range.setStart(textNode, match.offset);
-      range.setEnd(textNode, match.offset + match.length);
+      const textNodeIndex = findTextNodeIndex(
+        splits,
+        suggestion.offset + suggestion.length - 1
+      );
+
+      const textNode = textNodes[textNodeIndex];
+
+      console.log({ textNode, textNodeIndex });
+
+      const offset =
+        textNodeIndex === 0
+          ? suggestion.offset
+          : suggestion.offset - splits[textNodeIndex - 1] - 1;
+
+      range.setStart(textNode, offset);
+      range.setEnd(textNode, offset + suggestion.length);
       const alert = range.getClientRects()[0];
 
       alerts.push({
@@ -109,37 +171,36 @@ export default function Demo() {
     });
   };
 
-  const checkContentEditableElement = async (target: HTMLDivElement) => {
-    if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
-      target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, uuidv4());
-    }
+  const checkContentEditableElement = useCallback(
+    async (target: HTMLDivElement) => {
+      if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
+        target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, uuidv4());
+      }
 
-    const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+      const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
 
-    if (!elementId) return;
+      if (!elementId) return;
 
-    const textNode = Array.from(target.childNodes).filter(
-      (n) => n.nodeType === n.TEXT_NODE
-    )[0];
+      const text = target.textContent?.trim() || '';
 
-    const text = textNode?.textContent?.trim() || '';
+      if (text === '') return;
 
-    if (text === '') return;
+      setLoadingSuggestions(true);
+      const [data] = await asyncWrapper(getSpellCheck(text));
+      setLoadingSuggestions(false);
+      if (!data) return;
 
-    setLoadingSuggestions(true);
-    const [data] = await asyncWrapper(getSpellCheck(text));
-    setLoadingSuggestions(false);
-    if (!data) return;
+      const suggestions = data.matches;
 
-    const matches = data.matches;
-
-    highlightSuggestionsRef.current = {
-      ...highlightSuggestionsRef.current,
-      [elementId]: matches,
-    };
-    setHighlightSuggestions(highlightSuggestionsRef.current);
-    highlightElementMatches(elementId);
-  };
+      highlightSuggestionsRef.current = {
+        ...highlightSuggestionsRef.current,
+        [elementId]: suggestions,
+      };
+      setHighlightSuggestions(highlightSuggestionsRef.current);
+      highlightElementSuggestions(elementId);
+    },
+    []
+  );
 
   const applySuggestion = (elementId: string, suggestion: TMatch) => {
     toggleSuggestionPopover(false);
@@ -178,73 +239,100 @@ export default function Demo() {
     return () => {
       document.removeEventListener('input', debouncedCheck);
     };
-  }, []);
+  }, [checkContentEditableElement]);
 
   useEffect(() => {
     const updateHighlights = () => {
       Object.keys(highlightSuggestions).forEach((elementId) => {
-        highlightElementMatches(elementId);
+        highlightElementSuggestions(elementId);
       });
     };
 
     const showPopover = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      let target: HTMLDivElement | null = null;
+
+      const elementIdS = Object.keys(highlightSuggestions);
+
+      let index = 0;
+
+      while (index < elementIdS.length) {
+        if (
+          // @ts-ignore
+          e.target?.matches(
+            `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"], div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"] *`
+          )
+        ) {
+          target = document.querySelector<HTMLDivElement>(
+            `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"]`
+          );
+          break;
+        }
+      }
 
       if (!target) return;
 
-      if (target.tagName === 'DIV' && target.isContentEditable) {
-        const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+      const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
 
-        if (!elementId) return;
+      if (!elementId) return;
 
-        const matches = highlightSuggestions[elementId];
+      const suggestions = highlightSuggestions[elementId];
 
-        if (!matches) return;
+      if (!suggestions) return;
 
-        const textNode = Array.from(target.childNodes).filter(
-          (n) => n.nodeType === n.TEXT_NODE
-        )[0];
+      const textNodes = getTextNodes(target);
 
-        let rect: DOMRect | null = null;
+      const splits = getTextNodesSplits(textNodes);
 
-        const match = matches.find((match) => {
-          const range = document.createRange();
-          range.setStart(textNode, match.offset);
-          range.setEnd(textNode, match.offset + match.length);
-          rect = range.getClientRects()[0];
+      let rect: DOMRect | null = null;
 
-          return (
-            rect.top <= e.clientY &&
-            rect.bottom >= e.clientY &&
-            rect.left <= e.clientX &&
-            rect.right >= e.clientX
-          );
-        });
+      const suggestion = suggestions.find((suggestion) => {
+        const range = document.createRange();
+        const textNodeIndex = findTextNodeIndex(
+          splits,
+          suggestion.offset + suggestion.length - 1
+        );
 
-        if (!match || rect === null) return;
+        const textNode = textNodes[textNodeIndex];
+        const offset =
+          textNodeIndex === 0
+            ? suggestion.offset
+            : suggestion.offset - splits[textNodeIndex - 1] - 1;
 
-        setSelectedSuggestion({
-          elementId,
-          suggestion: match,
-        });
+        range.setStart(textNode, offset);
+        range.setEnd(textNode, offset + suggestion.length);
+        rect = range.getClientRects()[0];
 
-        const virtualEl: VirtualAnchor = {
-          getBoundingClientRect() {
-            return {
-              x: rect?.x || 0,
-              y: rect?.y || 0,
-              top: rect?.top || 0,
-              left: rect?.left || 0,
-              bottom: rect?.bottom || 0,
-              right: rect?.right || 0,
-              width: rect?.width || 0,
-              height: rect?.height || 0,
-            };
-          },
-        };
-        setAnchorRef(virtualEl);
-        setIsPopoverOpen(true);
-      }
+        return (
+          rect.top <= e.clientY &&
+          rect.bottom >= e.clientY &&
+          rect.left <= e.clientX &&
+          rect.right >= e.clientX
+        );
+      });
+
+      if (!suggestion || rect === null) return;
+
+      setSelectedSuggestion({
+        elementId,
+        suggestion,
+      });
+
+      const virtualEl: VirtualAnchor = {
+        getBoundingClientRect() {
+          return {
+            x: rect?.x || 0,
+            y: rect?.y || 0,
+            top: rect?.top || 0,
+            left: rect?.left || 0,
+            bottom: rect?.bottom || 0,
+            right: rect?.right || 0,
+            width: rect?.width || 0,
+            height: rect?.height || 0,
+          };
+        },
+      };
+      setAnchorRef(virtualEl);
+      setIsPopoverOpen(true);
     };
 
     window.addEventListener('scroll', updateHighlights);
@@ -266,22 +354,11 @@ export default function Demo() {
             Free Online Pidgin English Checker
           </h1>
           <div className="flex flex-col lg:flex-row gap-6">
-            <div
+            <Editor
               className="w-full h-[calc(100vh-200px)] p-4 bg-white overflow-auto text-xl"
-              contentEditable
-              suppressContentEditableWarning
-            >
-              Make I tell you, life na journey wey no get one road. Sometimes,
-              you go waka for smooth road, everything go dey jolly, but other
-              times, e fit be say na wahala full the road. Na why dem talk say,
-              no matter how e be, you gatz hold strong, no give up. As you dey
-              hustle, you go see say no be every day go soft, but na the ginger
-              wey you carry for mind go make the wahala no too heavy. Even if
-              rain fall or sun shine, you gatz waka your waka because na
-              persistence dey bring beta result. Last last, e no matter how slow
-              or fast you dey go, as long as you no sidon dey look, you go reach
-              where you wan reach.
-            </div>
+              value={editorContent}
+              onChange={(e) => setEditorContent(e.target.value)}
+            />
             <div
               className={cn(
                 'flex',
@@ -303,6 +380,9 @@ export default function Demo() {
                 <Spinner className="mx-auto h-20 w-20" />
               ) : (
                 <ul className="overflow-y-scroll h-7/8">
+                  {Object.entries(highlightSuggestions).length < 1 && (
+                    <h1>You are all good here!</h1>
+                  )}
                   {Object.entries(highlightSuggestions).map(
                     ([elementId, suggestions]) =>
                       suggestions.map((suggestion) => (
