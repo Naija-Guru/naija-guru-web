@@ -7205,6 +7205,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-simple-wysiwyg@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "react-simple-wysiwyg@npm:3.1.2"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 10c0/b6e5624cd6bff2af1d00077f02295c7c15d58083383fa04688f7d26d35ee9e40351598280f0cc1b42c5993be884fa057a5d6c14c237679fb43e1275f53d44a59
+  languageName: node
+  linkType: hard
+
 "react-style-singleton@npm:^2.2.1":
   version: 2.2.1
   resolution: "react-style-singleton@npm:2.2.1"
@@ -8821,6 +8830,7 @@ __metadata:
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
+    react-simple-wysiwyg: "npm:^3.1.2"
     sass: "npm:^1.77.8"
     tailwind-merge: "npm:^2.5.2"
     tailwindcss: "npm:^3.4.1"
