@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const TMatch = z.object({
+export const TSuggestion = z.object({
   message: z.string(),
   replacements: z.array(
     z.object({
@@ -28,4 +28,4 @@ export const TMatch = z.object({
   }),
 });
 
-export type TMatch = z.infer<typeof TMatch>;
+export type TSuggestion = z.infer<typeof TSuggestion>;
