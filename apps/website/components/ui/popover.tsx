@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactNode, FC } from 'react';
-import { shift, flip, hide } from '@floating-ui/dom';
+import { ReactNode, FC, useEffect } from 'react';
+import { shift, flip, hide, VirtualElement } from '@floating-ui/dom';
 import {
   useFloating,
   useDismiss,
@@ -10,15 +10,11 @@ import {
 } from '@floating-ui/react';
 import { cn } from '@/lib/utils';
 
-export type VirtualAnchor = {
-  getBoundingClientRect(): Omit<DOMRect, 'toJSON'>;
-};
-
 export interface PopoverProps {
   children: ReactNode;
   open: boolean;
   toggleOpen: (open: boolean) => void;
-  virtualAnchor: VirtualAnchor | null;
+  virtualAnchor: VirtualElement | null;
 }
 
 const Popover: FC<PopoverProps> = ({
@@ -30,9 +26,6 @@ const Popover: FC<PopoverProps> = ({
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: toggleOpen,
-    elements: {
-      reference: virtualAnchor as Element,
-    },
     middleware: [
       shift(),
       flip(),
@@ -48,6 +41,12 @@ const Popover: FC<PopoverProps> = ({
   const dismiss = useDismiss(context);
 
   const { getFloatingProps } = useInteractions([dismiss]);
+
+  useEffect(() => {
+    if (virtualAnchor) {
+      refs.setPositionReference(virtualAnchor);
+    }
+  }, [refs, virtualAnchor]);
 
   return open ? (
     <FloatingPortal id="naija-spellchecker-popup-root">

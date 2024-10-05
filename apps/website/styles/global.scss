@@ -81,3 +81,9 @@ h6 {
     @apply bg-background text-foreground;
   }
 }
+
+.rsw-ce {
+  &:focus {
+    outline: none !important;
+  }
+}

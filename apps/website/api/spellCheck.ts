@@ -1,8 +1,8 @@
-import { TMatch } from 'models/match';
+import { TSuggestion } from 'models/suggestion';
 import { z } from 'zod';
 
 const TSpellCheckResponse = z.object({
-  matches: z.array(TMatch),
+  matches: z.array(TSuggestion),
 });
 
 type TSpellCheckResponse = z.infer<typeof TSpellCheckResponse>;
