@@ -1,0 +1,22 @@
+---
+name: 🔧 Improvement/Refactor Request
+about: Request for code or documentation improvement
+title: "[Improvement] "
+labels: refactor, improvement
+assignees: ''
+
+---
+
+## What Needs to Be Improved?
+Describe what part of the code or documentation could be improved.
+
+## How Will This Improve the Codebase?
+Explain why this improvement is needed and how it will enhance the project.
+
+## Affected Component
+Which part of the monorepo does this request affect?
+- [ ] Grammar Checker Demo Website
+- [ ] Chrome Extension
+
+## Additional Notes
+Anything else that’s relevant to the improvement.
