@@ -1,5 +1,3 @@
-# Pull Request Template
-
 ## Description
 Please provide a clear and concise description of the changes made in this pull request. Include a summary of what this PR is trying to achieve.
 
