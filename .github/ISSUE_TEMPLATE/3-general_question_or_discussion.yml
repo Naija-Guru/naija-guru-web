@@ -1,0 +1,18 @@
+---
+name: 💬 Question/Discussion
+about: For general questions or discussions about the project
+title: "[Question] "
+labels: question
+assignees: ''
+
+---
+
+## What’s your question or discussion topic?
+
+## Context
+Please provide some context or background to your question. If it’s about how something works, what have you tried so far?
+
+## Affected Component
+Which part of the monorepo is relevant to your question?
+- [ ] Grammar Checker Demo Website
+- [ ] Chrome Extension
