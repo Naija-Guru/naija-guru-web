@@ -1,21 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { AlertCircle, File, FileCheck } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  BtnBold,
-  BtnBulletList,
-  BtnClearFormatting,
-  BtnItalic,
-  BtnNumberedList,
-  BtnRedo,
-  BtnStrikeThrough,
-  BtnUnderline,
-  BtnUndo,
-  Editor,
-  EditorProvider,
-  Separator,
-  Toolbar,
-} from 'react-simple-wysiwyg';
+import { VirtualElement } from '@floating-ui/dom';
 
 import { getSpellCheck } from '@/api/spellCheck';
 import { Popover } from '@/components/ui/popover';
@@ -29,8 +15,8 @@ import {
 import { TAlert } from '@/models/alerts';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { VirtualElement } from '@floating-ui/dom';
-import { useElementRemoved } from 'hooks/useElementRemoved';
+import { useElementRemoved } from '@/hooks/useElementRemoved';
+import { Editor } from '@/components/features/editor';
 import {
   Carousel,
   CarouselContent,
@@ -38,93 +24,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-
-const findTextNodeIndex = (endIndexes: number[], offset: number) => {
-  let left = 0;
-  let right = endIndexes.length - 1;
-
-  while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
-    const guess = endIndexes[mid];
-    if (guess === offset) {
-      return mid;
-    }
-
-    if (offset < guess && offset > endIndexes[mid - 1]) {
-      return mid;
-    }
-
-    if (guess < offset) {
-      left = mid + 1;
-    } else {
-      right = mid - 1;
-    }
-  }
-
-  return left;
-};
-
-const getTextNodes = (el: HTMLElement) => {
-  const nodes = [];
-  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-  while (walker.nextNode()) {
-    nodes.push(walker.currentNode);
-  }
-
-  return nodes;
-};
-
-const getTextNodesEndIndexes = (textNodes: Node[]) => {
-  const endIndexes = textNodes.reduce((acc, node) => {
-    if (acc.length === 0) {
-      return [node.textContent ? node.textContent.length - 1 : 0];
-    }
-    return [...acc, acc[acc.length - 1] + (node.textContent?.length || 0)];
-  }, [] as number[]);
-
-  return endIndexes;
-};
-
-function isPointInVisiblePart(x: number, y: number, element: HTMLElement) {
-  // Get the bounding rectangle of the element
-  const rect = element.getBoundingClientRect();
-
-  // Check if the point is within the element's bounding rectangle
-  const isWithinElement =
-    x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-
-  if (!isWithinElement) {
-    // If the point is not within the element's bounding box, it's not in the visible part
-    return false;
-  }
-
-  // Check if the element has an ancestor that clips overflow (like a scrolling container)
-  let parent = element.parentElement;
-
-  while (parent) {
-    const parentRect = parent.getBoundingClientRect();
-    const overflow = window.getComputedStyle(parent).overflow;
-
-    if (overflow === 'hidden' || overflow === 'scroll' || overflow === 'auto') {
-      // Check if the point is within the visible area of this parent
-      const isWithinParent =
-        x >= parentRect.left &&
-        x <= parentRect.right &&
-        y >= parentRect.top &&
-        y <= parentRect.bottom;
-
-      if (!isWithinParent) {
-        // If the point lies outside the visible area of this parent, it's not in the visible part
-        return false;
-      }
-    }
-
-    parent = parent.parentElement;
-  }
-
-  // If no clipping ancestors restrict the point, it's in a visible part
-  return true;
-}
+import {
+  isPointInVisiblePartOfElement,
+  findTextNodeIndexFromListOfTextNodeEndIndexes,
+  getTextNodes,
+  getTextNodesEndIndexes,
+} from '@/lib/dom';
+import { useObserveContentEditableElements } from '@/hooks/useObserveContentEditableElements';
+import { useDomLayoutChange } from '@/hooks/useDomLayoutChange';
+import { useClickEventDelegation } from '@/hooks/useClickEventDelegation';
 
 export default function Demo() {
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -188,7 +96,7 @@ export default function Demo() {
 
     suggestions.forEach((suggestion) => {
       const range = document.createRange();
-      const textNodeIndex = findTextNodeIndex(
+      const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
         endIndexes,
         suggestion.offset + suggestion.length - 1
       );
@@ -226,7 +134,7 @@ export default function Demo() {
     highlights.style.pointerEvents = 'none';
 
     alerts.forEach((alert) => {
-      if (ctx && isPointInVisiblePart(alert.left, alert.top, target)) {
+      if (ctx && isPointInVisiblePartOfElement(alert.left, alert.top, target)) {
         ctx.fillStyle = 'red';
         ctx.fillRect(
           alert.left - targetElRect.x,
@@ -253,13 +161,12 @@ export default function Demo() {
       if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
         const id = uuidv4();
         target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, id);
+        target.setAttribute('spellcheck', 'false');
       }
 
       const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
 
       if (!elementId) return;
-
-      target.setAttribute('spellcheck', 'false');
 
       const text = target.textContent?.trim() || '';
 
@@ -310,7 +217,7 @@ export default function Demo() {
 
     const endIndexes = getTextNodesEndIndexes(textNodes);
 
-    const textNodeIndex = findTextNodeIndex(
+    const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
       endIndexes,
       suggestion.offset + suggestion.length - 1
     );
@@ -333,7 +240,7 @@ export default function Demo() {
   };
 
   const observeContentEditableElement = useCallback(
-    (element: HTMLElement) => {
+    (element: ObservableHTMLElement) => {
       const debounceCheckContentEditableElement = debounce(
         checkContentEditableElement,
         500
@@ -350,170 +257,122 @@ export default function Demo() {
       });
 
       contentObserver.observe(element, {
-        childList: true, // Observe changes to the HTML structure
-        subtree: true, // Observe descendants of the contenteditable element
-        characterData: true, // Observe changes to text content
+        childList: true,
+        subtree: true,
+        characterData: true,
       });
 
-      // @ts-ignore
       element._observer = contentObserver;
     },
     [checkContentEditableElement]
   );
 
-  useEffect(() => {
-    document
-      .querySelectorAll('[contenteditable="true"]')
-      .forEach((el) => observeContentEditableElement(el as HTMLElement));
+  useObserveContentEditableElements(observeContentEditableElement);
 
-    const bodyObserver = new MutationObserver((mutationsList) => {
-      mutationsList.forEach((mutation) => {
-        if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => {
-            if (node instanceof HTMLElement && node.isContentEditable) {
-              observeContentEditableElement(node);
-            }
-          });
-        }
-      });
-    });
+  const showPopover = (e: MouseEvent) => {
+    let target: HTMLDivElement | null = null;
 
-    bodyObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    const elementIdS = Object.keys(suggestionsList);
 
-    return () => {
-      bodyObserver.disconnect();
-    };
-  }, [observeContentEditableElement]);
+    let index = 0;
 
-  useEffect(() => {
-    const updateSuggestionsPositions = () => {
-      Object.keys(suggestionsList).forEach((elementId) => {
-        highlightElementSuggestions(elementId);
-      });
-    };
-
-    let animating = false;
-    const animateUpdateSuggestionsPositions = () => {
-      if (!animating) {
-        window.requestAnimationFrame(() => {
-          updateSuggestionsPositions();
-          animating = false;
-        });
-        animating = true;
-      }
-    };
-
-    const showPopover = (e: MouseEvent) => {
-      let target: HTMLDivElement | null = null;
-
-      const elementIdS = Object.keys(suggestionsList);
-
-      let index = 0;
-
-      while (index < elementIdS.length) {
-        if (
-          // @ts-ignore
-          e.target?.matches(
-            `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"], div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"] *`
-          )
-        ) {
-          target = document.querySelector<HTMLDivElement>(
-            `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"]`
-          );
-          break;
-        }
-        index++;
-      }
-
-      if (!target) return;
-
-      const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
-
-      if (!elementId) return;
-
-      const suggestions = suggestionsList[elementId];
-
-      if (!suggestions) return;
-
-      const textNodes = getTextNodes(target);
-
-      const endIndexes = getTextNodesEndIndexes(textNodes);
-
-      let rect: DOMRect | undefined;
-      let suggestion: TSuggestion | undefined;
-
-      for (let s of suggestions) {
-        const range = document.createRange();
-        const textNodeIndex = findTextNodeIndex(
-          endIndexes,
-          s.offset + s.length - 1
+    while (index < elementIdS.length) {
+      if (
+        // @ts-ignore
+        e.target?.matches(
+          `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"], div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"] *`
+        )
+      ) {
+        target = document.querySelector<HTMLDivElement>(
+          `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementIdS[index]}"]`
         );
-
-        const textNode = textNodes[textNodeIndex];
-        const offset =
-          textNodeIndex === 0
-            ? s.offset
-            : s.offset - endIndexes[textNodeIndex - 1] - 1;
-
-        range.setStart(textNode, offset);
-        range.setEnd(textNode, offset + s.length);
-        rect = range.getClientRects()[0];
-
-        if (
-          rect.top <= e.clientY &&
-          rect.bottom >= e.clientY &&
-          rect.left <= e.clientX &&
-          rect.right >= e.clientX
-        ) {
-          suggestion = s;
-          break;
-        }
+        break;
       }
+      index++;
+    }
 
-      if (suggestion && rect) {
-        console.log({ suggestion, rect });
-        setSelectedSuggestion({
-          elementId,
-          suggestion,
-        });
+    if (!target) return;
 
-        const virtualEl: VirtualElement = {
-          getBoundingClientRect: () => rect,
-        };
-        setAnchorRef(virtualEl);
-        setIsPopoverOpen(true);
+    const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+
+    if (!elementId) return;
+
+    const suggestions = suggestionsList[elementId];
+
+    if (!suggestions) return;
+
+    const textNodes = getTextNodes(target);
+
+    const endIndexes = getTextNodesEndIndexes(textNodes);
+
+    let rect: DOMRect | undefined;
+    let suggestion: TSuggestion | undefined;
+
+    for (let s of suggestions) {
+      const range = document.createRange();
+      const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
+        endIndexes,
+        s.offset + s.length - 1
+      );
+
+      const textNode = textNodes[textNodeIndex];
+      const offset =
+        textNodeIndex === 0
+          ? s.offset
+          : s.offset - endIndexes[textNodeIndex - 1] - 1;
+
+      range.setStart(textNode, offset);
+      range.setEnd(textNode, offset + s.length);
+      rect = range.getClientRects()[0];
+
+      if (
+        rect.top <= e.clientY &&
+        rect.bottom >= e.clientY &&
+        rect.left <= e.clientX &&
+        rect.right >= e.clientX
+      ) {
+        suggestion = s;
+        break;
       }
-    };
+    }
 
-    window.addEventListener('scroll', animateUpdateSuggestionsPositions, true);
-    window.addEventListener('resize', animateUpdateSuggestionsPositions, true);
-    document.addEventListener('click', showPopover);
+    if (suggestion && rect) {
+      setSelectedSuggestion({
+        elementId,
+        suggestion,
+      });
 
-    return () => {
-      window.removeEventListener(
-        'scroll',
-        animateUpdateSuggestionsPositions,
-        true
-      );
-      window.removeEventListener(
-        'resize',
-        animateUpdateSuggestionsPositions,
-        true
-      );
-      document.removeEventListener('click', showPopover);
-    };
-  }, [suggestionsList]);
+      const virtualEl: VirtualElement = {
+        getBoundingClientRect: () => rect,
+      };
+      setAnchorRef(virtualEl);
+      setIsPopoverOpen(true);
+    }
+  };
 
-  useElementRemoved(document.body, (node) => {
+  const updateSuggestionsPositions = () => {
+    Object.keys(suggestionsList).forEach((elementId) => {
+      highlightElementSuggestions(elementId);
+    });
+  };
+
+  const animating = useRef(false);
+  const animateUpdateSuggestionsPositions = () => {
+    if (!animating.current) {
+      window.requestAnimationFrame(() => {
+        updateSuggestionsPositions();
+        animating.current = false;
+      });
+      animating.current = true;
+    }
+  };
+
+  const handleRemoveNode = (node: Node) => {
     if (node instanceof HTMLElement) {
       const elementId = node.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
       if (elementId) {
         clearHighlights(elementId);
-        // @ts-ignore
-        node._observer.disconnect();
+        (node as ObservableHTMLElement)._observer?.disconnect();
         let highlights: HTMLCanvasElement | null =
           document.querySelector<HTMLCanvasElement>(
             `canvas[${HIGHLIGHT_DATA_ATTRIBUTE_ID}="${elementId}"]`
@@ -521,7 +380,11 @@ export default function Demo() {
         highlights?.remove();
       }
     }
-  });
+  };
+
+  useClickEventDelegation(showPopover);
+  useDomLayoutChange(animateUpdateSuggestionsPositions);
+  useElementRemoved(document.body, handleRemoveNode);
 
   return (
     <>
@@ -537,33 +400,11 @@ export default function Demo() {
             </Button>
           </div>
           <div className="flex flex-col lg:flex-row gap-6">
-            <EditorProvider>
-              <Editor
-                containerProps={{
-                  className:
-                    'w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto text-xl border',
-                }}
-                value={editorContent}
-                onChange={(e) => setEditorContent(e.target.value)}
-                // @ts-ignore
-                placeholder="Type or paste your text here"
-              >
-                <Toolbar>
-                  <BtnRedo />
-                  <BtnUndo />
-                  <Separator />
-                  <BtnBold />
-                  <BtnItalic />
-                  <BtnUnderline />
-                  <BtnStrikeThrough />
-                  <Separator />
-                  <BtnNumberedList />
-                  <BtnBulletList />
-                  <Separator />
-                  <BtnClearFormatting />
-                </Toolbar>
-              </Editor>
-            </EditorProvider>
+            <Editor
+              className="w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto text-xl border"
+              content={editorContent}
+              setContent={(c: string) => setEditorContent(c)}
+            />
             <div
               className={cn(
                 'flex',

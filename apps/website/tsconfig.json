@@ -23,6 +23,7 @@
       "@/components/*": ["./components/*"],
       "@/constants/*": ["./constants/*"],
       "@/images/*": ["./assets/images/*"],
+      "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./lib/*"],
       "@/models/*": ["./models/*"],
       "@/styles/*": ["./styles/*"]
@@ -31,6 +32,7 @@
   "include": [
     "svgr.d.ts",
     "next-env.d.ts",
+    "dom.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
