@@ -23,8 +23,9 @@ This monorepo uses [Turborepo](https://turbo.build/)
 
 ### Apps and Packages
 
+- `apps/editor/`: The [Naija spell checker](https://spellchecker.naija.guru/) editor website
 - `apps/chrome-extension/`: The Naija spell checker chrome extension
-- `apps/website/`: The [Naija spell checker](https://spellchecker.naija.guru/) landing page and demo website
+
 ### Build
 
 To build all apps and packages, run the following command:

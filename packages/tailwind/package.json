@@ -1,0 +1,9 @@
+{
+  "name": "@naija-spell-checker/tailwind",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "tailwindcss-animate": "^1.0.7"
+  }
+}
