@@ -7,8 +7,11 @@ Please provide a clear and concise description of the changes made in this pull 
 
 ## Scope of Change
 Which part of the monorepo does this PR affect? (Select all that apply)
-- [ ] Grammar Checker Demo Website
+- [ ] Editor App
+- [ ] UI package
+- [ ] Tailwind package
 - [ ] Chrome Extension
+- [ ] Other
 
 ## Related Issue
 Does this pull request address an open issue? If so, please provide the issue number or link.
