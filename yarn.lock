@@ -1880,31 +1880,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@naija-spell-checker/editor@workspace:apps/editor":
-  version: 0.0.0-use.local
-  resolution: "@naija-spell-checker/editor@workspace:apps/editor"
-  dependencies:
-    "@naija-spell-checker/tailwind": "workspace:^"
-    "@naija-spell-checker/ui": "workspace:^"
-    "@svgr/webpack": "npm:^8.1.0"
-    "@types/node": "npm:^20"
-    "@types/react": "npm:^18"
-    "@types/react-dom": "npm:^18"
-    "@types/uuid": "npm:^10"
-    eslint: "npm:^8"
-    eslint-config-next: "npm:14.2.7"
-    lucide-react: "npm:^0.439.0"
-    next: "npm:14.2.7"
-    postcss: "npm:^8"
-    react: "npm:^18"
-    react-dom: "npm:^18"
-    react-simple-wysiwyg: "npm:^3.1.2"
-    sass: "npm:^1.77.8"
-    uuid: "npm:^10.0.0"
-    zod: "npm:^3.23.8"
-  languageName: unknown
-  linkType: soft
-
 "@naija-spell-checker/tailwind@workspace:^, @naija-spell-checker/tailwind@workspace:packages/tailwind":
   version: 0.0.0-use.local
   resolution: "@naija-spell-checker/tailwind@workspace:packages/tailwind"
@@ -4325,6 +4300,31 @@ __metadata:
   checksum: 10c0/26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
   languageName: node
   linkType: hard
+
+"editor@workspace:apps/editor":
+  version: 0.0.0-use.local
+  resolution: "editor@workspace:apps/editor"
+  dependencies:
+    "@naija-spell-checker/tailwind": "workspace:^"
+    "@naija-spell-checker/ui": "workspace:^"
+    "@svgr/webpack": "npm:^8.1.0"
+    "@types/node": "npm:^20"
+    "@types/react": "npm:^18"
+    "@types/react-dom": "npm:^18"
+    "@types/uuid": "npm:^10"
+    eslint: "npm:^8"
+    eslint-config-next: "npm:14.2.7"
+    lucide-react: "npm:^0.439.0"
+    next: "npm:14.2.7"
+    postcss: "npm:^8"
+    react: "npm:^18"
+    react-dom: "npm:^18"
+    react-simple-wysiwyg: "npm:^3.1.2"
+    sass: "npm:^1.77.8"
+    uuid: "npm:^10.0.0"
+    zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
 
 "electron-to-chromium@npm:^1.5.4":
   version: 1.5.18
