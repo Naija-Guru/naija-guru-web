@@ -1,0 +1,35 @@
+{
+  "name": "@naija-spell-checker/editor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "validate": "lint-staged"
+  },
+  "dependencies": {
+    "@naija-spell-checker/tailwind": "workspace:^",
+    "@naija-spell-checker/ui": "workspace:^",
+    "lucide-react": "^0.439.0",
+    "next": "14.2.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-simple-wysiwyg": "^3.1.2",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.7",
+    "postcss": "^8",
+    "sass": "^1.77.8"
+  },
+  "type": "module"
+}

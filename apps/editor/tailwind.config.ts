@@ -1,11 +1,13 @@
+import type { Config } from 'tailwindcss';
+
 import defaultConfig from '@naija-spell-checker/tailwind/config';
 
-/** @type {import('tailwindcss').Config} */
-export default {
+const config: Config = {
   ...defaultConfig,
   content: [
-    './*.html',
-    './src/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
     '../../node_modules/@naija-spell-checker/ui/**/*.{js,ts,jsx,tsx}',
   ],
 };
+export default config;
