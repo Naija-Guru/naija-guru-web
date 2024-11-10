@@ -391,9 +391,9 @@ export default function EditorPageContent() {
 
   return (
     <>
-      <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen p-4 m-auto max-w-[1200px] sm:p-6 lg:p-8">
         <div className="max-w-8xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-green">
+          <h1 className="text-3xl font-bold mb-6 text-secondary">
             Pidgin English Spell Checker
           </h1>
           <div className="mb-4">
@@ -425,7 +425,9 @@ export default function EditorPageContent() {
                 'border-solid'
               )}
             >
-              <h2 className="text-xl font-semibold p-4">Review Suggestions</h2>
+              <h2 className="text-secondary text-xl font-semibold p-4">
+                Review Suggestions
+              </h2>
               <Carousel className="w-full md:hidden">
                 <CarouselContent>
                   {Object.entries(suggestionsList).map(
@@ -496,7 +498,7 @@ export default function EditorPageContent() {
               </ul>
               {isSuggestionsListEmpty && (
                 <div>
-                  <FileCheck className="mx-auto h-20 w-20 text-green" />
+                  <FileCheck className="mx-auto h-20 w-20 text-secondary" />
                   <p className="p-4 text-center">You are all good here!</p>
                 </div>
               )}

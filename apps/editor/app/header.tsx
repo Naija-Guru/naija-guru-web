@@ -1,28 +1,20 @@
 'use client';
-
 import Link from 'next/link';
-import Logo from '@/images/logo.svg';
-import { usePathname } from 'next/navigation';
+
+import Logo from '@/images/full-logo.svg';
+import { MobileNavigationMenu } from '../components/mobile-navigation-menu';
+import { DesktopNavigationMenu } from '../components/desktop-navigation-menu';
 
 export function Header() {
-  const pathname = usePathname();
-
   return (
-    <header className="px-4 lg:px-6 h-14 flex items-center">
-      <Link className="flex items-center justify-center" href="/">
-        <Logo className="h-6 w-6 mr-2" />
-        <span className="font-bold text-primary">Naija Spell Checker</span>
-      </Link>
-      <nav className="ml-auto flex gap-4 sm:gap-6">
-        {pathname !== '/demo' && (
-          <Link
-            className="text-sm font-medium text-primary hover:underline underline-offset-4"
-            href="/demo"
-          >
-            Demo
-          </Link>
-        )}
-      </nav>
-    </header>
+    <div className="border-b">
+      <header className="flex items-center justify-between m-auto max-w-[1200px] px-4 py-10 sm:p-6 lg:p-8">
+        <Link href="/">
+          <Logo className="h-8 mr-2" />
+        </Link>
+        <MobileNavigationMenu />
+        <DesktopNavigationMenu />
+      </header>
+    </div>
   );
 }

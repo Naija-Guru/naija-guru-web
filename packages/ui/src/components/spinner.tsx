@@ -9,6 +9,6 @@ interface SpinnerProps {
 
 export const Spinner: React.FC<SpinnerProps> = ({ className }) => {
   return (
-    <LoaderCircle className={cn('animate-spin', 'text-green', className)} />
+    <LoaderCircle className={cn('animate-spin', 'text-primary', className)} />
   );
 };
