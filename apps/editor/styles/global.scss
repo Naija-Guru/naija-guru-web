@@ -1,6 +1,7 @@
 @use '@naija-spell-checker/ui/dist/styles/global.scss';
 
 .rsw-ce {
+  height: 80%;
   &:focus {
     outline: none !important;
   }
