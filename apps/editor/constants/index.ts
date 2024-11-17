@@ -27,6 +27,10 @@ export const HEADER_ROUTES = [
         url: `${MAIN_WEBSITE_DOMAIN}/dictionary`,
       },
       {
+        label: 'Spell Checker',
+        url: '#',
+      },
+      {
         label: 'Translator',
         url: 'https://translate.naija.guru',
       },
