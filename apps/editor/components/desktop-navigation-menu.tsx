@@ -17,7 +17,7 @@ export function DesktopNavigationMenu() {
           Array.isArray(route.routes) ? (
             <NavigationMenuItem value={route.label} key={i}>
               <NavigationMenuTrigger>{route.label}</NavigationMenuTrigger>
-              <NavigationMenuContent>
+              <NavigationMenuContent className="w-[300px]">
                 {route.routes.map((subroute, index) => (
                   <NavigationMenuLink
                     href={subroute.url}

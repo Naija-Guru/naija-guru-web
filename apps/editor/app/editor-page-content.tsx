@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { AlertCircle, File, FileCheck } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
@@ -391,12 +393,15 @@ export default function EditorPageContent() {
 
   return (
     <>
-      <div className="min-h-screen p-4 m-auto max-w-[1200px] sm:p-6 lg:p-8">
+      <div
+        className="min-h-screen p-4 m-auto max-w-[1200px] sm:p-6 lg:p-8"
+        suppressHydrationWarning
+      >
         <div className="max-w-8xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-secondary">
+          <h1 className="text-xl md:text-3xl font-bold mb-6 text-secondary text-center md:text-left">
             Pidgin English Spell Checker
           </h1>
-          <div className="mb-4">
+          <div className="mb-4 hidden md:block">
             <Button variant="outline" onClick={onUseSampleContent}>
               <File className="mr-2 h-4 w-4" />
               Use Sample content
@@ -404,7 +409,7 @@ export default function EditorPageContent() {
           </div>
           <div className="flex flex-col lg:flex-row gap-6">
             <Editor
-              className="w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto text-xl border"
+              className="w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto md:text-xl border"
               content={editorContent}
               setContent={(c: string) => setEditorContent(c)}
             />
@@ -419,7 +424,7 @@ export default function EditorPageContent() {
                 'left-0',
                 'right-0',
                 'bg-white',
-                'h-[250px]',
+                'h-[225px]',
                 'lg:h-[calc(100vh-300px)]',
                 'border',
                 'border-solid'
@@ -498,7 +503,7 @@ export default function EditorPageContent() {
               </ul>
               {isSuggestionsListEmpty && (
                 <div>
-                  <FileCheck className="mx-auto h-20 w-20 text-secondary" />
+                  <FileCheck className="mx-auto h-10 w-10 md:h-20 md:w-20 text-secondary" />
                   <p className="p-4 text-center">You are all good here!</p>
                 </div>
               )}

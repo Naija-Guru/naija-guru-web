@@ -32,6 +32,7 @@
   "include": [
     "svgr.d.ts",
     "next-env.d.ts",
+    "global.d.ts",
     "dom.d.ts",
     "**/*.ts",
     "**/*.tsx",
