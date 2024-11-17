@@ -25,7 +25,7 @@ export function MobileNavigationMenu() {
         </Button>
       </SheetTrigger>
       <SheetContent
-        className="bg-white w-screen sm:max-w-screen py-10 px-0"
+        className="bg-white w-screen sm:max-w-screen py-4 px-0"
         showClose={false}
       >
         <div className="flex justify-between px-4">
