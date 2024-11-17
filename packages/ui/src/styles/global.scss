@@ -88,5 +88,10 @@ h6 {
 
 a:hover {
   color: var(--secondary);
-  cursor: pointer;
+  cursor: pointer !important;
+}
+
+
+ul, ol {
+  list-style: initial;
 }

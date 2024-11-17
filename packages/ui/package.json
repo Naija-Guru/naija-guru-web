@@ -3,10 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc && copyfiles -u 1 src/**/*.scss dist && copyfiles -u 1 src/assets/** dist"
-  },
+  "main": "src/index.ts",
   "dependencies": {
     "@floating-ui/dom": "^1.6.11",
     "@floating-ui/react": "^0.26.24",
@@ -22,7 +19,8 @@
     "embla-carousel-react": "^8.3.0",
     "lucide-react": "^0.439.0",
     "react": "^18",
-    "tailwind-merge": "^2.5.2"
+    "tailwind-merge": "^2.5.2",
+    "vaul": "^1.1.1"
   },
   "devDependencies": {
     "@naija-spell-checker/tailwind": "workspace:^",
