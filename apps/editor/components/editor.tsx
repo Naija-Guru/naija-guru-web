@@ -14,6 +14,10 @@ import {
   Separator,
   Toolbar,
 } from 'react-simple-wysiwyg';
+
+import { cn } from '@naija-spell-checker/ui';
+
+import styles from './editor.module.scss';
 export interface EditorProps {
   className?: string;
   content: string;
@@ -25,7 +29,7 @@ export const Editor: FC<EditorProps> = ({ className, content, setContent }) => {
     <EditorProvider>
       <WYSIWYGEditor
         containerProps={{
-          className,
+          className: cn(className, styles.container),
         }}
         value={content}
         onChange={(e) => setContent(e.target.value)}
