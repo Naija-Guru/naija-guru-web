@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 
 import '@/styles/global.scss';
-import { Header } from './header';
-import { Footer } from './footer';
-import { InstallPrompt } from './install-prompt';
+import { Header } from '@/components/header';
+import { Footer } from '@/components/footer';
+import { InstallPrompt } from '@/components/install-prompt';
 
 export const metadata: Metadata = {
   title: 'Naija Spell Checker',

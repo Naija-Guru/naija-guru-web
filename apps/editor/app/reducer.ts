@@ -1,0 +1,47 @@
+import { VirtualElement } from '@floating-ui/dom';
+
+import { TSuggestion } from '@/models/suggestion';
+
+export const initialState = {
+  loadingSuggestions: false,
+  suggestionsList: {} as Record<string, TSuggestion[]>,
+  selectedSuggestion: null as {
+    elementId: string;
+    suggestion: TSuggestion;
+  } | null,
+  isPopoverOpen: false,
+  anchorRef: null as VirtualElement | null,
+  editorContent: '',
+};
+
+export type State = typeof initialState;
+
+export type Action =
+  | { type: 'SET_LOADING_SUGGESTIONS'; payload: boolean }
+  | { type: 'SET_SUGGESTIONS_LIST'; payload: Record<string, TSuggestion[]> }
+  | {
+      type: 'SET_SELECTED_SUGGESTION';
+      payload: { elementId: string; suggestion: TSuggestion } | null;
+    }
+  | { type: 'SET_IS_POPOVER_OPEN'; payload: boolean }
+  | { type: 'SET_ANCHOR_REF'; payload: VirtualElement | null }
+  | { type: 'SET_EDITOR_CONTENT'; payload: string };
+
+export function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'SET_LOADING_SUGGESTIONS':
+      return { ...state, loadingSuggestions: action.payload };
+    case 'SET_SUGGESTIONS_LIST':
+      return { ...state, suggestionsList: action.payload };
+    case 'SET_SELECTED_SUGGESTION':
+      return { ...state, selectedSuggestion: action.payload };
+    case 'SET_IS_POPOVER_OPEN':
+      return { ...state, isPopoverOpen: action.payload };
+    case 'SET_ANCHOR_REF':
+      return { ...state, anchorRef: action.payload };
+    case 'SET_EDITOR_CONTENT':
+      return { ...state, editorContent: action.payload };
+    default:
+      return state;
+  }
+}

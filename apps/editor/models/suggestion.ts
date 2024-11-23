@@ -29,3 +29,10 @@ export const TSuggestion = z.object({
 });
 
 export type TSuggestion = z.infer<typeof TSuggestion>;
+
+export type TSuggestionCoordinates = {
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+};
