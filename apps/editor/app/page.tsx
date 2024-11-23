@@ -1,10 +1,10 @@
 'use client';
 import dynamic from 'next/dynamic';
 
-const EditorPageContent = dynamic(() => import('./editor-page-content'), {
+const Content = dynamic(() => import('./content'), {
   ssr: false,
 });
 
 export default function EditorPage() {
-  return <EditorPageContent />;
+  return <Content />;
 }
