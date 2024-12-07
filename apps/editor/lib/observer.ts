@@ -8,6 +8,7 @@ export const addElObserver = (
   el: ObservableHTMLElement,
   callback: (el: HTMLElement) => void
 ) => {
+  disconnectElObserver(el);
   // Create a new MutationObserver instance
   const contentObserver = new MutationObserver((mutationsList) => {
     // Iterate through the list of mutations
@@ -31,11 +32,11 @@ export const addElObserver = (
 };
 
 /**
- * Removes the MutationObserver from the specified element.
+ * Disconnects the MutationObserver from the specified element.
  *
- * @param {ObservableHTMLElement} el - The element whose observer should be removed.
+ * @param {ObservableHTMLElement} el - The element whose observer should be disconnected.
  */
-export const removeElObserver = (el: ObservableHTMLElement) => {
+export const disconnectElObserver = (el: ObservableHTMLElement) => {
   // Disconnect the observer if it exists
   el._observer?.disconnect();
 };

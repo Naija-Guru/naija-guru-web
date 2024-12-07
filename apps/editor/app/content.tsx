@@ -2,7 +2,7 @@
 
 import { VirtualElement } from '@floating-ui/dom';
 import { File } from 'lucide-react';
-import { useCallback, useMemo, useReducer, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button, cn } from '@naija-spell-checker/ui';
@@ -21,12 +21,13 @@ import {
   findSuggestionAndRect,
   findTargetElement,
   getOrCreateHighlightCanvas,
+  getTargetElementById,
   removeElCanvas,
   updateTargetElTextWithSuggestion,
 } from '@/lib/dom';
 import { TSuggestion } from '@/models/suggestion';
 
-import { addElObserver, removeElObserver } from '@/lib/observer';
+import { addElObserver, disconnectElObserver } from '@/lib/observer';
 import { debounce } from '@/lib/utils';
 import { SuggestionPopover } from '@/components/suggestion-popover';
 import { ReviewSuggestions } from '@/components/review-suggestions';
@@ -43,7 +44,7 @@ const suggestionsListContainerClassnames = cn(
   'left-0',
   'right-0',
   'bg-white',
-  'h-[225px]',
+  'h-[250px]',
   'lg:h-[calc(100vh-300px)]',
   'border',
   'border-solid'
@@ -95,6 +96,7 @@ export default function Content() {
 
   const checkContentEditableElement = useCallback(
     async (target: HTMLElement) => {
+      dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: true });
       if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
         const id = uuidv4();
         target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, id);
@@ -108,9 +110,7 @@ export default function Content() {
       const text = target.textContent?.trim() || '';
 
       if (text.length) {
-        dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: true });
         const [data] = await asyncWrapper(getSpellingSuggestions(text));
-        dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: false });
         if (!data) {
           clearHighlights(elementId);
           return;
@@ -130,6 +130,7 @@ export default function Content() {
       } else {
         clearHighlights(elementId);
       }
+      dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: false });
     },
     [clearHighlights]
   );
@@ -137,54 +138,48 @@ export default function Content() {
   const applySuggestion = useCallback(
     (elementId: string, suggestion: TSuggestion) => {
       toggleSuggestionPopover(false);
-
-      const remainingSuggestions = suggestionsListRef.current[elementId].filter(
-        (s) => s.offset !== suggestion.offset
-      );
-
-      suggestionsListRef.current = {
-        ...suggestionsListRef.current,
-        [elementId]: remainingSuggestions,
-      };
-      dispatch({
-        type: 'SET_SUGGESTIONS_LIST',
-        payload: suggestionsListRef.current,
-      });
-
       updateTargetElTextWithSuggestion(elementId, suggestion);
     },
     []
   );
 
-  const showPopover = (e: MouseEvent) => {
-    const elementIdS = Object.keys(state.suggestionsList);
-    const target = findTargetElement(e, elementIdS);
+  const showPopover = useCallback(
+    (e: MouseEvent) => {
+      if (state.isAcceptingAllSuggestions) return;
+      const elementIdS = Object.keys(state.suggestionsList);
+      const target = findTargetElement(e, elementIdS);
 
-    if (!target) return;
+      if (!target) return;
 
-    const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+      const elementId = target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
 
-    if (!elementId) return;
+      if (!elementId) return;
 
-    const suggestions = state.suggestionsList[elementId];
+      const suggestions = state.suggestionsList[elementId];
 
-    if (!suggestions) return;
+      if (!suggestions) return;
 
-    const { suggestion, rect } = findSuggestionAndRect(e, target, suggestions);
+      const { suggestion, rect } = findSuggestionAndRect(
+        e,
+        target,
+        suggestions
+      );
 
-    if (suggestion && rect) {
-      dispatch({
-        type: 'SET_SELECTED_SUGGESTION',
-        payload: { elementId, suggestion },
-      });
+      if (suggestion && rect) {
+        dispatch({
+          type: 'SET_SELECTED_SUGGESTION',
+          payload: { elementId, suggestion },
+        });
 
-      const virtualEl: VirtualElement = {
-        getBoundingClientRect: () => rect,
-      };
-      dispatch({ type: 'SET_ANCHOR_REF', payload: virtualEl });
-      dispatch({ type: 'SET_IS_POPOVER_OPEN', payload: true });
-    }
-  };
+        const virtualEl: VirtualElement = {
+          getBoundingClientRect: () => rect,
+        };
+        dispatch({ type: 'SET_ANCHOR_REF', payload: virtualEl });
+        dispatch({ type: 'SET_IS_POPOVER_OPEN', payload: true });
+      }
+    },
+    [state.isAcceptingAllSuggestions, state.suggestionsList]
+  );
 
   const updateSuggestionsPositions = useCallback(() => {
     Object.keys(state.suggestionsList).forEach((elementId) => {
@@ -207,24 +202,48 @@ export default function Content() {
       const elementId = node.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
       if (elementId) {
         clearHighlights(elementId);
-        removeElObserver(node as ObservableHTMLElement);
+        disconnectElObserver(node as ObservableHTMLElement);
         removeElCanvas(elementId);
       }
     }
   };
 
+  const handleObserveContentEditableElements = useCallback(
+    (el: HTMLElement) => {
+      const debouncedChecker = debounce(checkContentEditableElement, 500);
+      addElObserver(el, debouncedChecker);
+    },
+    [checkContentEditableElement]
+  );
+
+  const handleApplyAllSuggestions = () => {
+    dispatch({ type: 'SET_IS_FIXING_ALL', payload: true });
+  };
+
+  const handleAcceptFirstSuggestionOnList = useCallback(() => {
+    const elementId = Object.keys(state.suggestionsList)[0];
+    applySuggestion(elementId, state.suggestionsList[elementId][0]);
+  }, [state.suggestionsList, applySuggestion]);
+
+  useEffect(() => {
+    if (state.isAcceptingAllSuggestions && !state.loadingSuggestions) {
+      if (isSuggestionsListEmpty) {
+        dispatch({ type: 'SET_IS_FIXING_ALL', payload: false });
+      } else {
+        handleAcceptFirstSuggestionOnList();
+      }
+    }
+  }, [
+    state.isAcceptingAllSuggestions,
+    isSuggestionsListEmpty,
+    state.loadingSuggestions,
+    handleAcceptFirstSuggestionOnList,
+  ]);
+
   useClickEventDelegation(showPopover);
   useDomLayoutChange(animateUpdateSuggestionsPositions);
   useElementRemoved(document.body, handleRemoveNode);
-  useObserveContentEditableElements(
-    useCallback(
-      (el) => {
-        const debouncedChecker = debounce(checkContentEditableElement, 500);
-        addElObserver(el, debouncedChecker);
-      },
-      [checkContentEditableElement]
-    )
-  );
+  useObserveContentEditableElements(handleObserveContentEditableElements);
 
   return (
     <>
@@ -254,8 +273,10 @@ export default function Content() {
               className={suggestionsListContainerClassnames}
               list={state.suggestionsList}
               onApplySuggestion={applySuggestion}
+              onApplyAllSuggestions={handleApplyAllSuggestions}
               isLoadingSuggestions={state.loadingSuggestions}
               isListEmpty={isSuggestionsListEmpty}
+              isAcceptingAllSuggestions={state.isAcceptingAllSuggestions}
             />
           </div>
         </div>
