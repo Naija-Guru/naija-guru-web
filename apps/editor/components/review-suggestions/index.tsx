@@ -1,10 +1,9 @@
 import { TSuggestion } from '@/models/suggestion';
-import { Button, cn, Spinner } from '@naija-spell-checker/ui';
+import { cn } from '@naija-spell-checker/ui';
+import { ApplyAllSuggestions } from './apply-all-suggestions';
 import { ReviewSuggestionsDesktopList } from './review-suggestions-desktop-list';
 import { ReviewSuggestionsEmpty } from './review-suggestions-empty';
 import { ReviewSuggestionsMobileList } from './review-suggestions-mobile-list';
-import { WrenchIcon } from 'lucide-react';
-import { ApplyAllSuggestions } from './apply-all-suggestions';
 
 export function ReviewSuggestions({
   className,
