@@ -30,25 +30,3 @@ export const getSpellingSuggestions = async (
 
   return parsedResponse;
 };
-
-export const fixAllSpellingSuggestions = async (
-  text: string
-): Promise<void> => {
-  let hasMatches = true;
-  let currentText = text;
-
-  while (hasMatches) {
-    const response = await getSpellingSuggestions(currentText);
-    if (response.matches.length) {
-      const firstMatch = response.matches[0];
-      currentText = replaceTextWithSuggestion(
-        currentText,
-        firstMatch.replacements[0].value,
-        firstMatch.offset,
-        firstMatch.length
-      );
-    } else {
-      hasMatches = false;
-    }
-  }
-};

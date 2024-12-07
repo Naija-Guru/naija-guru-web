@@ -6,42 +6,6 @@ import {
 import { replaceTextWithSuggestion } from './string';
 
 /**
- * Finds the index of the text node from a list of text node end indexes.
- *
- * @param {number[]} endIndexes - The list of text node end indexes.
- * @param {number} offset - The offset to find the index for.
- * @returns {number} The index of the text node.
- */
-export const findTextNodeIndexFromListOfTextNodeEndIndexes = (
-  endIndexes: number[],
-  offset: number
-): number => {
-  let left = 0;
-  let right = endIndexes.length - 1;
-
-  while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
-    const guess = endIndexes[mid];
-
-    if (guess === offset) {
-      return mid;
-    }
-
-    if (offset < guess && offset > endIndexes[mid - 1]) {
-      return mid;
-    }
-
-    if (guess < offset) {
-      left = mid + 1;
-    } else {
-      right = mid - 1;
-    }
-  }
-
-  return left;
-};
-
-/**
  * Retrieves all text nodes within a given HTML element.
  *
  * @param {HTMLElement} el - The HTML element to retrieve text nodes from.
@@ -55,7 +19,11 @@ export const getTextNodes = (el: HTMLElement): Node[] => {
     nodes.push(walker.currentNode);
   }
 
-  return nodes;
+  const filteredNodes = nodes.filter((node) =>
+    Boolean(node.textContent?.length)
+  );
+
+  return filteredNodes;
 };
 
 /**
@@ -66,7 +34,7 @@ export const getTextNodes = (el: HTMLElement): Node[] => {
  */
 export const getTextNodesEndIndexes = (textNodes: Node[]): number[] => {
   return textNodes.reduce((acc, node) => {
-    const lastIndex = acc.length ? acc[acc.length - 1] : 0;
+    const lastIndex = acc.length ? acc[acc.length - 1] : -1;
     const endIndex = lastIndex + node.textContent!.length;
     acc.push(endIndex);
     return acc;
@@ -136,9 +104,7 @@ export const drawHighlightsForElementSuggestions = (
   elementId: string,
   suggestions: TSuggestion[]
 ) => {
-  const target = document.querySelector<HTMLDivElement>(
-    `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
-  );
+  const target = getTargetElementById(elementId);
 
   if (!target) return;
 
@@ -195,9 +161,7 @@ export const drawSuggestionRect = (
 export const getOrCreateHighlightCanvas = (
   elementId: string
 ): HTMLCanvasElement | null => {
-  const target = document.querySelector<HTMLDivElement>(
-    `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
-  );
+  const target = getTargetElementById(elementId);
 
   if (!target) {
     return null;
@@ -218,6 +182,25 @@ export const getOrCreateHighlightCanvas = (
   return canvas;
 };
 
+export const findNodeAndLengthDiffForOffset = (
+  nodes: Node[],
+  offset: number
+): [Node, number] => {
+  let currentLength = nodes.reduce((sum, n) => {
+    return sum + n.textContent!.length;
+  }, 0);
+
+  for (let i = nodes.length - 1; i > 0; i--) {
+    if (offset < currentLength) {
+      currentLength -= nodes[i].textContent!.length;
+    } else {
+      return [nodes[i + 1], currentLength];
+    }
+  }
+
+  return [nodes[0], 0];
+};
+
 /**
  * Gets the coordinates of the suggestions within the target element.
  *
@@ -231,20 +214,16 @@ export const getSuggestionsCoordinates = (
 ): TSuggestionCoordinates[] => {
   const suggestionCoordinates: TSuggestionCoordinates[] = [];
   const textNodes = getTextNodes(target);
-  const endIndexes = getTextNodesEndIndexes(textNodes);
 
   suggestions.forEach((suggestion) => {
     const range = document.createRange();
-    const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
-      endIndexes,
-      suggestion.offset + suggestion.length - 1
+
+    const [textNode, lengthDiff] = findNodeAndLengthDiffForOffset(
+      textNodes,
+      suggestion.offset
     );
 
-    const textNode = textNodes[textNodeIndex];
-    const offset =
-      textNodeIndex === 0
-        ? suggestion.offset
-        : suggestion.offset - endIndexes[textNodeIndex - 1] - 1;
+    const offset = suggestion.offset - lengthDiff;
 
     range.setStart(textNode, offset);
     range.setEnd(textNode, offset + suggestion.length);
@@ -304,9 +283,7 @@ export const updateTargetElTextWithSuggestion = (
   elementId: string,
   suggestion: TSuggestion
 ) => {
-  const target = document.querySelector<HTMLDivElement>(
-    `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
-  );
+  const target = getTargetElementById(elementId);
 
   if (!target) {
     console.error(`Element with ID ${elementId} not found.`);
@@ -314,33 +291,36 @@ export const updateTargetElTextWithSuggestion = (
   }
 
   const textNodes = getTextNodes(target);
-  const endIndexes = getTextNodesEndIndexes(textNodes);
-  const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
-    endIndexes,
-    suggestion.offset + suggestion.length - 1
+
+  const [textNode, lengthDiff] = findNodeAndLengthDiffForOffset(
+    textNodes,
+    suggestion.offset
   );
 
-  if (textNodeIndex < 0 || textNodeIndex >= textNodes.length) {
-    console.error(`Text node index ${textNodeIndex} is out of bounds.`);
-    return;
-  }
-
-  const textNode = textNodes[textNodeIndex];
-  const offset = calculateOffset(textNodeIndex, endIndexes, suggestion.offset);
-
-  if (!textNode.textContent) {
-    console.error(`Text node content is null or undefined.`);
-    return;
-  }
+  const offset = suggestion.offset - lengthDiff;
 
   const newTextContent = replaceTextWithSuggestion(
-    textNode.textContent,
+    textNode.textContent!,
     suggestion.replacements[0].value,
     offset,
     suggestion.length
   );
 
   textNode.textContent = newTextContent;
+
+  const changeEvent = new Event('change', {
+    bubbles: true,
+    cancelable: true,
+  });
+
+  target.dispatchEvent(changeEvent);
+
+  const inputEvent = new InputEvent('input', {
+    bubbles: true,
+    cancelable: true,
+  });
+
+  target.dispatchEvent(inputEvent);
 };
 
 /**
@@ -394,9 +374,7 @@ export const findTargetElement = (
         `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"], div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"] *`
       )
     ) {
-      return document.querySelector<HTMLDivElement>(
-        `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
-      );
+      return getTargetElementById(elementId);
     }
   }
   return null;
@@ -416,20 +394,15 @@ export const findSuggestionAndRect = (
   suggestions: TSuggestion[]
 ): { suggestion: TSuggestion | undefined; rect: DOMRect | undefined } => {
   const textNodes = getTextNodes(target);
-  const endIndexes = getTextNodesEndIndexes(textNodes);
 
   for (const suggestion of suggestions) {
     const range = document.createRange();
-    const textNodeIndex = findTextNodeIndexFromListOfTextNodeEndIndexes(
-      endIndexes,
-      suggestion.offset + suggestion.length - 1
+    const [textNode, lengthDiff] = findNodeAndLengthDiffForOffset(
+      textNodes,
+      suggestion.offset
     );
 
-    const textNode = textNodes[textNodeIndex];
-    const offset =
-      textNodeIndex === 0
-        ? suggestion.offset
-        : suggestion.offset - endIndexes[textNodeIndex - 1] - 1;
+    const offset = suggestion.offset - lengthDiff;
 
     range.setStart(textNode, offset);
     range.setEnd(textNode, offset + suggestion.length);
@@ -446,4 +419,18 @@ export const findSuggestionAndRect = (
   }
 
   return { suggestion: undefined, rect: undefined };
+};
+
+/**
+ * Queries the DOM for a div element with the specified data attribute.
+ *
+ * @param {string} elementId - The ID of the element to query.
+ * @returns {HTMLDivElement | null} - The target element if found, otherwise null.
+ */
+export const getTargetElementById = (
+  elementId: string
+): HTMLDivElement | null => {
+  return document.querySelector<HTMLDivElement>(
+    `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
+  );
 };

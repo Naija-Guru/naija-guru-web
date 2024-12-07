@@ -10,6 +10,7 @@ export const initialState = {
     suggestion: TSuggestion;
   } | null,
   isPopoverOpen: false,
+  isAcceptingAllSuggestions: false,
   anchorRef: null as VirtualElement | null,
   editorContent: '',
 };
@@ -24,6 +25,7 @@ export type Action =
       payload: { elementId: string; suggestion: TSuggestion } | null;
     }
   | { type: 'SET_IS_POPOVER_OPEN'; payload: boolean }
+  | { type: 'SET_IS_FIXING_ALL'; payload: boolean }
   | { type: 'SET_ANCHOR_REF'; payload: VirtualElement | null }
   | { type: 'SET_EDITOR_CONTENT'; payload: string };
 
@@ -37,6 +39,8 @@ export function reducer(state: State, action: Action): State {
       return { ...state, selectedSuggestion: action.payload };
     case 'SET_IS_POPOVER_OPEN':
       return { ...state, isPopoverOpen: action.payload };
+    case 'SET_IS_FIXING_ALL':
+      return { ...state, isAcceptingAllSuggestions: action.payload };
     case 'SET_ANCHOR_REF':
       return { ...state, anchorRef: action.payload };
     case 'SET_EDITOR_CONTENT':
