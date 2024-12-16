@@ -123,7 +123,11 @@ export const drawHighlightsForElementSuggestions = (
   suggestionsCoordinates.forEach((coordinates) => {
     if (
       ctx &&
-      isPointInVisiblePartOfElement(coordinates.left, coordinates.top, target)
+      isPointInVisiblePartOfElement(
+        coordinates.left,
+        coordinates.top + coordinates.height,
+        target
+      )
     ) {
       drawSuggestionRect(ctx, coordinates, targetElRect);
     }

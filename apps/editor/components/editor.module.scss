@@ -7,4 +7,13 @@
     list-style: decimal;
     list-style-position: inside;
   }
+
+  :global(.rsw-ce) {
+    height: fit-content;
+  }
+
+  :global(.rsw-toolbar) {
+    position: sticky;
+    top: 0;
+  }
 }
