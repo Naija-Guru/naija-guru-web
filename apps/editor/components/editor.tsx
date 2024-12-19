@@ -22,19 +22,32 @@ export interface EditorProps {
   className?: string;
   content: string;
   setContent: (content: string) => void;
+  disabled: boolean;
 }
 
-export const Editor: FC<EditorProps> = ({ className, content, setContent }) => {
+export const Editor: FC<EditorProps> = ({
+  className,
+  content,
+  setContent,
+  disabled,
+}) => {
   return (
     <EditorProvider>
       <WYSIWYGEditor
         containerProps={{
-          className: cn(className, styles.container),
+          className: cn(
+            className,
+            {
+              'opacity-25 cursor-not-allowed': disabled,
+            },
+            styles.container
+          ),
         }}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         // @ts-ignore
         placeholder="Type or paste your text here"
+        disabled={disabled}
       >
         <Toolbar>
           <BtnRedo />
