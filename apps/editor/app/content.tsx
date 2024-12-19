@@ -11,7 +11,6 @@ import { getSpellingSuggestions } from '@/api/spellCheck';
 import { Editor } from '@/components/editor';
 import { ELEMENT_DATA_ATTRIBUTE_ID, SAMPLE_TEXT } from '@/constants/index';
 import { useClickEventDelegation } from '@/hooks/useClickEventDelegation';
-import { useDomLayoutChange } from '@/hooks/useDomLayoutChange';
 import { useElementRemoved } from '@/hooks/useElementRemoved';
 import { useObserveContentEditableElements } from '@/hooks/useObserveContentEditableElements';
 import { asyncWrapper } from '@/lib/async';
@@ -20,6 +19,7 @@ import {
   drawHighlightsForElementSuggestions,
   findSuggestionAndRect,
   findTargetElement,
+  getIdOfTargetElement,
   getOrCreateHighlightCanvas,
   getTargetElementById,
   removeElCanvas,
@@ -33,6 +33,8 @@ import { SuggestionPopover } from '@/components/suggestion-popover';
 import { ReviewSuggestions } from '@/components/review-suggestions';
 
 import { initialState, reducer } from './reducer';
+import { useObserveElementsResize } from '@/hooks/useObserveElementsResize';
+import { useListenToElementsScroll } from '@/hooks/useListenToElementsScroll';
 
 const suggestionsListContainerClassnames = cn(
   'flex',
@@ -181,22 +183,6 @@ export default function Content() {
     [state.isAcceptingAllSuggestions, state.suggestionsList]
   );
 
-  const updateSuggestionsPositions = useCallback(() => {
-    Object.keys(state.suggestionsList).forEach((elementId) => {
-      highlightElementSuggestions(elementId);
-    });
-  }, [state.suggestionsList]);
-
-  const requestAnimationFrameRequest = useRef<number | null>(null);
-  const animateUpdateSuggestionsPositions = useCallback(() => {
-    if (requestAnimationFrameRequest.current) {
-      window.cancelAnimationFrame(requestAnimationFrameRequest.current);
-    }
-    requestAnimationFrameRequest.current = window.requestAnimationFrame(
-      updateSuggestionsPositions
-    );
-  }, [updateSuggestionsPositions]);
-
   const handleRemoveNode = (node: Node) => {
     if (node instanceof HTMLElement) {
       const elementId = node.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
@@ -240,8 +226,27 @@ export default function Content() {
     handleAcceptFirstSuggestionOnList,
   ]);
 
+  const elementIds = useMemo(
+    () => Object.keys(state.suggestionsList),
+    [state.suggestionsList]
+  );
+
+  const targetedElements = useMemo(
+    () => elementIds.map(getTargetElementById).filter(Boolean) as Element[],
+    [elementIds]
+  );
+
+  const handleElementPositionChange = (el: Element) => {
+    const elementId = getIdOfTargetElement(el);
+
+    if (!elementId) return;
+
+    highlightElementSuggestions(elementId);
+  };
+
+  useObserveElementsResize(targetedElements, handleElementPositionChange);
+  useListenToElementsScroll(targetedElements, handleElementPositionChange);
   useClickEventDelegation(showPopover);
-  useDomLayoutChange(animateUpdateSuggestionsPositions);
   useElementRemoved(document.body, handleRemoveNode);
   useObserveContentEditableElements(handleObserveContentEditableElements);
 
@@ -268,6 +273,7 @@ export default function Content() {
               setContent={(c: string) =>
                 dispatch({ type: 'SET_EDITOR_CONTENT', payload: c })
               }
+              disabled={state.isAcceptingAllSuggestions}
             />
             <ReviewSuggestions
               className={suggestionsListContainerClassnames}

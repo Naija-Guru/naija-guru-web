@@ -180,6 +180,10 @@ export const getOrCreateHighlightCanvas = (
     canvas = document.createElement('canvas');
     canvas.setAttribute(HIGHLIGHT_DATA_ATTRIBUTE_ID, elementId);
 
+    canvas.style.position = 'relative';
+    canvas.style.backgroundColor = 'transparent';
+    canvas.style.pointerEvents = 'none';
+
     target.insertAdjacentElement('afterend', canvas);
   }
 
@@ -256,15 +260,13 @@ export const mirrorDivElWithCanvas = (
 ) => {
   const targetElRect = target.getBoundingClientRect();
 
-  canvas.style.position = 'fixed';
   canvas.style.width = targetElRect.width + 'px';
   canvas.style.height = targetElRect.height + 'px';
   canvas.width = targetElRect.width;
   canvas.height = targetElRect.height;
-  canvas.style.top = targetElRect.y + 'px';
-  canvas.style.left = targetElRect.x + 'px';
-  canvas.style.backgroundColor = 'transparent';
-  canvas.style.pointerEvents = 'none';
+  canvas.style.top = `-${targetElRect.height}px`;
+  // TODO: THIS WOULD BE NEEDED WHEN THIS IS MOVED TO SHARED CODE FOR AN EXTENSION
+  // canvas.style.left = `${targetElRect.x}px`;
 };
 
 /**
@@ -437,4 +439,52 @@ export const getTargetElementById = (
   return document.querySelector<HTMLDivElement>(
     `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"]`
   );
+};
+
+/**
+ * Retrieves the ID of the target element based on a specific data attribute.
+ *
+ * @param {Element} el - The element from which to retrieve the ID.
+ * @returns {string | null} - The ID of the target element if found, otherwise null.
+ */
+export const getIdOfTargetElement = (el: Element): string | null =>
+  el.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+
+/**
+ * Watches for position changes of the specified element and triggers a callback when a change is detected.
+ *
+ * @param {Element} el - The element to watch for position changes.
+ * @param {function} callback - The callback function to execute when the element's position changes.
+ */
+export const watchElementPositionChange = (
+  el: Element,
+  callback: (el: Element) => void
+) => {
+  let lastRect = el.getBoundingClientRect();
+  let active = false;
+
+  const loopAnimationFrame = () => {
+    if (!active) return;
+
+    const currentRect = el.getBoundingClientRect();
+
+    if (lastRect.x !== currentRect.x || lastRect.y !== currentRect.y) {
+      callback(el);
+      lastRect = currentRect; // Update lastRect to the currentRect after the callback
+    }
+
+    requestAnimationFrame(loopAnimationFrame);
+  };
+
+  loopAnimationFrame();
+
+  return {
+    start() {
+      active = true;
+      loopAnimationFrame();
+    },
+    stop() {
+      active = false;
+    },
+  };
 };
