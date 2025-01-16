@@ -10,7 +10,7 @@ import {
 
 import { useParams } from 'next/navigation';
 import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../constants';
-import { LocaleFlag } from './review-suggestions/locale-flag';
+import { LocaleFlag } from './locale-flag';
 
 export function DesktopLocaleSwitcher() {
   const pathname = usePathname();
