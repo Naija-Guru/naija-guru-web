@@ -15,6 +15,7 @@ import {
 
 import Logo from '@/images/full-logo.svg';
 import { HEADER_ROUTES } from '../constants';
+import { MobileLocaleSwitcher } from './mobile-locale-switcher';
 
 export function MobileNavigationMenu() {
   return (
@@ -57,11 +58,12 @@ export function MobileNavigationMenu() {
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <Link className="block py-4 px-4" href={route.url ?? ''} key={i}>
+              <Link className="block p-4" href={route.url ?? ''} key={i}>
                 {route.label}
               </Link>
             )
           )}
+          <MobileLocaleSwitcher />
         </Accordion>
       </SheetContent>
     </Sheet>

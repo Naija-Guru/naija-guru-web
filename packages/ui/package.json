@@ -18,7 +18,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.3.0",
     "lucide-react": "^0.439.0",
-    "react": "^18",
+    "react": "^19",
     "tailwind-merge": "^2.5.2",
     "vaul": "^1.1.1"
   },

@@ -8,6 +8,7 @@ import {
 } from '@naija-spell-checker/ui';
 
 import { HEADER_ROUTES } from '../constants';
+import { DesktopLocaleSwitcher } from './desktop-locale-switcher';
 
 export function DesktopNavigationMenu() {
   return (
@@ -15,9 +16,13 @@ export function DesktopNavigationMenu() {
       <NavigationMenuList>
         {HEADER_ROUTES.map((route, i) =>
           Array.isArray(route.routes) ? (
-            <NavigationMenuItem value={route.label} key={i}>
+            <NavigationMenuItem
+              value={route.label}
+              key={i}
+              className="relative"
+            >
               <NavigationMenuTrigger>{route.label}</NavigationMenuTrigger>
-              <NavigationMenuContent className="w-[300px]">
+              <NavigationMenuContent className="w-[200px]">
                 {route.routes.map((subroute, index) => (
                   <NavigationMenuLink
                     href={subroute.url}
@@ -36,6 +41,7 @@ export function DesktopNavigationMenu() {
             </NavigationMenuItem>
           )
         )}
+        <DesktopLocaleSwitcher />
       </NavigationMenuList>
     </NavigationMenu>
   );
