@@ -4,6 +4,7 @@ import { VirtualElement } from '@floating-ui/dom';
 import { Button, Popover } from '@naija-spell-checker/ui';
 
 import { TSuggestion } from '@/models/suggestion';
+import { useTranslations } from 'next-intl';
 
 export function SuggestionPopover({
   isOpen,
@@ -20,6 +21,8 @@ export function SuggestionPopover({
   toggle: (open: boolean) => void;
   onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
 }) {
+  const t = useTranslations('Home');
+
   return (
     <Popover open={isOpen} toggleOpen={toggle} virtualAnchor={anchorRef}>
       <h4 className="mb-2">Suggestion</h4>
@@ -28,7 +31,7 @@ export function SuggestionPopover({
       </p>
       <p className="text-xs mb-4">{suggestion.message}</p>
       <Button onClick={() => onApplySuggestion(elementId, suggestion)}>
-        Accept Suggestion
+        {t('accept_suggestion')}
       </Button>
     </Popover>
   );

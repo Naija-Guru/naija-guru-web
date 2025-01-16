@@ -23,11 +23,13 @@
       "@/components/*": ["./components/*"],
       "@/constants/*": ["./constants/*"],
       "@/images/*": ["./assets/images/*"],
+      "@/i18n/*": ["./i18n/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./lib/*"],
       "@/models/*": ["./models/*"],
       "@/styles/*": ["./styles/*"]
-    }
+    },
+    "target": "ES2017"
   },
   "include": [
     "svgr.d.ts",

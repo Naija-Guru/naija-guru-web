@@ -5,22 +5,67 @@ import { ChevronDown } from 'lucide-react';
 
 import { cn } from './utils';
 
+interface NavigationItemPositionContext {
+  leftPosition: number;
+  setLeftPosition?: (leftPosition: number) => void;
+  onLeftPositionChange?: (leftPosition: number) => void;
+}
+
+class NavigationItemPositionDefaultContext
+  implements NavigationItemPositionContext
+{
+  public setLeftPosition?: (leftPosition: number) => void;
+  public onLeftPositionChange?: (leftPosition: number) => void;
+
+  constructor(public leftPosition: number = 0) {
+    this.setLeftPosition = (leftPosition: number) => {
+      this.leftPosition = leftPosition;
+      if (this.onLeftPositionChange) {
+        this.onLeftPositionChange(leftPosition);
+      }
+    };
+  }
+}
+const CurrentNavigationItemPositionContext =
+  React.createContext<NavigationItemPositionContext | null>(null);
+
+const NavigationMenuItemProvider: React.FC<{
+  navigationItemPosition: NavigationItemPositionContext | null;
+  children: React.ReactNode;
+}> = ({ navigationItemPosition, children }) => {
+  return (
+    <CurrentNavigationItemPositionContext.Provider
+      value={navigationItemPosition}
+    >
+      {children}
+    </CurrentNavigationItemPositionContext.Provider>
+  );
+};
+
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
->(({ className, children, ...props }, ref) => (
-  <NavigationMenuPrimitive.Root
-    ref={ref}
-    className={cn(
-      'relative z-10 flex max-w-max flex-1 items-center justify-center',
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <NavigationMenuViewport />
-  </NavigationMenuPrimitive.Root>
-));
+>(({ className, children, ...props }, ref) => {
+  const navigationItemPosition = new NavigationItemPositionDefaultContext();
+
+  return (
+    <NavigationMenuPrimitive.Root
+      ref={ref}
+      className={cn(
+        'relative z-10 flex max-w-max flex-1 items-center justify-center',
+        className
+      )}
+      {...props}
+    >
+      <NavigationMenuItemProvider
+        navigationItemPosition={navigationItemPosition}
+      >
+        {children}
+        <NavigationMenuViewport />
+      </NavigationMenuItemProvider>
+    </NavigationMenuPrimitive.Root>
+  );
+});
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
 
 const NavigationMenuList = React.forwardRef<
@@ -38,7 +83,51 @@ const NavigationMenuList = React.forwardRef<
 ));
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 
-const NavigationMenuItem = NavigationMenuPrimitive.Item;
+const NavigationMenuItem = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item>
+>(({ className, children, ...props }, ref) => {
+  const currentNavigationItemPositionContext = React.useContext(
+    CurrentNavigationItemPositionContext
+  );
+  const itemRef = React.useRef<HTMLLIElement>(null);
+
+  React.useEffect(() => {
+    itemRef.current?.addEventListener('mouseenter', () => {
+      if (itemRef.current && currentNavigationItemPositionContext != null) {
+        const parentRect =
+          itemRef.current.parentElement?.getBoundingClientRect();
+        const rect = itemRef.current.getBoundingClientRect();
+        if (
+          parentRect &&
+          currentNavigationItemPositionContext?.setLeftPosition
+        ) {
+          currentNavigationItemPositionContext.setLeftPosition(
+            rect.left - parentRect.left
+          );
+        }
+      }
+    });
+  }, [itemRef, currentNavigationItemPositionContext]);
+
+  return (
+    <NavigationMenuPrimitive.Item
+      ref={(node) => {
+        itemRef.current = node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          (ref as React.RefObject<HTMLLIElement | null>).current = node;
+        }
+      }}
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </NavigationMenuPrimitive.Item>
+  );
+});
+NavigationMenuItem.displayName = NavigationMenuPrimitive.Item.displayName;
 
 const navigationMenuTriggerStyle = cva(
   'group inline-flex h-9 w-max items-center justify-center disabled:pointer-events-none disabled:opacity-50'
@@ -69,7 +158,7 @@ const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      'top-0 grid gap-6 p-4 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute',
+      'left-0 top-0 grid gap-6 p-4 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52',
       className
     )}
     {...props}
@@ -88,18 +177,40 @@ NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
->(({ className, ...props }, ref) => (
-  <div className={cn('absolute left-0 top-full flex justify-center')}>
-    <NavigationMenuPrimitive.Viewport
-      className={cn(
-        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden border bg-popover text-popover-foreground shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  </div>
-));
+>(({ className, ...props }, ref) => {
+  const currentNavigationItemPositionContext = React.useContext(
+    CurrentNavigationItemPositionContext
+  );
+  if (!currentNavigationItemPositionContext) {
+    throw new Error(
+      'Cannot use NavigationMenuViewport outside of NavigationMenu'
+    );
+  }
+  const [leftPosition, setLeftPosition] = React.useState<number>(
+    currentNavigationItemPositionContext?.leftPosition ?? 0
+  );
+  currentNavigationItemPositionContext.onLeftPositionChange = (
+    leftPosition: number
+  ) => {
+    setLeftPosition(leftPosition);
+  };
+
+  return (
+    <div
+      style={{ left: leftPosition }}
+      className={cn('absolute left-0 top-full flex justify-center')}
+    >
+      <NavigationMenuPrimitive.Viewport
+        className={cn(
+          'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    </div>
+  );
+});
 NavigationMenuViewport.displayName =
   NavigationMenuPrimitive.Viewport.displayName;
 
