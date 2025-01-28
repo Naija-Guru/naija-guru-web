@@ -1,5 +1,20 @@
 import { z } from 'zod';
 
+export const TSuggestionRuleCategory = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+export type TSuggestionRuleCategory = z.infer<typeof TSuggestionRuleCategory>;
+
+export const TSuggestionRule = z.object({
+  id: z.string(),
+  description: z.string(),
+  category: TSuggestionRuleCategory,
+});
+
+export type TSuggestionRule = z.infer<typeof TSuggestionRule>;
+
 export const TSuggestion = z.object({
   message: z.string(),
   replacements: z.array(
@@ -18,14 +33,7 @@ export const TSuggestion = z.object({
   type: z.object({
     typeName: z.string(),
   }),
-  rule: z.object({
-    id: z.string(),
-    description: z.string(),
-    category: z.object({
-      id: z.string(),
-      name: z.string(),
-    }),
-  }),
+  rule: TSuggestionRule,
 });
 
 export type TSuggestion = z.infer<typeof TSuggestion>;

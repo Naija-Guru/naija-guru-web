@@ -32,44 +32,34 @@ import { debounce } from '@/lib/utils';
 import { SuggestionPopover } from '@/components/suggestion-popover';
 import { ReviewSuggestions } from '@/components/review-suggestions';
 
-import { initialState, reducer } from './reducer';
 import { useObserveElementsResize } from '@/hooks/useObserveElementsResize';
 import { useListenToElementsScroll } from '@/hooks/useListenToElementsScroll';
-
-const suggestionsListContainerClassnames = cn(
-  'flex',
-  'flex-col',
-  'lg:w-1/3',
-  'lg:static',
-  'fixed',
-  'bottom-0',
-  'left-0',
-  'right-0',
-  'bg-white',
-  'h-[250px]',
-  'lg:h-[calc(100vh-300px)]',
-  'border',
-  'border-solid'
-);
+import { useSuggestionsReducer } from 'reducers/suggestions-reducer';
 
 export default function Content() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [suggestionsState, suggestionsStateDispatch] = useSuggestionsReducer();
   const suggestionsListRef = useRef<Record<string, TSuggestion[]>>({});
 
   const isSuggestionsListEmpty = useMemo(
-    () => Object.values(state.suggestionsList).flat().length < 1,
-    [state.suggestionsList]
+    () => Object.values(suggestionsState.suggestionsList).flat().length < 1,
+    [suggestionsState.suggestionsList]
   );
 
   const onUseSampleContent = () => {
-    dispatch({ type: 'SET_EDITOR_CONTENT', payload: SAMPLE_TEXT });
+    suggestionsStateDispatch({
+      type: 'SET_EDITOR_CONTENT',
+      payload: SAMPLE_TEXT,
+    });
   };
 
   const toggleSuggestionPopover = (open: boolean) => {
     if (!open) {
-      dispatch({ type: 'SET_SELECTED_SUGGESTION', payload: null });
+      suggestionsStateDispatch({
+        type: 'SET_SELECTED_SUGGESTION',
+        payload: null,
+      });
     }
-    dispatch({ type: 'SET_IS_POPOVER_OPEN', payload: open });
+    suggestionsStateDispatch({ type: 'SET_IS_POPOVER_OPEN', payload: open });
   };
 
   const highlightElementSuggestions = (elementId: string) => {
@@ -89,7 +79,7 @@ export default function Content() {
     suggestionsListRef.current = {
       ...rest,
     };
-    dispatch({
+    suggestionsStateDispatch({
       type: 'SET_SUGGESTIONS_LIST',
       payload: suggestionsListRef.current,
     });
@@ -98,7 +88,10 @@ export default function Content() {
 
   const checkContentEditableElement = useCallback(
     async (target: HTMLElement) => {
-      dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: true });
+      suggestionsStateDispatch({
+        type: 'SET_LOADING_SUGGESTIONS',
+        payload: true,
+      });
       if (!target.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID)) {
         const id = uuidv4();
         target.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, id);
@@ -124,7 +117,7 @@ export default function Content() {
           ...suggestionsListRef.current,
           [elementId]: suggestions,
         };
-        dispatch({
+        suggestionsStateDispatch({
           type: 'SET_SUGGESTIONS_LIST',
           payload: suggestionsListRef.current,
         });
@@ -132,7 +125,10 @@ export default function Content() {
       } else {
         clearHighlights(elementId);
       }
-      dispatch({ type: 'SET_LOADING_SUGGESTIONS', payload: false });
+      suggestionsStateDispatch({
+        type: 'SET_LOADING_SUGGESTIONS',
+        payload: false,
+      });
     },
     [clearHighlights]
   );
@@ -147,8 +143,8 @@ export default function Content() {
 
   const showPopover = useCallback(
     (e: MouseEvent) => {
-      if (state.isAcceptingAllSuggestions) return;
-      const elementIdS = Object.keys(state.suggestionsList);
+      if (suggestionsState.isAcceptingAllSuggestions) return;
+      const elementIdS = Object.keys(suggestionsState.suggestionsList);
       const target = findTargetElement(e, elementIdS);
 
       if (!target) return;
@@ -157,7 +153,7 @@ export default function Content() {
 
       if (!elementId) return;
 
-      const suggestions = state.suggestionsList[elementId];
+      const suggestions = suggestionsState.suggestionsList[elementId];
 
       if (!suggestions) return;
 
@@ -168,7 +164,7 @@ export default function Content() {
       );
 
       if (suggestion && rect) {
-        dispatch({
+        suggestionsStateDispatch({
           type: 'SET_SELECTED_SUGGESTION',
           payload: { elementId, suggestion },
         });
@@ -176,11 +172,20 @@ export default function Content() {
         const virtualEl: VirtualElement = {
           getBoundingClientRect: () => rect,
         };
-        dispatch({ type: 'SET_ANCHOR_REF', payload: virtualEl });
-        dispatch({ type: 'SET_IS_POPOVER_OPEN', payload: true });
+        suggestionsStateDispatch({
+          type: 'SET_ANCHOR_REF',
+          payload: virtualEl,
+        });
+        suggestionsStateDispatch({
+          type: 'SET_IS_POPOVER_OPEN',
+          payload: true,
+        });
       }
     },
-    [state.isAcceptingAllSuggestions, state.suggestionsList]
+    [
+      suggestionsState.isAcceptingAllSuggestions,
+      suggestionsState.suggestionsList,
+    ]
   );
 
   const handleRemoveNode = (node: Node) => {
@@ -203,32 +208,35 @@ export default function Content() {
   );
 
   const handleApplyAllSuggestions = () => {
-    dispatch({ type: 'SET_IS_FIXING_ALL', payload: true });
+    suggestionsStateDispatch({ type: 'SET_IS_FIXING_ALL', payload: true });
   };
 
   const handleAcceptFirstSuggestionOnList = useCallback(() => {
-    const elementId = Object.keys(state.suggestionsList)[0];
-    applySuggestion(elementId, state.suggestionsList[elementId][0]);
-  }, [state.suggestionsList, applySuggestion]);
+    const elementId = Object.keys(suggestionsState.suggestionsList)[0];
+    applySuggestion(elementId, suggestionsState.suggestionsList[elementId][0]);
+  }, [suggestionsState.suggestionsList, applySuggestion]);
 
   useEffect(() => {
-    if (state.isAcceptingAllSuggestions && !state.loadingSuggestions) {
+    if (
+      suggestionsState.isAcceptingAllSuggestions &&
+      !suggestionsState.loadingSuggestions
+    ) {
       if (isSuggestionsListEmpty) {
-        dispatch({ type: 'SET_IS_FIXING_ALL', payload: false });
+        suggestionsStateDispatch({ type: 'SET_IS_FIXING_ALL', payload: false });
       } else {
         handleAcceptFirstSuggestionOnList();
       }
     }
   }, [
-    state.isAcceptingAllSuggestions,
+    suggestionsState.isAcceptingAllSuggestions,
     isSuggestionsListEmpty,
-    state.loadingSuggestions,
+    suggestionsState.loadingSuggestions,
     handleAcceptFirstSuggestionOnList,
   ]);
 
   const elementIds = useMemo(
-    () => Object.keys(state.suggestionsList),
-    [state.suggestionsList]
+    () => Object.keys(suggestionsState.suggestionsList),
+    [suggestionsState.suggestionsList]
   );
 
   const targetedElements = useMemo(
@@ -263,37 +271,41 @@ export default function Content() {
           <div className="mb-4 hidden md:block">
             <Button variant="outline" onClick={onUseSampleContent}>
               <File className="mr-2 h-4 w-4" />
-              Use Sample content
+              Insert Example Text
             </Button>
           </div>
           <div className="flex flex-col lg:flex-row gap-6">
             <Editor
               className="w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto md:text-xl border"
-              content={state.editorContent}
+              content={suggestionsState.editorContent}
               setContent={(c: string) =>
-                dispatch({ type: 'SET_EDITOR_CONTENT', payload: c })
+                suggestionsStateDispatch({
+                  type: 'SET_EDITOR_CONTENT',
+                  payload: c,
+                })
               }
-              disabled={state.isAcceptingAllSuggestions}
+              disabled={suggestionsState.isAcceptingAllSuggestions}
             />
             <ReviewSuggestions
-              className={suggestionsListContainerClassnames}
-              list={state.suggestionsList}
+              list={suggestionsState.suggestionsList}
               onApplySuggestion={applySuggestion}
               onApplyAllSuggestions={handleApplyAllSuggestions}
-              isLoadingSuggestions={state.loadingSuggestions}
+              isLoadingSuggestions={suggestionsState.loadingSuggestions}
               isListEmpty={isSuggestionsListEmpty}
-              isAcceptingAllSuggestions={state.isAcceptingAllSuggestions}
+              isAcceptingAllSuggestions={
+                suggestionsState.isAcceptingAllSuggestions
+              }
             />
           </div>
         </div>
       </div>
-      {state.selectedSuggestion && (
+      {suggestionsState.selectedSuggestion && (
         <SuggestionPopover
-          isOpen={state.isPopoverOpen}
-          anchorRef={state.anchorRef}
+          isOpen={suggestionsState.isPopoverOpen}
+          anchorRef={suggestionsState.anchorRef}
           toggle={toggleSuggestionPopover}
-          elementId={state.selectedSuggestion.elementId}
-          suggestion={state.selectedSuggestion.suggestion}
+          elementId={suggestionsState.selectedSuggestion.elementId}
+          suggestion={suggestionsState.selectedSuggestion.suggestion}
           onApplySuggestion={applySuggestion}
         />
       )}
