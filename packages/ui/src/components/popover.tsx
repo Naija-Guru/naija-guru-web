@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode, FC, useEffect } from 'react';
 import { shift, flip, hide, VirtualElement } from '@floating-ui/dom';
 import {

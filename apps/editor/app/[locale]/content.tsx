@@ -5,7 +5,7 @@ import { File } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button, cn } from '@naija-spell-checker/ui';
+import { Button, useToast } from '@naija-spell-checker/ui';
 
 import { getSpellingSuggestions } from '@/api/spellCheck';
 import { Editor } from '@/components/editor';
@@ -37,6 +37,8 @@ import { useListenToElementsScroll } from '@/hooks/useListenToElementsScroll';
 import { useSuggestionsReducer } from 'reducers/suggestions-reducer';
 
 export default function Content() {
+  const { toast } = useToast();
+
   const [suggestionsState, suggestionsStateDispatch] = useSuggestionsReducer();
   const suggestionsListRef = useRef<Record<string, TSuggestion[]>>({});
 
@@ -105,9 +107,15 @@ export default function Content() {
       const text = target.textContent?.trim() || '';
 
       if (text.length) {
-        const [data] = await asyncWrapper(getSpellingSuggestions(text));
+        const [data, error] = await asyncWrapper(getSpellingSuggestions(text));
         if (!data) {
           clearHighlights(elementId);
+          toast({
+            title: 'Error occurred',
+            description:
+              error?.message || error?.name || 'Unknown error occurred',
+            variant: 'destructive',
+          });
           return;
         }
 

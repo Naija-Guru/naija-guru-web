@@ -1,4 +1,4 @@
-import { replaceTextWithSuggestion } from '@/lib/string';
+import { getSavedPreferencesState } from '@/lib/storage';
 import { TSuggestion } from 'models/suggestion';
 import { z } from 'zod';
 
@@ -13,8 +13,12 @@ type TSpellingSuggestionsResponse = z.infer<
 export const getSpellingSuggestions = async (
   text: string
 ): Promise<TSpellingSuggestionsResponse> => {
+  const endpoint =
+    getSavedPreferencesState().customSpellCheckApiEndpoint ??
+    process.env.NEXT_PUBLIC_SPELL_CHECK_API_ENDPOINT;
+
   const res = await fetch(
-    `https://spellchecker-1.nl.naija.guru/v2/check?${new URLSearchParams({
+    `${endpoint}?${new URLSearchParams({
       text,
       language: 'pcm-NG',
     }).toString()}`

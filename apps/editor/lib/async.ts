@@ -1,3 +1,18 @@
+export const castErrorType = (error: unknown) => {
+  if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    return error as TypeError;
+  }
+
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    return error as DOMException;
+  }
+
+  if (!navigator.onLine) {
+    return new Error('Error connecting online');
+  }
+
+  return new Error('Unknown error occurred');
+};
 /**
  * A wrapper function to handle async operations with try-catch.
  *
@@ -7,13 +22,12 @@
  */
 export async function asyncWrapper<T>(
   promise: Promise<T>
-): Promise<readonly [T | null, any | null]> {
+): Promise<readonly [T | null, ReturnType<typeof castErrorType> | null]> {
   try {
     // Await the promise and return the data with null error
     const data = await promise;
     return [data, null] as const;
   } catch (error) {
-    // If an error occurs, return null data with the error
-    return [null, error] as const;
+    return [null, castErrorType(error)] as const;
   }
 }

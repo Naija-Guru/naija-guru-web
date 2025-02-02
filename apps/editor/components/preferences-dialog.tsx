@@ -1,15 +1,17 @@
 import { FC, ReactNode } from 'react';
 
 import {
-  Button,
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 } from '@naija-spell-checker/ui';
+import { ApiForm } from './api-form';
 
 export const PreferencesDialog: FC<{ trigger: ReactNode }> = ({ trigger }) => {
   return (
@@ -18,13 +20,17 @@ export const PreferencesDialog: FC<{ trigger: ReactNode }> = ({ trigger }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Preferences</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+        <Tabs defaultValue="api">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="api">API</TabsTrigger>
+            <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
+          </TabsList>
+          <TabsContent value="api">
+            <ApiForm />
+          </TabsContent>
+          <TabsContent value="suggestions"></TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
