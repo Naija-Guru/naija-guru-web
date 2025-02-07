@@ -10,7 +10,8 @@ import { TSuggestionRule, TSuggestionRuleCategory } from '@/models/suggestion';
 const createInitialState = () => getSavedPreferencesState();
 
 export type TPreferencesReducerAction =
-  | { type: 'SET_CUSTOM_API_DOMAIN'; payload: { url: string } }
+  | { type: 'SET_CUSTOM_SPELL_CHECKER_API_ENDPOINT'; payload: { url: string } }
+  | { type: 'RESET_CUSTOM_SPELL_CHECKER_API_ENDPOINT' }
   | {
       type: 'ADD_IGNORED_CATEGORY';
       payload: { category: TSuggestionRuleCategory };
@@ -26,8 +27,10 @@ export function preferencesReducer(
   action: TPreferencesReducerAction
 ): TPreferencesState {
   switch (action.type) {
-    case 'SET_CUSTOM_API_DOMAIN':
+    case 'SET_CUSTOM_SPELL_CHECKER_API_ENDPOINT':
       return { ...state, customSpellCheckApiEndpoint: action.payload.url };
+    case 'RESET_CUSTOM_SPELL_CHECKER_API_ENDPOINT':
+      return { ...state, customSpellCheckApiEndpoint: null };
     case 'ADD_IGNORED_CATEGORY':
       return {
         ...state,

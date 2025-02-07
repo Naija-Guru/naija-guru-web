@@ -2,8 +2,8 @@
 import Link from 'next/link';
 
 import Logo from '@/images/full-logo.svg';
-import { MobileNavigationMenu } from '../components/mobile-navigation-menu';
-import { DesktopNavigationMenu } from '../components/desktop-navigation-menu';
+import { MobileNavigationMenu } from './navigation-menu/mobile-navigation-menu';
+import { DesktopNavigationMenu } from './navigation-menu/desktop-navigation-menu';
 
 export function Header() {
   return (

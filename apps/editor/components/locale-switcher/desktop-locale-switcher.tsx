@@ -8,14 +8,13 @@ import {
   NavigationMenuTrigger,
 } from '@naija-spell-checker/ui';
 
-import { useParams } from 'next/navigation';
-import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../constants';
-import { LocaleFlag } from './locale-flag';
+import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../../constants';
+import { LocaleFlag } from '../locale-flag';
+import { useLocale } from '@/hooks/useLocale';
 
 export function DesktopLocaleSwitcher() {
   const pathname = usePathname();
-  const params = useParams();
-  const currentLocale = params.locale as string;
+  const currentLocale = useLocale();
 
   return (
     <NavigationMenuItem className="relative">

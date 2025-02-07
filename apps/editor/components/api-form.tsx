@@ -14,17 +14,20 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  useToast,
 } from '@naija-spell-checker/ui';
 import { usePreferencesReducer } from 'reducers/preferences-reducer';
 
 const formSchema = z.object({
-  url: z.union([z.string().url(), z.literal('')]),
+  url: z.string().url(),
 });
 
 export const ApiForm: FC = () => {
+  const { toast } = useToast();
   const [preferencesState, dispatchPreferencesState] = usePreferencesReducer();
 
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: 'onSubmit',
     resolver: zodResolver(formSchema),
     defaultValues: {
       url: preferencesState.customSpellCheckApiEndpoint ?? '',
@@ -33,12 +36,26 @@ export const ApiForm: FC = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     dispatchPreferencesState({
-      type: 'SET_CUSTOM_API_DOMAIN',
+      type: 'SET_CUSTOM_SPELL_CHECKER_API_ENDPOINT',
       payload: {
         url: values.url,
       },
     });
+    toast({
+      title: 'Settings saved!',
+    });
   }
+
+  function resetCustomApiEndpoint() {
+    dispatchPreferencesState({
+      type: 'RESET_CUSTOM_SPELL_CHECKER_API_ENDPOINT',
+    });
+    form.reset({ url: '' });
+  }
+
+  const canResetForm =
+    form.getValues().url === preferencesState.customSpellCheckApiEndpoint &&
+    Boolean(form.getValues().url);
 
   return (
     <Form {...form}>
@@ -59,15 +76,13 @@ export const ApiForm: FC = () => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={
-            form.getValues().url ===
-            preferencesState.customSpellCheckApiEndpoint
-          }
-        >
-          Save
-        </Button>
+        {canResetForm ? (
+          <Button type="button" onClick={resetCustomApiEndpoint}>
+            Reset
+          </Button>
+        ) : (
+          <Button type="submit">Save</Button>
+        )}
       </form>
     </Form>
   );

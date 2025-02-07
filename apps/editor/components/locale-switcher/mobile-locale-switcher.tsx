@@ -8,14 +8,13 @@ import {
 } from '@naija-spell-checker/ui';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../constants';
-import { LocaleFlag } from './locale-flag';
+import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../../constants';
+import { LocaleFlag } from '../locale-flag';
+import { useLocale } from '@/hooks/useLocale';
 
 export function MobileLocaleSwitcher() {
   const pathname = usePathname();
-  const params = useParams();
-  const currentLocale = params.locale as string;
+  const currentLocale = useLocale();
 
   return (
     <AccordionItem value={currentLocale}>

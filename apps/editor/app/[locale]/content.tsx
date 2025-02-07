@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, useToast } from '@naija-spell-checker/ui';
 
 import { getSpellingSuggestions } from '@/api/spellCheck';
-import { Editor } from '@/components/editor';
+import { Editor } from '@/components/wysiwyg-editor/editor';
 import { ELEMENT_DATA_ATTRIBUTE_ID, SAMPLE_TEXT } from '@/constants/index';
 import { useClickEventDelegation } from '@/hooks/useClickEventDelegation';
 import { useElementRemoved } from '@/hooks/useElementRemoved';

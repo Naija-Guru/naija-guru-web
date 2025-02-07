@@ -1,11 +1,9 @@
 import { TSuggestion } from '@/models/suggestion';
-import { Button, cn } from '@naija-spell-checker/ui';
-import { ApplyAllSuggestions } from './apply-all-suggestions';
+import { cn } from '@naija-spell-checker/ui';
+import { ReviewSuggestionsActions } from './review-suggestions-actions';
 import { ReviewSuggestionsDesktopList } from './review-suggestions-desktop-list';
 import { ReviewSuggestionsEmpty } from './review-suggestions-empty';
 import { ReviewSuggestionsMobileList } from './review-suggestions-mobile-list';
-import { PreferencesDialog } from '../preferences-dialog';
-import { SettingsIcon } from 'lucide-react';
 
 export function ReviewSuggestions({
   list,
@@ -40,23 +38,14 @@ export function ReviewSuggestions({
         'border-solid'
       )}
     >
-      <h2 className="text-secondary text-xl font-semibold p-4 text-center">
-        Review Suggestions
-      </h2>
-      <PreferencesDialog
-        trigger={
-          <Button className="mx-4" variant="link">
-            <SettingsIcon className="px-1" />
-            Preferences
-          </Button>
-        }
+      <div className="p-4 flex justify-between">
+        <h2 className="text-secondary text-xl font-semibold">Suggestions</h2>
+      </div>
+      <ReviewSuggestionsActions
+        showApplyAllSuggestionsAction={!isListEmpty}
+        isAcceptingAllSuggestions={isAcceptingAllSuggestions}
+        onApplyAllSuggestions={onApplyAllSuggestions}
       />
-      {!isListEmpty && (
-        <ApplyAllSuggestions
-          isAcceptingAllSuggestions={isAcceptingAllSuggestions}
-          onApplyAllSuggestions={onApplyAllSuggestions}
-        />
-      )}
       {!isAcceptingAllSuggestions && (
         <>
           <ReviewSuggestionsMobileList
