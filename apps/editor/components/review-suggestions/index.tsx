@@ -23,23 +23,25 @@ export function ReviewSuggestions({
   return (
     <div
       className={cn(
-        'flex',
-        'flex-col',
-        'lg:w-1/3',
-        'lg:static',
-        'fixed',
-        'bottom-0',
-        'left-0',
-        'right-0',
-        'bg-white',
-        'h-[250px]',
-        'lg:h-[calc(100vh-300px)]',
-        'border',
-        'border-solid'
+        'tw-flex',
+        'tw-flex-col',
+        'lg:tw-w-1/3',
+        'lg:tw-static',
+        'tw-fixed',
+        'tw-bottom-0',
+        'tw-left-0',
+        'tw-right-0',
+        'tw-bg-white',
+        'tw-h-[250px]',
+        'lg:tw-h-[calc(100vh-300px)]',
+        'tw-border',
+        'tw-border-solid'
       )}
     >
-      <div className="p-4 flex justify-between">
-        <h2 className="text-secondary text-xl font-semibold">Suggestions</h2>
+      <div className="tw-p-4 tw-flex tw-justify-between">
+        <h2 className="tw-text-secondary tw-text-xl tw-font-semibold">
+          Suggestions
+        </h2>
       </div>
       <ReviewSuggestionsActions
         showApplyAllSuggestionsAction={!isListEmpty}

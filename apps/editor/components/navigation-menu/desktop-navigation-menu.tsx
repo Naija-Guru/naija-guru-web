@@ -12,17 +12,17 @@ import { DesktopLocaleSwitcher } from '../locale-switcher/desktop-locale-switche
 
 export function DesktopNavigationMenu() {
   return (
-    <NavigationMenu className="hidden md:block">
+    <NavigationMenu className="tw-hidden md:tw-block">
       <NavigationMenuList>
         {HEADER_ROUTES.map((route, i) =>
           Array.isArray(route.routes) ? (
             <NavigationMenuItem
               value={route.label}
               key={i}
-              className="relative"
+              className="tw-relative"
             >
               <NavigationMenuTrigger>{route.label}</NavigationMenuTrigger>
-              <NavigationMenuContent className="w-[200px]">
+              <NavigationMenuContent className="tw-w-[200px]">
                 {route.routes.map((subroute, index) => (
                   <NavigationMenuLink
                     href={subroute.url}

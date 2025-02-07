@@ -1,7 +1,7 @@
 export function Footer() {
   return (
-    <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-      <p className="text-xs text-gray-500 dark:text-gray-400">
+    <footer className="tw-flex tw-flex-col tw-gap-2 sm:tw-flex-row tw-py-6 tw-w-full tw-shrink-0 tw-items-center tw-px-4 md:tw-px-6 tw-border-t">
+      <p className="tw-text-xs tw-text-gray-500 dark:tw-text-gray-400">
         © {new Date().getFullYear()} Naija Spell Checker.
       </p>
     </footer>

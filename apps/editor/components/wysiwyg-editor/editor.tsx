@@ -38,7 +38,7 @@ export const Editor: FC<EditorProps> = ({
           className: cn(
             className,
             {
-              'opacity-25 cursor-not-allowed': disabled,
+              'tw-opacity-25 tw-cursor-not-allowed': disabled,
             },
             styles.container
           ),

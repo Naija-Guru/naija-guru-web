@@ -17,18 +17,18 @@ export function DesktopLocaleSwitcher() {
   const currentLocale = useLocale();
 
   return (
-    <NavigationMenuItem className="relative">
-      <NavigationMenuTrigger className="flex gap-2">
+    <NavigationMenuItem className="tw-relative">
+      <NavigationMenuTrigger className="tw-flex tw-gap-2">
         <LocaleFlag locale={currentLocale} />
         {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[currentLocale]}
       </NavigationMenuTrigger>
-      <NavigationMenuContent className="w-[150px]">
+      <NavigationMenuContent className="tw-w-[150px]">
         {routing.locales.map((locale) =>
           locale !== currentLocale ? (
             <NavigationMenuLink
               href={`/${locale}${pathname}`}
               key={locale}
-              className="flex gap-2"
+              className="tw-flex tw-gap-2"
             >
               <LocaleFlag locale={locale} />
               {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[locale]}

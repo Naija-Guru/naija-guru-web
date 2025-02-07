@@ -18,8 +18,8 @@ export function MobileLocaleSwitcher() {
 
   return (
     <AccordionItem value={currentLocale}>
-      <AccordionTrigger className="px-4">
-        <span className="flex gap-2">
+      <AccordionTrigger className="tw-px-4">
+        <span className="tw-flex tw-gap-2">
           <LocaleFlag locale={currentLocale} />
           {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[currentLocale]}
         </span>
@@ -30,7 +30,7 @@ export function MobileLocaleSwitcher() {
             <Link
               href={`/${locale}${pathname}`}
               key={locale}
-              className="flex gap-2 p-4"
+              className="tw-flex tw-gap-2 tw-p-4"
             >
               <LocaleFlag locale={locale} />
               {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[locale]}

@@ -7,10 +7,10 @@ import { DesktopNavigationMenu } from './navigation-menu/desktop-navigation-menu
 
 export function Header() {
   return (
-    <div className="border-b">
-      <header className="flex items-center justify-between m-auto max-w-[1200px] p-4 md:py-10">
+    <div className="tw-border-b">
+      <header className="tw-flex tw-items-center tw-justify-between tw-m-auto tw-max-w-[1200px] tw-p-4 md:tw-py-10">
         <Link href="/">
-          <Logo className="h-8 mr-2" />
+          <Logo className="tw-h-8 tw-mr-2" />
         </Link>
         <MobileNavigationMenu />
         <DesktopNavigationMenu />

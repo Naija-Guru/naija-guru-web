@@ -36,9 +36,9 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <div className="flex flex-col min-h-screen">
+          <div className="tw-flex tw-flex-col tw-min-h-screen">
             <Header />
-            <div className="flex-1">{children}</div>
+            <div className="tw-flex-1">{children}</div>
             <Footer />
             <InstallPrompt />
             <Toaster />

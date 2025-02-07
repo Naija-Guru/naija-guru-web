@@ -14,18 +14,18 @@ export const ReviewSuggestionsActions = ({
   onApplyAllSuggestions: () => void;
 }) => {
   return (
-    <div className="p-4 flex justify-between items-center g-4">
+    <div className="tw-p-4 tw-flex tw-justify-between tw-items-center tw-g-4">
       <PreferencesDialog
         trigger={
           <Button variant="outline">
-            <SettingsIcon className="h-4 w-4 mr-1" />
+            <SettingsIcon className="tw-h-4 tw-w-4 tw-mr-1" />
             Preferences
           </Button>
         }
       />
       {showApplyAllSuggestionsAction && (
         <Button onClick={onApplyAllSuggestions} variant="outline">
-          <WandSparklesIcon className="h-4 w-4 mr-1" />
+          <WandSparklesIcon className="tw-h-4 tw-w-4 tw-mr-1" />
           {isAcceptingAllSuggestions ? 'Fixing...' : 'Fix all'}
         </Button>
       )}

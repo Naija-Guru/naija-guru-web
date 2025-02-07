@@ -82,9 +82,9 @@ export function InstallPrompt() {
   return (
     <Drawer open={isBannerOpen}>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="tw-mx-auto tw-w-full tw-max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="text-secondary">
+            <DrawerTitle className="tw-text-secondary">
               Install Naija Spell Checker
             </DrawerTitle>
             <DrawerDescription>
@@ -92,25 +92,29 @@ export function InstallPrompt() {
               store. No download. No hassle.
             </DrawerDescription>
           </DrawerHeader>
-          <div className="px-10">
+          <div className="tw-px-10">
             {isIOSDevice && (
               <ol>
-                <li className="mb-4">
+                <li className="tw-mb-4">
                   Tap on the share button{' '}
-                  <ShareIcon className="inline mx-2 text-secondary" />
+                  <ShareIcon className="tw-inline tw-mx-2 tw-text-secondary" />
                 </li>
-                <li className="mb-4">
+                <li className="tw-mb-4">
                   Select{' '}
-                  <span className="text-secondary">Add to Home Screen</span>{' '}
-                  <PlusSquareIcon className="inline mx-2 text-secondary" />
+                  <span className="tw-text-secondary">Add to Home Screen</span>{' '}
+                  <PlusSquareIcon className="tw-inline tw-mx-2 tw-text-secondary" />
                 </li>
               </ol>
             )}
           </div>
           <DrawerFooter>
             {!isIOSDevice && (
-              <Button className="mb-4" ref={installBtn} onClick={onInstallApp}>
-                <PlusSquareIcon className="mr-2" />
+              <Button
+                className="tw-mb-4"
+                ref={installBtn}
+                onClick={onInstallApp}
+              >
+                <PlusSquareIcon className="tw-mr-2" />
                 Install
               </Button>
             )}

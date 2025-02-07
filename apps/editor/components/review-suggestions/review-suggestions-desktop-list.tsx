@@ -18,19 +18,19 @@ export function ReviewSuggestionsDesktopList({
   isLoadingSuggestions: boolean;
 }) {
   return (
-    <ul className="overflow-y-scroll h-7/8 border-t border-solid p-4 hidden md:block">
+    <ul className="tw-overflow-y-scroll tw-h-7/8 tw-border-t tw-border-solid tw-p-4 tw-hidden md:tw-block">
       {Object.entries(list).map(([elementId, suggestions]) =>
         suggestions.map((suggestion) => (
           <li key={elementId + suggestion.offset}>
-            <Alert className="my-4 cursor-pointer" variant="destructive">
-              <AlertCircle className="h-5" />
-              <AlertTitle className="font-normal">
+            <Alert className="tw-my-4 tw-cursor-pointer" variant="destructive">
+              <AlertCircle className="tw-h-5" />
+              <AlertTitle className="tw-font-normal">
                 {suggestion.message}
               </AlertTitle>
-              <AlertDescription className="font-bold text-xl">
+              <AlertDescription className="tw-font-bold tw-text-xl">
                 <p>{suggestion.replacements[0].value}</p>
                 <Button
-                  className="my-4"
+                  className="tw-my-4"
                   onClick={() => onApplySuggestion(elementId, suggestion)}
                   disabled={isLoadingSuggestions}
                 >

@@ -25,11 +25,11 @@ export function SuggestionPopover({
 
   return (
     <Popover open={isOpen} toggleOpen={toggle} virtualAnchor={anchorRef}>
-      <h4 className="mb-2">Suggestion</h4>
-      <p className="text-primary font-bold text-xl mb-2">
+      <h4 className="tw-mb-2">Suggestion</h4>
+      <p className="tw-text-primary tw-font-bold tw-text-xl tw-mb-2">
         {suggestion.replacements[0].value}
       </p>
-      <p className="text-xs mb-4">{suggestion.message}</p>
+      <p className="tw-text-xs tw-mb-4">{suggestion.message}</p>
       <Button onClick={() => onApplySuggestion(elementId, suggestion)}>
         {t('accept_suggestion')}
       </Button>

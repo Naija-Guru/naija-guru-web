@@ -25,23 +25,23 @@ export function ReviewSuggestionsMobileList({
   isListEmpty: boolean;
 }) {
   return (
-    <Carousel className="w-full md:hidden">
+    <Carousel className="tw-w-full md:tw-hidden">
       <CarouselContent>
         {Object.entries(list).map(([elementId, suggestions]) =>
           suggestions.map((suggestion) => (
             <CarouselItem key={elementId + suggestion.offset}>
               <Alert
-                className="cursor-pointer w-4/6 mx-auto"
+                className="tw-cursor-pointer tw-w-4/6 tw-mx-auto"
                 variant="destructive"
               >
-                <AlertCircle className="h-5" />
-                <AlertTitle className="font-normal">
+                <AlertCircle className="tw-h-5" />
+                <AlertTitle className="tw-font-normal">
                   {suggestion.message}
                 </AlertTitle>
-                <AlertDescription className="font-bold text-xl">
+                <AlertDescription className="tw-font-bold tw-text-xl">
                   <p>{suggestion.replacements[0].value}</p>
                   <Button
-                    className="my-4"
+                    className="tw-my-4"
                     onClick={() => onApplySuggestion(elementId, suggestion)}
                     disabled={isLoadingSuggestions}
                   >

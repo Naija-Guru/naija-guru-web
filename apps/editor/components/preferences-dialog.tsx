@@ -17,12 +17,12 @@ export const PreferencesDialog: FC<{ trigger: ReactNode }> = ({ trigger }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:tw-max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Preferences</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="api">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="tw-grid tw-w-full tw-grid-cols-2">
             <TabsTrigger value="api">API</TabsTrigger>
             <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
           </TabsList>

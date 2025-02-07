@@ -269,22 +269,22 @@ export default function Content() {
   return (
     <>
       <div
-        className="min-h-screen m-auto max-w-[1200px] p-4 md:py-10"
+        className="tw-min-h-screen tw-m-auto tw-max-w-[1200px] tw-p-4 md:tw-py-10"
         suppressHydrationWarning
       >
-        <div className="max-w-8xl mx-auto">
-          <h1 className="text-xl md:text-3xl font-bold mb-6 text-secondary text-center md:text-left">
+        <div className="tw-max-w-8xl tw-mx-auto">
+          <h1 className="tw-text-xl md:tw-text-3xl tw-font-bold tw-mb-6 tw-text-secondary tw-text-center md:tw-text-left">
             Pidgin English Spell Checker
           </h1>
-          <div className="mb-4 hidden md:block">
+          <div className="tw-mb-4 tw-hidden md:tw-block">
             <Button variant="outline" onClick={onUseSampleContent}>
-              <File className="mr-2 h-4 w-4" />
+              <File className="tw-mr-2 tw-h-4 tw-w-4" />
               Insert Example Text
             </Button>
           </div>
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="tw-flex tw-flex-col lg:tw-flex-row tw-gap-6">
             <Editor
-              className="w-full h-[calc(100vh-300px)] p-4 bg-white overflow-auto md:text-xl border"
+              className="tw-w-full tw-h-[calc(100vh-300px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
               content={suggestionsState.editorContent}
               setContent={(c: string) =>
                 suggestionsStateDispatch({
