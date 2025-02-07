@@ -32,14 +32,14 @@ export function ReviewSuggestions({
         'tw-left-0',
         'tw-right-0',
         'tw-bg-white',
-        'tw-h-[250px]',
+        'tw-h-[40vh]',
         'lg:tw-h-[calc(100vh-300px)]',
         'tw-border',
         'tw-border-solid'
       )}
     >
-      <div className="tw-p-4 tw-flex tw-justify-between">
-        <h2 className="tw-text-secondary tw-text-xl tw-font-semibold">
+      <div className="tw-p-4 tw-pb-0 tw-flex tw-justify-between">
+        <h2 className="tw-text-secondary tw-text-xl tw-font-semibold tw-text-center tw-w-full">
           Suggestions
         </h2>
       </div>

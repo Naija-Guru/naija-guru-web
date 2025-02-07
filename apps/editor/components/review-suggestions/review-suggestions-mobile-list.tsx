@@ -1,17 +1,12 @@
-import { AlertCircle } from 'lucide-react';
-
 import { TSuggestion } from '@/models/suggestion';
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Button,
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@naija-spell-checker/ui';
+import { Suggestion } from '../suggestion';
 
 export function ReviewSuggestionsMobileList({
   list,
@@ -30,25 +25,12 @@ export function ReviewSuggestionsMobileList({
         {Object.entries(list).map(([elementId, suggestions]) =>
           suggestions.map((suggestion) => (
             <CarouselItem key={elementId + suggestion.offset}>
-              <Alert
-                className="tw-cursor-pointer tw-w-4/6 tw-mx-auto"
-                variant="destructive"
-              >
-                <AlertCircle className="tw-h-5" />
-                <AlertTitle className="tw-font-normal">
-                  {suggestion.message}
-                </AlertTitle>
-                <AlertDescription className="tw-font-bold tw-text-xl">
-                  <p>{suggestion.replacements[0].value}</p>
-                  <Button
-                    className="tw-my-4"
-                    onClick={() => onApplySuggestion(elementId, suggestion)}
-                    disabled={isLoadingSuggestions}
-                  >
-                    Accept Suggestion
-                  </Button>
-                </AlertDescription>
-              </Alert>
+              <Suggestion
+                className="tw-p-4 tw-border tw-border-solid tw-w-[60%] tw-m-auto"
+                suggestion={suggestion}
+                onAccept={() => onApplySuggestion(elementId, suggestion)}
+                disableAccept={isLoadingSuggestions}
+              />
             </CarouselItem>
           ))
         )}

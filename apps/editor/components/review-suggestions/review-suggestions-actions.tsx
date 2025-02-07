@@ -14,7 +14,7 @@ export const ReviewSuggestionsActions = ({
   onApplyAllSuggestions: () => void;
 }) => {
   return (
-    <div className="tw-p-4 tw-flex tw-justify-between tw-items-center tw-g-4">
+    <div className="tw-px-4 tw-py-2 tw-flex tw-items-center tw-justify-center tw-gap-2">
       <PreferencesDialog
         trigger={
           <Button variant="outline">
