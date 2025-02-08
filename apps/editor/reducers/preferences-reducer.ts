@@ -5,7 +5,6 @@ import {
   setSavedPreferencesState,
   TPreferencesState,
 } from '@/lib/storage';
-import { TSuggestionRule, TSuggestionRuleCategory } from '@/models/suggestion';
 
 const createInitialState = () => getSavedPreferencesState();
 
@@ -14,11 +13,11 @@ export type TPreferencesReducerAction =
   | { type: 'RESET_CUSTOM_SPELL_CHECKER_API_ENDPOINT' }
   | {
       type: 'ADD_IGNORED_CATEGORY';
-      payload: { category: TSuggestionRuleCategory };
+      payload: { categoryId: string };
     }
   | { type: 'REMOVE_IGNORED_CATEGORY'; payload: { categoryId: string } }
   | { type: 'CLEAR_IGNORED_CATEGORIES' }
-  | { type: 'ADD_IGNORED_RULE'; payload: { rule: TSuggestionRule } }
+  | { type: 'ADD_IGNORED_RULE'; payload: { ruleId: string } }
   | { type: 'REMOVE_IGNORED_RULE'; payload: { ruleId: string } }
   | { type: 'CLEAR_IGNORED_RULES' };
 
@@ -36,14 +35,14 @@ export function preferencesReducer(
         ...state,
         ignoredCategories: [
           ...state.ignoredCategories,
-          action.payload.category,
+          action.payload.categoryId,
         ],
       };
     case 'REMOVE_IGNORED_CATEGORY':
       return {
         ...state,
         ignoredCategories: state.ignoredCategories.filter(
-          (category) => category.id === action.payload.categoryId
+          (categoryId) => categoryId === action.payload.categoryId
         ),
       };
     case 'CLEAR_IGNORED_CATEGORIES':
@@ -54,13 +53,13 @@ export function preferencesReducer(
     case 'ADD_IGNORED_RULE':
       return {
         ...state,
-        ignoredRules: [...state.ignoredRules, action.payload.rule],
+        ignoredRules: [...state.ignoredRules, action.payload.ruleId],
       };
     case 'REMOVE_IGNORED_RULE':
       return {
         ...state,
         ignoredRules: state.ignoredRules.filter(
-          (rule) => rule.id === action.payload.ruleId
+          (ruleId) => ruleId === action.payload.ruleId
         ),
       };
     case 'CLEAR_IGNORED_RULES':

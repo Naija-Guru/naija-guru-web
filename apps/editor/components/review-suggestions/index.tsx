@@ -8,6 +8,7 @@ import { ReviewSuggestionsMobileList } from './review-suggestions-mobile-list';
 export function ReviewSuggestions({
   list,
   onApplySuggestion,
+  onIgnoreRuleOrCategory,
   onApplyAllSuggestions,
   isLoadingSuggestions,
   isListEmpty,
@@ -15,6 +16,7 @@ export function ReviewSuggestions({
 }: {
   list: Record<string, TSuggestion[]>;
   onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onIgnoreRuleOrCategory: (elementId: string) => void;
   onApplyAllSuggestions: () => void;
   isLoadingSuggestions: boolean;
   isListEmpty: boolean;
@@ -53,12 +55,14 @@ export function ReviewSuggestions({
           <ReviewSuggestionsMobileList
             list={list}
             onApplySuggestion={onApplySuggestion}
+            onIgnoreRuleOrCategory={onIgnoreRuleOrCategory}
             isLoadingSuggestions={isLoadingSuggestions}
             isListEmpty={isListEmpty}
           />
           <ReviewSuggestionsDesktopList
             list={list}
             onApplySuggestion={onApplySuggestion}
+            onIgnoreRuleOrCategory={onIgnoreRuleOrCategory}
             isLoadingSuggestions={isLoadingSuggestions}
           />
         </>

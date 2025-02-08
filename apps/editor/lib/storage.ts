@@ -1,4 +1,3 @@
-import { TSuggestionRule, TSuggestionRuleCategory } from '@/models/suggestion';
 import { z } from 'zod';
 
 const PREFERENCES_STORAGE_KEY = 'naija-guru-spellchecker/preferences';
@@ -12,8 +11,8 @@ export const preferencesReducerInitialState: TPreferencesState = {
 export const TPreferencesState = z
   .object({
     customSpellCheckApiEndpoint: z.union([z.string().url(), z.null()]),
-    ignoredCategories: z.array(TSuggestionRuleCategory),
-    ignoredRules: z.array(TSuggestionRule),
+    ignoredCategories: z.array(z.string()),
+    ignoredRules: z.array(z.string()),
   })
   .catch(() => {
     return preferencesReducerInitialState;

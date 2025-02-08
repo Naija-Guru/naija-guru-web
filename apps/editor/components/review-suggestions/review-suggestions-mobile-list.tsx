@@ -11,11 +11,13 @@ import { Suggestion } from '../suggestion';
 export function ReviewSuggestionsMobileList({
   list,
   onApplySuggestion,
+  onIgnoreRuleOrCategory,
   isLoadingSuggestions,
   isListEmpty,
 }: {
   list: Record<string, TSuggestion[]>;
   onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onIgnoreRuleOrCategory: (elementId: string) => void;
   isLoadingSuggestions: boolean;
   isListEmpty: boolean;
 }) {
@@ -29,7 +31,8 @@ export function ReviewSuggestionsMobileList({
                 className="tw-p-4 tw-border tw-border-solid tw-w-[60%] tw-m-auto"
                 suggestion={suggestion}
                 onAccept={() => onApplySuggestion(elementId, suggestion)}
-                disableAccept={isLoadingSuggestions}
+                onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
+                disabled={isLoadingSuggestions}
               />
             </CarouselItem>
           ))

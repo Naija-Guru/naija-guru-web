@@ -4,10 +4,12 @@ import { Suggestion } from '../suggestion';
 export function ReviewSuggestionsDesktopList({
   list,
   onApplySuggestion,
+  onIgnoreRuleOrCategory,
   isLoadingSuggestions,
 }: {
   list: Record<string, TSuggestion[]>;
   onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onIgnoreRuleOrCategory: (elementId: string) => void;
   isLoadingSuggestions: boolean;
 }) {
   return (
@@ -19,7 +21,8 @@ export function ReviewSuggestionsDesktopList({
               className="tw-p-4 tw-border-b tw-border-solid"
               suggestion={suggestion}
               onAccept={() => onApplySuggestion(elementId, suggestion)}
-              disableAccept={isLoadingSuggestions}
+              onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
+              disabled={isLoadingSuggestions}
             />
           </li>
         ))
