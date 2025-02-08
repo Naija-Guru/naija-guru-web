@@ -14,42 +14,42 @@ import {
 } from '@naija-spell-checker/ui';
 
 import Logo from '@/images/full-logo.svg';
-import { HEADER_ROUTES } from '../constants';
-import { MobileLocaleSwitcher } from './mobile-locale-switcher';
+import { HEADER_ROUTES } from '../../constants';
+import { MobileLocaleSwitcher } from '../locale-switcher/mobile-locale-switcher';
 
 export function MobileNavigationMenu() {
   return (
     <Sheet>
-      <SheetTrigger asChild className="md:hidden">
-        <Button variant="ghost" size="icon" className="w-auto">
+      <SheetTrigger asChild className="md:tw-hidden">
+        <Button variant="ghost" size="icon" className="tw-w-auto">
           <MenuIcon />
         </Button>
       </SheetTrigger>
       <SheetContent
-        className="bg-white w-screen sm:max-w-screen py-4 px-0"
+        className="tw-bg-white tw-w-screen sm:tw-max-w-screen tw-py-4 tw-px-0"
         showClose={false}
       >
-        <div className="flex justify-between px-4">
-          <Logo className="h-8 mr-2" />
+        <div className="tw-flex tw-justify-between tw-px-4">
+          <Logo className="tw-h-8 tw-mr-2" />
           <SheetClose>
-            <Button variant="ghost" size="icon" className="w-auto">
+            <Button variant="ghost" size="icon" className="tw-w-auto">
               <XIcon />
             </Button>
           </SheetClose>
         </div>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="tw-w-full">
           {HEADER_ROUTES.map((route, i) =>
             Array.isArray(route.routes) ? (
               <AccordionItem value={route.label} key={i}>
-                <AccordionTrigger className="px-4">
+                <AccordionTrigger className="tw-px-4">
                   {route.label}
                 </AccordionTrigger>
                 <AccordionContent>
                   {route.routes.map((subroute, index) => (
                     <Link
-                      className="flex py-4 pl-4"
+                      className="tw-flex tw-py-4 tw-pl-4"
                       href={subroute.url}
-                      key={`${route.label}${index}`}
+                      key={`tw-${route.label}${index}`}
                     >
                       <ChevronRight />
                       {subroute.label}
@@ -58,7 +58,11 @@ export function MobileNavigationMenu() {
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <Link className="block p-4" href={route.url ?? ''} key={i}>
+              <Link
+                className="tw-block tw-p-4"
+                href={route.url ?? 'tw-'}
+                key={i}
+              >
                 {route.label}
               </Link>
             )

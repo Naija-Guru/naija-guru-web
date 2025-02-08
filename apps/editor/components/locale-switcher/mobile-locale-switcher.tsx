@@ -8,19 +8,18 @@ import {
 } from '@naija-spell-checker/ui';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../constants';
-import { LocaleFlag } from './locale-flag';
+import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../../constants';
+import { LocaleFlag } from '../locale-flag';
+import { useLocale } from '@/hooks/useLocale';
 
 export function MobileLocaleSwitcher() {
   const pathname = usePathname();
-  const params = useParams();
-  const currentLocale = params.locale as string;
+  const currentLocale = useLocale();
 
   return (
     <AccordionItem value={currentLocale}>
-      <AccordionTrigger className="px-4">
-        <span className="flex gap-2">
+      <AccordionTrigger className="tw-px-4">
+        <span className="tw-flex tw-gap-2">
           <LocaleFlag locale={currentLocale} />
           {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[currentLocale]}
         </span>
@@ -31,7 +30,7 @@ export function MobileLocaleSwitcher() {
             <Link
               href={`/${locale}${pathname}`}
               key={locale}
-              className="flex gap-2 p-4"
+              className="tw-flex tw-gap-2 tw-p-4"
             >
               <LocaleFlag locale={locale} />
               {ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL[locale]}

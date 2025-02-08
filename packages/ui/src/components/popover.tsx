@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode, FC, useEffect } from 'react';
 import { shift, flip, hide, VirtualElement } from '@floating-ui/dom';
 import {
@@ -52,7 +54,7 @@ const Popover: FC<PopoverProps> = ({
       <div
         ref={refs.setFloating}
         className={cn(
-          'z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none'
+          'tw-z-50 tw-w-72 tw-rounded-md tw-border tw-bg-popover tw-p-4 tw-text-popover-foreground tw-shadow-md tw-outline-none'
         )}
         style={floatingStyles}
         {...getFloatingProps()}

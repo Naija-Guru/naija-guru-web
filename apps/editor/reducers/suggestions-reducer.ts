@@ -1,8 +1,9 @@
 import { VirtualElement } from '@floating-ui/dom';
 
 import { TSuggestion } from '@/models/suggestion';
+import { useReducer } from 'react';
 
-export const initialState = {
+export const suggestionsReducerInitialState = {
   loadingSuggestions: false,
   suggestionsList: {} as Record<string, TSuggestion[]>,
   selectedSuggestion: null as {
@@ -15,9 +16,9 @@ export const initialState = {
   editorContent: '',
 };
 
-export type State = typeof initialState;
+export type SuggestionsReducerState = typeof suggestionsReducerInitialState;
 
-export type Action =
+export type SuggestionsReducerAction =
   | { type: 'SET_LOADING_SUGGESTIONS'; payload: boolean }
   | { type: 'SET_SUGGESTIONS_LIST'; payload: Record<string, TSuggestion[]> }
   | {
@@ -29,7 +30,10 @@ export type Action =
   | { type: 'SET_ANCHOR_REF'; payload: VirtualElement | null }
   | { type: 'SET_EDITOR_CONTENT'; payload: string };
 
-export function reducer(state: State, action: Action): State {
+export function suggestionsReducer(
+  state: SuggestionsReducerState,
+  action: SuggestionsReducerAction
+): SuggestionsReducerState {
   switch (action.type) {
     case 'SET_LOADING_SUGGESTIONS':
       return { ...state, loadingSuggestions: action.payload };
@@ -49,3 +53,7 @@ export function reducer(state: State, action: Action): State {
       return state;
   }
 }
+
+export const useSuggestionsReducer = () => {
+  return useReducer(suggestionsReducer, suggestionsReducerInitialState);
+};

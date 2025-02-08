@@ -1,3 +1,6 @@
+import { TSuggestion } from '@/models/suggestion';
+import { getSavedPreferencesState } from './storage';
+
 /**
  * Creates a debounced function that delays invoking the provided function until after the specified delay.
  *
@@ -16,3 +19,18 @@ export function debounce(func: Function, delay: number) {
     timeout = setTimeout(() => func(...args), delay);
   };
 }
+
+export const filterSuggestions = (
+  suggestions: TSuggestion[],
+  ignoredRules: string[],
+  ignoredCategories: string[]
+) => {
+  const filteredSuggestions = suggestions.filter((suggestion) => {
+    return (
+      !ignoredCategories.includes(suggestion.rule.category.id) &&
+      !ignoredRules.includes(suggestion.rule.id)
+    );
+  });
+
+  return filteredSuggestions;
+};

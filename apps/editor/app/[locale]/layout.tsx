@@ -9,6 +9,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { InstallPrompt } from '@/components/install-prompt';
 import '@/styles/global.scss';
+import { Toaster } from '@naija-spell-checker/ui';
 
 export const metadata: Metadata = {
   title: 'Naija Spell Checker',
@@ -35,14 +36,15 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <div className="flex flex-col min-h-screen">
+          <div className="tw-flex tw-flex-col tw-min-h-screen">
             <Header />
-            <div className="flex-1">{children}</div>
+            <div className="tw-flex-1">{children}</div>
             <Footer />
             <InstallPrompt />
+            <Toaster />
           </div>
-          <Script src="/service-worker.js" />
         </NextIntlClientProvider>
+        <Script src="/service-worker.js" />
       </body>
     </html>
   );

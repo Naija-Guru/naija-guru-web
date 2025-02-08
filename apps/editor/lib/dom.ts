@@ -4,6 +4,7 @@ import {
   HIGHLIGHT_DATA_ATTRIBUTE_ID,
 } from '../constants';
 import { replaceTextWithSuggestion } from './string';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Retrieves all text nodes within a given HTML element.
@@ -449,6 +450,29 @@ export const getTargetElementById = (
  */
 export const getIdOfTargetElement = (el: Element): string | null =>
   el.getAttribute(ELEMENT_DATA_ATTRIBUTE_ID);
+
+/**
+ * Sets or retrieves a unique ID for a target element.
+ * If the element already has an ID, returns the existing ID.
+ * If not, generates a new UUID, sets it as an attribute, and disables spellcheck.
+ *
+ * @param {Element} el - The element to set or get the ID for
+ * @returns {string} The element's ID (either existing or newly generated)
+ */
+export const setIdOfTargetElement = (el: Element): string => {
+  const currentId = getIdOfTargetElement(el);
+  if (currentId) {
+    return currentId;
+  }
+
+  const elId = uuidv4();
+  el.setAttribute(ELEMENT_DATA_ATTRIBUTE_ID, elId);
+
+  return elId;
+};
+
+export const disableElementNativeSpellCheck = (el: Element) =>
+  el.setAttribute('spellcheck', 'false');
 
 /**
  * Watches for position changes of the specified element and triggers a callback when a change is detected.

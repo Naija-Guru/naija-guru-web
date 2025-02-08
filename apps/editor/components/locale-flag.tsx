@@ -17,6 +17,6 @@ export function LocaleFlag({ locale }: { locale: string }) {
   return logoSrc ? (
     <Image src={logoSrc} alt={locale} width={20} height={20} />
   ) : (
-    <div className="h-4 w-6 bg-gray-200 animate-pulse" />
+    <div className="tw-h-[20px] tw-w-[20px] tw-bg-gray-200 tw-animate-pulse" />
   );
 }
