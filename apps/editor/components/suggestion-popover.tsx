@@ -12,7 +12,6 @@ export function SuggestionPopover({
   suggestion,
   anchorRef,
   onApplySuggestion,
-  onIgnoreRuleOrCategory,
 }: {
   isOpen: boolean;
   suggestion: TSuggestion;
@@ -20,14 +19,12 @@ export function SuggestionPopover({
   elementId: string;
   toggle: (open: boolean) => void;
   onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
-  onIgnoreRuleOrCategory: (elementId: string) => void;
 }) {
   return (
     <Popover open={isOpen} toggleOpen={toggle} virtualAnchor={anchorRef}>
       <Suggestion
         suggestion={suggestion}
         onAccept={() => onApplySuggestion(elementId, suggestion)}
-        onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
       />
     </Popover>
   );

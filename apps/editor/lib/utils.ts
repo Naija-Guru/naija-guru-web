@@ -1,5 +1,4 @@
 import { TSuggestion } from '@/models/suggestion';
-import { getSavedPreferencesState } from './storage';
 
 /**
  * Creates a debounced function that delays invoking the provided function until after the specified delay.
@@ -27,6 +26,7 @@ export const filterSuggestions = (
 ) => {
   const filteredSuggestions = suggestions.filter((suggestion) => {
     return (
+      suggestion.replacements.length > 0 &&
       !ignoredCategories.includes(suggestion.rule.category.id) &&
       !ignoredRules.includes(suggestion.rule.id)
     );
@@ -34,3 +34,9 @@ export const filterSuggestions = (
 
   return filteredSuggestions;
 };
+
+export const getUniqueArray = <T>(arr: T[]) => {
+  return Array.from(new Set(arr));
+};
+
+export const isClient = () => typeof window !== 'undefined';

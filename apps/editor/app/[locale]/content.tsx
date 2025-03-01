@@ -1,15 +1,16 @@
 import { VirtualElement } from '@floating-ui/dom';
-import { File } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { Button, useToast } from '@naija-spell-checker/ui';
+import { useToast } from '@naija-spell-checker/ui';
 
 import { getSpellingSuggestions } from '@/api/spellCheck';
 import { Editor } from '@/components/wysiwyg-editor/editor';
-import { ELEMENT_DATA_ATTRIBUTE_ID, SAMPLE_TEXT } from '@/constants/index';
-import { useClickEventDelegation } from '@/hooks/useClickEventDelegation';
-import { useElementRemoved } from '@/hooks/useElementRemoved';
-import { useObserveContentEditableElements } from '@/hooks/useObserveContentEditableElements';
+import { ELEMENT_DATA_ATTRIBUTE_ID } from '@/constants/dom';
+import { useClickEventDelegation } from '@/hooks/use-click-event-delegation';
+import { useElementRemoved } from '@/hooks/use-element-removed';
+import { useObserveContentEditableElements } from '@/hooks/use-observe-content-editable-elements';
+import { useListenToElementsScroll } from '@/hooks/use-listen-to-Elements-scroll';
+import { useObserveElementsResize } from '@/hooks/use-observe-elements-resize';
 import { asyncWrapper } from '@/lib/async';
 import {
   clearCanvas,
@@ -26,15 +27,13 @@ import {
 } from '@/lib/dom';
 import { TSuggestion } from '@/models/suggestion';
 
-import { addElObserver, disconnectElObserver } from '@/lib/observer';
-import { debounce, filterSuggestions } from '@/lib/utils';
-import { SuggestionPopover } from '@/components/suggestion-popover';
 import { ReviewSuggestions } from '@/components/review-suggestions';
-
-import { useObserveElementsResize } from '@/hooks/useObserveElementsResize';
-import { useListenToElementsScroll } from '@/hooks/useListenToElementsScroll';
-import { useSuggestionsReducer } from 'reducers/suggestions-reducer';
+import { SuggestionPopover } from '@/components/suggestion-popover';
+import { addElObserver, disconnectElObserver } from '@/lib/observer';
 import { getSavedPreferencesState } from '@/lib/storage';
+import { debounce, filterSuggestions } from '@/lib/utils';
+import { useSuggestionsReducer } from '@/reducers/suggestions-reducer';
+import { AddSampleContent } from '@/components/add-sample-content';
 
 export default function Content() {
   const { toast } = useToast();
@@ -47,22 +46,18 @@ export default function Content() {
     [suggestionsState.suggestionsList]
   );
 
-  const onUseSampleContent = () => {
-    suggestionsStateDispatch({
-      type: 'SET_EDITOR_CONTENT',
-      payload: SAMPLE_TEXT,
-    });
-  };
-
-  const toggleSuggestionPopover = (open: boolean) => {
-    if (!open) {
-      suggestionsStateDispatch({
-        type: 'SET_SELECTED_SUGGESTION',
-        payload: null,
-      });
-    }
-    suggestionsStateDispatch({ type: 'SET_IS_POPOVER_OPEN', payload: open });
-  };
+  const toggleSuggestionPopover = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        suggestionsStateDispatch({
+          type: 'SET_SELECTED_SUGGESTION',
+          payload: null,
+        });
+      }
+      suggestionsStateDispatch({ type: 'SET_IS_POPOVER_OPEN', payload: open });
+    },
+    [suggestionsStateDispatch]
+  );
 
   const highlightElementSuggestions = (elementId: string) => {
     const suggestions = suggestionsListRef.current[elementId];
@@ -76,17 +71,20 @@ export default function Content() {
     }
   };
 
-  const clearHighlights = useCallback((elementId: string) => {
-    const { [elementId]: _, ...rest } = suggestionsListRef.current;
-    suggestionsListRef.current = {
-      ...rest,
-    };
-    suggestionsStateDispatch({
-      type: 'SET_SUGGESTIONS_LIST',
-      payload: suggestionsListRef.current,
-    });
-    highlightElementSuggestions(elementId);
-  }, []);
+  const clearHighlights = useCallback(
+    (elementId: string) => {
+      const { [elementId]: _, ...rest } = suggestionsListRef.current;
+      suggestionsListRef.current = {
+        ...rest,
+      };
+      suggestionsStateDispatch({
+        type: 'SET_SUGGESTIONS_LIST',
+        payload: suggestionsListRef.current,
+      });
+      highlightElementSuggestions(elementId);
+    },
+    [suggestionsStateDispatch]
+  );
 
   const checkContentEditableElement = useCallback(
     async (target: HTMLElement) => {
@@ -137,7 +135,7 @@ export default function Content() {
         payload: false,
       });
     },
-    [clearHighlights]
+    [clearHighlights, suggestionsStateDispatch, toast]
   );
 
   const handleApplySuggestion = useCallback(
@@ -145,17 +143,20 @@ export default function Content() {
       toggleSuggestionPopover(false);
       updateTargetElTextWithSuggestion(elementId, suggestion);
     },
-    []
+    [toggleSuggestionPopover]
   );
 
-  const handleIgnoreRuleOrCategory = useCallback((elementId: string) => {
-    toggleSuggestionPopover(false);
-    const el = getTargetElementById(elementId);
+  const handleIgnoreRuleOrCategory = useCallback(
+    (elementId: string) => {
+      toggleSuggestionPopover(false);
+      const el = getTargetElementById(elementId);
 
-    if (el) {
-      checkContentEditableElement(el);
-    }
-  }, []);
+      if (el) {
+        checkContentEditableElement(el);
+      }
+    },
+    [checkContentEditableElement, toggleSuggestionPopover]
+  );
 
   const showPopover = useCallback(
     (e: MouseEvent) => {
@@ -201,6 +202,7 @@ export default function Content() {
     [
       suggestionsState.isAcceptingAllSuggestions,
       suggestionsState.suggestionsList,
+      suggestionsStateDispatch,
     ]
   );
 
@@ -251,6 +253,7 @@ export default function Content() {
     isSuggestionsListEmpty,
     suggestionsState.loadingSuggestions,
     handleAcceptFirstSuggestionOnList,
+    suggestionsStateDispatch,
   ]);
 
   const elementIds = useMemo(
@@ -271,6 +274,13 @@ export default function Content() {
     highlightElementSuggestions(elementId);
   };
 
+  const handleAddSampleContent = useCallback((content: string) => {
+    suggestionsStateDispatch({
+      type: 'SET_EDITOR_CONTENT',
+      payload: content,
+    });
+  }, []);
+
   useObserveElementsResize(targetedElements, handleElementPositionChange);
   useListenToElementsScroll(targetedElements, handleElementPositionChange);
   useClickEventDelegation(showPopover);
@@ -287,15 +297,10 @@ export default function Content() {
           <h1 className="tw-text-xl md:tw-text-3xl tw-font-bold tw-mb-6 tw-text-secondary tw-text-center md:tw-text-left">
             Pidgin English Spell Checker
           </h1>
-          <div className="tw-mb-4 tw-hidden md:tw-block">
-            <Button variant="outline" onClick={onUseSampleContent}>
-              <File className="tw-mr-2 tw-h-4 tw-w-4" />
-              Insert Example Text
-            </Button>
-          </div>
-          <div className="tw-flex tw-flex-col lg:tw-flex-row tw-gap-6">
+          <AddSampleContent onAddSampleContent={handleAddSampleContent} />
+          <div className="tw-grid tw-grid-cols-3">
             <Editor
-              className="tw-w-full tw-h-[calc(100vh-300px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
+              className="tw-col-span-3 md:tw-col-span-2 tw-h-[calc(100vh-250px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
               content={suggestionsState.editorContent}
               setContent={(c: string) =>
                 suggestionsStateDispatch({
@@ -327,7 +332,6 @@ export default function Content() {
           elementId={suggestionsState.selectedSuggestion.elementId}
           suggestion={suggestionsState.selectedSuggestion.suggestion}
           onApplySuggestion={handleApplySuggestion}
-          onIgnoreRuleOrCategory={handleIgnoreRuleOrCategory}
         />
       )}
     </>

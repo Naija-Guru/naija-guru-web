@@ -8,9 +8,10 @@ import {
   NavigationMenuTrigger,
 } from '@naija-spell-checker/ui';
 
-import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../../constants';
+import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '@/constants/country';
+import { useLocale } from '@/hooks/use-locale';
+
 import { LocaleFlag } from '../locale-flag';
-import { useLocale } from '@/hooks/useLocale';
 
 export function DesktopLocaleSwitcher() {
   const pathname = usePathname();

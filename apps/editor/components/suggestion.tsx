@@ -4,14 +4,14 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@naija-spell-checker/ui';
 
 import { TSuggestion } from '@/models/suggestion';
-import { usePreferencesReducer } from 'reducers/preferences-reducer';
 import { formatEnumToText } from '@/lib/string';
+import { usePreferences } from '@/providers/preferences-provider';
 
 interface SuggestionProps {
   className?: string;
   suggestion: TSuggestion;
   onAccept: () => void;
-  onIgnoreRuleOrCategory: () => void;
+  onIgnoreRuleOrCategory?: () => void;
   disabled?: boolean;
 }
 
@@ -23,26 +23,26 @@ export const Suggestion: FC<SuggestionProps> = ({
   onIgnoreRuleOrCategory,
 }) => {
   const t = useTranslations();
-  const [, dispatchPreferencesState] = usePreferencesReducer();
+  const { dispatch: dispatchPreferences } = usePreferences();
 
   const handleIgnoreCategory = () => {
-    dispatchPreferencesState({
+    dispatchPreferences({
       type: 'ADD_IGNORED_CATEGORY',
       payload: {
         categoryId: suggestion.rule.category.id,
       },
     });
-    onIgnoreRuleOrCategory();
+    onIgnoreRuleOrCategory?.();
   };
 
   const handleIgnoreRule = () => {
-    dispatchPreferencesState({
+    dispatchPreferences({
       type: 'ADD_IGNORED_RULE',
       payload: {
         ruleId: suggestion.rule.id,
       },
     });
-    onIgnoreRuleOrCategory();
+    onIgnoreRuleOrCategory?.();
   };
 
   return (
@@ -54,34 +54,36 @@ export const Suggestion: FC<SuggestionProps> = ({
       <Button className="tw-my-4" onClick={onAccept} disabled={disabled}>
         {t('accept_suggestion')}
       </Button>
-      <div className="tw-flex tw-gap-x-2 tw-flex-wrap">
-        <Button
-          className="tw-my-2 tw-text-xs tw-whitespace-break-spaces"
-          variant="outline"
-          onClick={handleIgnoreRule}
-          disabled={disabled}
-        >
-          <span>
-            Ignore rule{' '}
-            <span className="tw-text-secondary">
-              {formatEnumToText(suggestion.rule.id)}
+      {onIgnoreRuleOrCategory && (
+        <div className="tw-flex tw-gap-x-2 tw-flex-wrap">
+          <Button
+            className="tw-my-2 tw-text-xs tw-whitespace-break-spaces"
+            variant="outline"
+            onClick={handleIgnoreRule}
+            disabled={disabled}
+          >
+            <span>
+              Ignore rule{' '}
+              <span className="tw-text-secondary">
+                {formatEnumToText(suggestion.rule.id)}
+              </span>
             </span>
-          </span>
-        </Button>
-        <Button
-          className="tw-my-2 tw-text-xs tw-whitespace-break-spaces"
-          variant="outline"
-          onClick={handleIgnoreCategory}
-          disabled={disabled}
-        >
-          <span>
-            Ignore category{' '}
-            <span className="tw-text-secondary">
-              {formatEnumToText(suggestion.rule.category.id)}
+          </Button>
+          <Button
+            className="tw-my-2 tw-text-xs tw-whitespace-break-spaces"
+            variant="outline"
+            onClick={handleIgnoreCategory}
+            disabled={disabled}
+          >
+            <span>
+              Ignore category{' '}
+              <span className="tw-text-secondary">
+                {formatEnumToText(suggestion.rule.category.id)}
+              </span>
             </span>
-          </span>
-        </Button>
-      </div>
+          </Button>
+        </div>
+      )}
     </section>
   );
 };

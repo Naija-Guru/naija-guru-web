@@ -2,7 +2,7 @@ import { SettingsIcon, WandSparklesIcon } from 'lucide-react';
 
 import { Button } from '@naija-spell-checker/ui';
 
-import { PreferencesDialog } from '../preferences-dialog';
+import { PreferencesDialog } from '../preferences-dialog/preferences-dialog';
 
 export const ReviewSuggestionsActions = ({
   isAcceptingAllSuggestions,

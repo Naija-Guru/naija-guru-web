@@ -27,6 +27,8 @@
       "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./lib/*"],
       "@/models/*": ["./models/*"],
+      "@/reducers/*": ["./reducers/*"],
+      "@/providers/*": ["./providers/*"],
       "@/styles/*": ["./styles/*"]
     },
     "target": "ES2017"
