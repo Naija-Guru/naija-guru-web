@@ -1,5 +1,5 @@
 import { TSuggestion } from '@/models/suggestion';
-import { cn, ScrollArea } from '@naija-spell-checker/ui';
+import { cn, ScrollArea, ScrollBar } from '@naija-spell-checker/ui';
 import { Suggestion } from '../suggestion';
 
 export function ReviewSuggestionsMobileList({
@@ -18,7 +18,7 @@ export function ReviewSuggestionsMobileList({
   return (
     <ScrollArea>
       <div
-        className={cn('tw-flex tw-flex-col tw-gap-2 tw-p-8', {
+        className={cn('tw-flex tw-flex-col tw-gap-2 tw-px-12 tw-h-[70vh]', {
           'tw-border': !isListEmpty,
         })}
       >
@@ -35,6 +35,7 @@ export function ReviewSuggestionsMobileList({
           ))
         )}
       </div>
+      <ScrollBar orientation="vertical" />
     </ScrollArea>
   );
 }
