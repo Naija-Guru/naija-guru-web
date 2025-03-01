@@ -34,3 +34,9 @@ export const filterSuggestions = (
 
   return filteredSuggestions;
 };
+
+export const getUniqueArray = <T>(arr: T[]) => {
+  return Array.from(new Set(arr));
+};
+
+export const isClient = () => typeof window !== 'undefined';

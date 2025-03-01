@@ -7,8 +7,9 @@ import {
   NavigationMenuTrigger,
 } from '@naija-spell-checker/ui';
 
-import { HEADER_ROUTES } from '../../constants';
-import { DesktopLocaleSwitcher } from '../locale-switcher/desktop-locale-switcher';
+import { HEADER_ROUTES } from '@/constants/routes';
+
+import { DesktopLocaleSwitcher } from './locale-switcher/desktop-locale-switcher';
 
 export function DesktopNavigationMenu() {
   return (

@@ -1,10 +1,12 @@
-import { TSuggestion, TSuggestionCoordinates } from '@/models/suggestion';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   ELEMENT_DATA_ATTRIBUTE_ID,
   HIGHLIGHT_DATA_ATTRIBUTE_ID,
-} from '../constants';
+} from '@/constants/dom';
+import { TSuggestion, TSuggestionCoordinates } from '@/models/suggestion';
+
 import { replaceTextWithSuggestion } from './string';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Retrieves all text nodes within a given HTML element.

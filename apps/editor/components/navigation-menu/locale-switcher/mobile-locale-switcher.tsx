@@ -1,16 +1,18 @@
 'use client';
 
-import { routing, usePathname } from '@/i18n/routing';
+import Link from 'next/link';
+
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@naija-spell-checker/ui';
 
-import Link from 'next/link';
-import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '../../constants';
+import { routing, usePathname } from '@/i18n/routing';
+import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '@/constants/country';
+import { useLocale } from '@/hooks/use-locale';
+
 import { LocaleFlag } from '../locale-flag';
-import { useLocale } from '@/hooks/useLocale';
 
 export function MobileLocaleSwitcher() {
   const pathname = usePathname();

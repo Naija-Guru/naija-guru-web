@@ -16,7 +16,7 @@ import {
   Input,
   useToast,
 } from '@naija-spell-checker/ui';
-import { usePreferencesReducer } from 'reducers/preferences-reducer';
+import { usePreferences } from '@/providers/preferences-provider';
 
 const formSchema = z.object({
   url: z.string().url(),
@@ -24,7 +24,8 @@ const formSchema = z.object({
 
 export const ApiForm: FC = () => {
   const { toast } = useToast();
-  const [preferencesState, dispatchPreferencesState] = usePreferencesReducer();
+  const { state: preferencesState, dispatch: preferencesDispatch } =
+    usePreferences();
 
   const form = useForm<z.infer<typeof formSchema>>({
     mode: 'onSubmit',
@@ -35,7 +36,7 @@ export const ApiForm: FC = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatchPreferencesState({
+    preferencesDispatch({
       type: 'SET_CUSTOM_SPELL_CHECKER_API_ENDPOINT',
       payload: {
         url: values.url,
@@ -47,7 +48,7 @@ export const ApiForm: FC = () => {
   }
 
   function resetCustomApiEndpoint() {
-    dispatchPreferencesState({
+    preferencesDispatch({
       type: 'RESET_CUSTOM_SPELL_CHECKER_API_ENDPOINT',
     });
     form.reset({ url: '' });

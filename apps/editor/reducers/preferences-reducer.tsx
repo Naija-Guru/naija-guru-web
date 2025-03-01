@@ -1,12 +1,5 @@
-import { ActionDispatch, useEffect, useReducer } from 'react';
-
-import {
-  getSavedPreferencesState,
-  setSavedPreferencesState,
-  TPreferencesState,
-} from '@/lib/storage';
-
-const createInitialState = () => getSavedPreferencesState();
+import { TPreferencesState } from '@/lib/storage';
+import { getUniqueArray } from '@/lib/utils';
 
 export type TPreferencesReducerAction =
   | { type: 'SET_CUSTOM_SPELL_CHECKER_API_ENDPOINT'; payload: { url: string } }
@@ -33,16 +26,16 @@ export function preferencesReducer(
     case 'ADD_IGNORED_CATEGORY':
       return {
         ...state,
-        ignoredCategories: [
+        ignoredCategories: getUniqueArray([
           ...state.ignoredCategories,
           action.payload.categoryId,
-        ],
+        ]),
       };
     case 'REMOVE_IGNORED_CATEGORY':
       return {
         ...state,
         ignoredCategories: state.ignoredCategories.filter(
-          (categoryId) => categoryId === action.payload.categoryId
+          (categoryId) => categoryId !== action.payload.categoryId
         ),
       };
     case 'CLEAR_IGNORED_CATEGORIES':
@@ -53,13 +46,16 @@ export function preferencesReducer(
     case 'ADD_IGNORED_RULE':
       return {
         ...state,
-        ignoredRules: [...state.ignoredRules, action.payload.ruleId],
+        ignoredRules: getUniqueArray([
+          ...state.ignoredRules,
+          action.payload.ruleId,
+        ]),
       };
     case 'REMOVE_IGNORED_RULE':
       return {
         ...state,
         ignoredRules: state.ignoredRules.filter(
-          (ruleId) => ruleId === action.payload.ruleId
+          (ruleId) => ruleId !== action.payload.ruleId
         ),
       };
     case 'CLEAR_IGNORED_RULES':
@@ -71,19 +67,3 @@ export function preferencesReducer(
       return state;
   }
 }
-
-export const usePreferencesReducer = (): [
-  TPreferencesState,
-  ActionDispatch<[action: TPreferencesReducerAction]>,
-] => {
-  const [state, dispatch] = useReducer(
-    preferencesReducer,
-    createInitialState()
-  );
-
-  useEffect(() => {
-    setSavedPreferencesState(state);
-  }, [state]);
-
-  return [state, dispatch];
-};

@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@naija-spell-checker/ui';
 
 import { TSuggestion } from '@/models/suggestion';
-import { usePreferencesReducer } from 'reducers/preferences-reducer';
 import { formatEnumToText } from '@/lib/string';
+import { usePreferences } from '@/providers/preferences-provider';
 
 interface SuggestionProps {
   className?: string;
@@ -23,10 +23,10 @@ export const Suggestion: FC<SuggestionProps> = ({
   onIgnoreRuleOrCategory,
 }) => {
   const t = useTranslations();
-  const [, dispatchPreferencesState] = usePreferencesReducer();
+  const { dispatch: dispatchPreferences } = usePreferences();
 
   const handleIgnoreCategory = () => {
-    dispatchPreferencesState({
+    dispatchPreferences({
       type: 'ADD_IGNORED_CATEGORY',
       payload: {
         categoryId: suggestion.rule.category.id,
@@ -36,7 +36,7 @@ export const Suggestion: FC<SuggestionProps> = ({
   };
 
   const handleIgnoreRule = () => {
-    dispatchPreferencesState({
+    dispatchPreferences({
       type: 'ADD_IGNORED_RULE',
       payload: {
         ruleId: suggestion.rule.id,

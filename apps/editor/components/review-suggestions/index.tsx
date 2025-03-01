@@ -41,7 +41,7 @@ export function ReviewSuggestions({
           'tw-flex-col',
           'tw-bg-white',
           'tw-border',
-          'tw-h-[calc(100vh-300px)]',
+          'tw-h-[calc(100vh-250px)]',
           'tw-border-l-0',
           'tw-border-solid'
         )}

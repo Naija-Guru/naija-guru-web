@@ -14,8 +14,9 @@ import {
 } from '@naija-spell-checker/ui';
 
 import Logo from '@/images/full-logo.svg';
-import { HEADER_ROUTES } from '../../constants';
-import { MobileLocaleSwitcher } from '../locale-switcher/mobile-locale-switcher';
+import { HEADER_ROUTES } from '@/constants/routes';
+
+import { MobileLocaleSwitcher } from './locale-switcher/mobile-locale-switcher';
 
 export function MobileNavigationMenu() {
   return (
