@@ -1,11 +1,5 @@
 import { TSuggestion } from '@/models/suggestion';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@naija-spell-checker/ui';
+import { cn, ScrollArea } from '@naija-spell-checker/ui';
 import { Suggestion } from '../suggestion';
 
 export function ReviewSuggestionsMobileList({
@@ -22,28 +16,25 @@ export function ReviewSuggestionsMobileList({
   isListEmpty: boolean;
 }) {
   return (
-    <Carousel className="tw-w-full md:tw-hidden">
-      <CarouselContent>
+    <ScrollArea>
+      <div
+        className={cn('tw-flex tw-flex-col tw-gap-2 tw-p-8', {
+          'tw-border': !isListEmpty,
+        })}
+      >
         {Object.entries(list).map(([elementId, suggestions]) =>
           suggestions.map((suggestion) => (
-            <CarouselItem key={elementId + suggestion.offset}>
-              <Suggestion
-                className="tw-p-4 tw-border tw-border-solid tw-w-[60%] tw-m-auto"
-                suggestion={suggestion}
-                onAccept={() => onApplySuggestion(elementId, suggestion)}
-                onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
-                disabled={isLoadingSuggestions}
-              />
-            </CarouselItem>
+            <Suggestion
+              key={elementId + suggestion.offset}
+              className="tw-p-4 tw-border tw-border-solid"
+              suggestion={suggestion}
+              onAccept={() => onApplySuggestion(elementId, suggestion)}
+              onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
+              disabled={isLoadingSuggestions}
+            />
           ))
         )}
-      </CarouselContent>
-      {!isListEmpty && (
-        <>
-          <CarouselPrevious />
-          <CarouselNext />
-        </>
-      )}
-    </Carousel>
+      </div>
+    </ScrollArea>
   );
 }

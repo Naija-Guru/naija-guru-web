@@ -137,7 +137,7 @@ export default function Content() {
         payload: false,
       });
     },
-    [clearHighlights]
+    [clearHighlights, suggestionsStateDispatch, toast]
   );
 
   const handleApplySuggestion = useCallback(
@@ -145,17 +145,20 @@ export default function Content() {
       toggleSuggestionPopover(false);
       updateTargetElTextWithSuggestion(elementId, suggestion);
     },
-    []
+    [toggleSuggestionPopover]
   );
 
-  const handleIgnoreRuleOrCategory = useCallback((elementId: string) => {
-    toggleSuggestionPopover(false);
-    const el = getTargetElementById(elementId);
+  const handleIgnoreRuleOrCategory = useCallback(
+    (elementId: string) => {
+      toggleSuggestionPopover(false);
+      const el = getTargetElementById(elementId);
 
-    if (el) {
-      checkContentEditableElement(el);
-    }
-  }, []);
+      if (el) {
+        checkContentEditableElement(el);
+      }
+    },
+    [checkContentEditableElement, toggleSuggestionPopover]
+  );
 
   const showPopover = useCallback(
     (e: MouseEvent) => {
@@ -201,6 +204,7 @@ export default function Content() {
     [
       suggestionsState.isAcceptingAllSuggestions,
       suggestionsState.suggestionsList,
+      suggestionsStateDispatch,
     ]
   );
 
@@ -251,6 +255,7 @@ export default function Content() {
     isSuggestionsListEmpty,
     suggestionsState.loadingSuggestions,
     handleAcceptFirstSuggestionOnList,
+    suggestionsStateDispatch,
   ]);
 
   const elementIds = useMemo(
@@ -293,9 +298,9 @@ export default function Content() {
               Insert Example Text
             </Button>
           </div>
-          <div className="tw-flex tw-flex-col lg:tw-flex-row tw-gap-6">
+          <div className="tw-grid tw-grid-cols-3">
             <Editor
-              className="tw-w-full tw-h-[calc(100vh-300px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
+              className="tw-col-span-3 md:tw-col-span-2 tw-h-[calc(100vh-300px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
               content={suggestionsState.editorContent}
               setContent={(c: string) =>
                 suggestionsStateDispatch({
@@ -327,7 +332,6 @@ export default function Content() {
           elementId={suggestionsState.selectedSuggestion.elementId}
           suggestion={suggestionsState.selectedSuggestion.suggestion}
           onApplySuggestion={handleApplySuggestion}
-          onIgnoreRuleOrCategory={handleIgnoreRuleOrCategory}
         />
       )}
     </>

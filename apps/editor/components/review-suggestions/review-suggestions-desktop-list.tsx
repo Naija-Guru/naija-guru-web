@@ -13,7 +13,7 @@ export function ReviewSuggestionsDesktopList({
   isLoadingSuggestions: boolean;
 }) {
   return (
-    <ul className="tw-overflow-y-scroll tw-h-7/8 tw-border-t tw-border-solid tw-hidden md:tw-block">
+    <ul className="tw-overflow-y-scroll tw-h-7/8 tw-border-t tw-border-solid">
       {Object.entries(list).map(([elementId, suggestions]) =>
         suggestions.map((suggestion) => (
           <li key={elementId + suggestion.offset}>

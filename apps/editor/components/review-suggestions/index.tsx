@@ -1,9 +1,19 @@
 import { TSuggestion } from '@/models/suggestion';
-import { cn } from '@naija-spell-checker/ui';
+import {
+  cn,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  FloatingButton,
+} from '@naija-spell-checker/ui';
 import { ReviewSuggestionsActions } from './review-suggestions-actions';
 import { ReviewSuggestionsDesktopList } from './review-suggestions-desktop-list';
 import { ReviewSuggestionsEmpty } from './review-suggestions-empty';
 import { ReviewSuggestionsMobileList } from './review-suggestions-mobile-list';
+import { ReviewSuggestionsHeader } from './review-suggestions-header';
+import { Settings2Icon } from 'lucide-react';
 
 export function ReviewSuggestions({
   list,
@@ -23,35 +33,52 @@ export function ReviewSuggestions({
   isAcceptingAllSuggestions: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        'tw-flex',
-        'tw-flex-col',
-        'lg:tw-w-1/3',
-        'lg:tw-static',
-        'tw-fixed',
-        'tw-bottom-0',
-        'tw-left-0',
-        'tw-right-0',
-        'tw-bg-white',
-        'tw-h-[40vh]',
-        'lg:tw-h-[calc(100vh-300px)]',
-        'tw-border',
-        'tw-border-solid'
-      )}
-    >
-      <div className="tw-p-4 tw-pb-0 tw-flex tw-justify-between">
-        <h2 className="tw-text-secondary tw-text-xl tw-font-semibold tw-text-center tw-w-full">
-          Suggestions
-        </h2>
+    <>
+      <div
+        className={cn(
+          'tw-hidden md:tw-block',
+          'tw-flex',
+          'tw-flex-col',
+          'tw-bg-white',
+          'tw-border',
+          'tw-h-[calc(100vh-300px)]',
+          'tw-border-l-0',
+          'tw-border-solid'
+        )}
+      >
+        <ReviewSuggestionsHeader />
+        <ReviewSuggestionsActions
+          showApplyAllSuggestionsAction={!isListEmpty}
+          isAcceptingAllSuggestions={isAcceptingAllSuggestions}
+          onApplyAllSuggestions={onApplyAllSuggestions}
+        />
+        {!isAcceptingAllSuggestions && (
+          <>
+            <ReviewSuggestionsDesktopList
+              list={list}
+              onApplySuggestion={onApplySuggestion}
+              onIgnoreRuleOrCategory={onIgnoreRuleOrCategory}
+              isLoadingSuggestions={isLoadingSuggestions}
+            />
+          </>
+        )}
+        {isListEmpty && <ReviewSuggestionsEmpty />}
       </div>
-      <ReviewSuggestionsActions
-        showApplyAllSuggestionsAction={!isListEmpty}
-        isAcceptingAllSuggestions={isAcceptingAllSuggestions}
-        onApplyAllSuggestions={onApplyAllSuggestions}
-      />
-      {!isAcceptingAllSuggestions && (
-        <>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <FloatingButton variant="outline" className="md:tw-hidden" size="lg">
+            <Settings2Icon />
+          </FloatingButton>
+        </DrawerTrigger>
+        <DrawerContent className="tw-h-[80vh]">
+          <DrawerHeader>
+            <DrawerTitle>Suggestions</DrawerTitle>
+          </DrawerHeader>
+          <ReviewSuggestionsActions
+            showApplyAllSuggestionsAction={!isListEmpty}
+            isAcceptingAllSuggestions={isAcceptingAllSuggestions}
+            onApplyAllSuggestions={onApplyAllSuggestions}
+          />
           <ReviewSuggestionsMobileList
             list={list}
             onApplySuggestion={onApplySuggestion}
@@ -59,15 +86,9 @@ export function ReviewSuggestions({
             isLoadingSuggestions={isLoadingSuggestions}
             isListEmpty={isListEmpty}
           />
-          <ReviewSuggestionsDesktopList
-            list={list}
-            onApplySuggestion={onApplySuggestion}
-            onIgnoreRuleOrCategory={onIgnoreRuleOrCategory}
-            isLoadingSuggestions={isLoadingSuggestions}
-          />
-        </>
-      )}
-      {isListEmpty && <ReviewSuggestionsEmpty />}
-    </div>
+          {isListEmpty && <ReviewSuggestionsEmpty />}
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }
