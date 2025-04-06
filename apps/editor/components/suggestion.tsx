@@ -10,7 +10,7 @@ import { usePreferences } from '@/providers/preferences-provider';
 interface SuggestionProps {
   className?: string;
   suggestion: TSuggestion;
-  onAccept: (replacementIndex: number) => void;
+  onAccept: (replacementIndex?: number) => void;
   onIgnoreRuleOrCategory?: () => void;
   disabled?: boolean;
 }
@@ -52,6 +52,15 @@ export const Suggestion: FC<SuggestionProps> = ({
       </h1>
       <p className="tw-font-normal tw-text-xs">{suggestion.message}</p>
       <div className="tw-flex tw-gap-x-2 tw-flex-wrap">
+        {suggestion.replacements.length < 1 && (
+          <Button
+            className="tw-my-4"
+            onClick={() => onAccept()}
+            disabled={disabled}
+          >
+            Fix
+          </Button>
+        )}
         {suggestion.replacements.map((replacement, index) => (
           <Button
             key={index}

@@ -26,7 +26,6 @@ export const filterSuggestions = (
 ) => {
   const filteredSuggestions = suggestions.filter((suggestion) => {
     return (
-      suggestion.replacements.length > 0 &&
       !ignoredCategories.includes(suggestion.rule.category.id) &&
       !ignoredRules.includes(suggestion.rule.id)
     );

@@ -21,7 +21,7 @@ export function SuggestionPopover({
   onApplySuggestion: (
     elementId: string,
     suggestion: TSuggestion,
-    replacementIndex: number
+    replacementIndex?: number
   ) => void;
 }) {
   return (

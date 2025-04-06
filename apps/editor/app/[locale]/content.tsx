@@ -139,7 +139,7 @@ export default function Content() {
   );
 
   const handleApplySuggestion = useCallback(
-    (elementId: string, suggestion: TSuggestion, replacementIndex: number) => {
+    (elementId: string, suggestion: TSuggestion, replacementIndex?: number) => {
       toggleSuggestionPopover(false);
       updateTargetElTextWithSuggestion(elementId, suggestion, replacementIndex);
     },

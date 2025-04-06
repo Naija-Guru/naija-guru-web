@@ -28,7 +28,7 @@ export function ReviewSuggestions({
   onApplySuggestion: (
     elementId: string,
     suggestion: TSuggestion,
-    replacementIndex: number
+    replacementIndex?: number
   ) => void;
   onIgnoreRuleOrCategory: (elementId: string) => void;
   onApplyAllSuggestions: () => void;

@@ -13,7 +13,7 @@ export function ReviewSuggestionsMobileList({
   onApplySuggestion: (
     elementId: string,
     suggestion: TSuggestion,
-    replacementIndex: number
+    replacementIndex?: number
   ) => void;
   onIgnoreRuleOrCategory: (elementId: string) => void;
   isLoadingSuggestions: boolean;
