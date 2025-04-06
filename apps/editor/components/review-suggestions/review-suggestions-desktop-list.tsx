@@ -8,19 +8,25 @@ export function ReviewSuggestionsDesktopList({
   isLoadingSuggestions,
 }: {
   list: Record<string, TSuggestion[]>;
-  onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onApplySuggestion: (
+    elementId: string,
+    suggestion: TSuggestion,
+    replacementIndex: number
+  ) => void;
   onIgnoreRuleOrCategory: (elementId: string) => void;
   isLoadingSuggestions: boolean;
 }) {
   return (
-    <ul className="tw-overflow-y-scroll tw-h-7/8 tw-border-t tw-border-solid">
+    <ul className="tw-overflow-x-scroll tw-max-h-[82%] tw-border-t tw-border-solid">
       {Object.entries(list).map(([elementId, suggestions]) =>
         suggestions.map((suggestion) => (
           <li key={elementId + suggestion.offset}>
             <Suggestion
               className="tw-p-4 tw-border-b tw-border-solid"
               suggestion={suggestion}
-              onAccept={() => onApplySuggestion(elementId, suggestion)}
+              onAccept={(replacementIndex) =>
+                onApplySuggestion(elementId, suggestion, replacementIndex)
+              }
               onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
               disabled={isLoadingSuggestions}
             />

@@ -10,7 +10,11 @@ export function ReviewSuggestionsMobileList({
   isListEmpty,
 }: {
   list: Record<string, TSuggestion[]>;
-  onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onApplySuggestion: (
+    elementId: string,
+    suggestion: TSuggestion,
+    replacementIndex: number
+  ) => void;
   onIgnoreRuleOrCategory: (elementId: string) => void;
   isLoadingSuggestions: boolean;
   isListEmpty: boolean;
@@ -28,7 +32,9 @@ export function ReviewSuggestionsMobileList({
               key={elementId + suggestion.offset}
               className="tw-p-4 tw-border tw-border-solid"
               suggestion={suggestion}
-              onAccept={() => onApplySuggestion(elementId, suggestion)}
+              onAccept={(replacementIndex) =>
+                onApplySuggestion(elementId, suggestion, replacementIndex)
+              }
               onIgnoreRuleOrCategory={() => onIgnoreRuleOrCategory(elementId)}
               disabled={isLoadingSuggestions}
             />

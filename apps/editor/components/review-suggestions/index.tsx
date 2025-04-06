@@ -25,7 +25,11 @@ export function ReviewSuggestions({
   isAcceptingAllSuggestions,
 }: {
   list: Record<string, TSuggestion[]>;
-  onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onApplySuggestion: (
+    elementId: string,
+    suggestion: TSuggestion,
+    replacementIndex: number
+  ) => void;
   onIgnoreRuleOrCategory: (elementId: string) => void;
   onApplyAllSuggestions: () => void;
   isLoadingSuggestions: boolean;
@@ -70,7 +74,7 @@ export function ReviewSuggestions({
             <Settings2Icon />
           </FloatingButton>
         </DrawerTrigger>
-        <DrawerContent className="tw-h-[80vh]">
+        <DrawerContent className="tw-h-[65vh]">
           <DrawerHeader>
             <DrawerTitle>Suggestions</DrawerTitle>
           </DrawerHeader>
