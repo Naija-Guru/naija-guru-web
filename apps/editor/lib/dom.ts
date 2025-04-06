@@ -310,7 +310,7 @@ export const updateTargetElTextWithSuggestion = (
   const offset = suggestion.offset - lengthDiff;
 
   const replacement =
-    suggestion.replacements.length > 1
+    suggestion.replacements.length > 0
       ? suggestion.replacements[replacementIndex ?? 0].value
       : '';
 
