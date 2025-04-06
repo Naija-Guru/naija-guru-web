@@ -139,9 +139,9 @@ export default function Content() {
   );
 
   const handleApplySuggestion = useCallback(
-    (elementId: string, suggestion: TSuggestion) => {
+    (elementId: string, suggestion: TSuggestion, replacementIndex?: number) => {
       toggleSuggestionPopover(false);
-      updateTargetElTextWithSuggestion(elementId, suggestion);
+      updateTargetElTextWithSuggestion(elementId, suggestion, replacementIndex);
     },
     [toggleSuggestionPopover]
   );
@@ -233,7 +233,8 @@ export default function Content() {
     const elementId = Object.keys(suggestionsState.suggestionsList)[0];
     handleApplySuggestion(
       elementId,
-      suggestionsState.suggestionsList[elementId][0]
+      suggestionsState.suggestionsList[elementId][0],
+      0
     );
   }, [suggestionsState.suggestionsList, handleApplySuggestion]);
 
@@ -274,12 +275,15 @@ export default function Content() {
     highlightElementSuggestions(elementId);
   };
 
-  const handleAddSampleContent = useCallback((content: string) => {
-    suggestionsStateDispatch({
-      type: 'SET_EDITOR_CONTENT',
-      payload: content,
-    });
-  }, []);
+  const handleAddSampleContent = useCallback(
+    (content: string) => {
+      suggestionsStateDispatch({
+        type: 'SET_EDITOR_CONTENT',
+        payload: content,
+      });
+    },
+    [suggestionsStateDispatch]
+  );
 
   useObserveElementsResize(targetedElements, handleElementPositionChange);
   useListenToElementsScroll(targetedElements, handleElementPositionChange);
@@ -302,10 +306,10 @@ export default function Content() {
             <Editor
               className="tw-col-span-3 md:tw-col-span-2 tw-h-[calc(100vh-250px)] tw-p-4 tw-bg-white tw-overflow-auto md:tw-text-xl tw-border"
               content={suggestionsState.editorContent}
-              setContent={(c: string) =>
+              setContent={(content: string) =>
                 suggestionsStateDispatch({
                   type: 'SET_EDITOR_CONTENT',
-                  payload: c,
+                  payload: content,
                 })
               }
               disabled={suggestionsState.isAcceptingAllSuggestions}

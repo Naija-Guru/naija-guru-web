@@ -290,7 +290,8 @@ export const clearCanvas = (canvas: HTMLCanvasElement) => {
  */
 export const updateTargetElTextWithSuggestion = (
   elementId: string,
-  suggestion: TSuggestion
+  suggestion: TSuggestion,
+  replacementIndex?: number
 ) => {
   const target = getTargetElementById(elementId);
 
@@ -308,9 +309,14 @@ export const updateTargetElTextWithSuggestion = (
 
   const offset = suggestion.offset - lengthDiff;
 
+  const replacement =
+    suggestion.replacements.length > 1
+      ? suggestion.replacements[replacementIndex ?? 0].value
+      : '';
+
   const newTextContent = replaceTextWithSuggestion(
     textNode.textContent!,
-    suggestion.replacements[0].value,
+    replacement,
     offset,
     suggestion.length
   );

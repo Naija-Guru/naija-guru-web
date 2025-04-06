@@ -10,7 +10,7 @@ import { usePreferences } from '@/providers/preferences-provider';
 interface SuggestionProps {
   className?: string;
   suggestion: TSuggestion;
-  onAccept: () => void;
+  onAccept: (replacementIndex?: number) => void;
   onIgnoreRuleOrCategory?: () => void;
   disabled?: boolean;
 }
@@ -47,13 +47,31 @@ export const Suggestion: FC<SuggestionProps> = ({
 
   return (
     <section className={className}>
-      <h1 className="tw-text-xl tw-font-bold">
-        {suggestion.replacements[0].value}
+      <h1 className="tw-text-l tw-font-bold">
+        {formatEnumToText(suggestion.rule.id)}
       </h1>
       <p className="tw-font-normal tw-text-xs">{suggestion.message}</p>
-      <Button className="tw-my-4" onClick={onAccept} disabled={disabled}>
-        {t('accept_suggestion')}
-      </Button>
+      <div className="tw-flex tw-gap-x-2 tw-flex-wrap">
+        {suggestion.replacements.length < 1 && (
+          <Button
+            className="tw-my-4"
+            onClick={() => onAccept()}
+            disabled={disabled}
+          >
+            Fix
+          </Button>
+        )}
+        {suggestion.replacements.map((replacement, index) => (
+          <Button
+            key={index}
+            className="tw-my-4"
+            onClick={() => onAccept(index)}
+            disabled={disabled}
+          >
+            {replacement.value}
+          </Button>
+        ))}
+      </div>
       {onIgnoreRuleOrCategory && (
         <div className="tw-flex tw-gap-x-2 tw-flex-wrap">
           <Button

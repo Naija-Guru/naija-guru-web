@@ -18,13 +18,19 @@ export function SuggestionPopover({
   anchorRef: VirtualElement | null;
   elementId: string;
   toggle: (open: boolean) => void;
-  onApplySuggestion: (elementId: string, suggestion: TSuggestion) => void;
+  onApplySuggestion: (
+    elementId: string,
+    suggestion: TSuggestion,
+    replacementIndex?: number
+  ) => void;
 }) {
   return (
     <Popover open={isOpen} toggleOpen={toggle} virtualAnchor={anchorRef}>
       <Suggestion
         suggestion={suggestion}
-        onAccept={() => onApplySuggestion(elementId, suggestion)}
+        onAccept={(replacementIndex) =>
+          onApplySuggestion(elementId, suggestion, replacementIndex)
+        }
       />
     </Popover>
   );
