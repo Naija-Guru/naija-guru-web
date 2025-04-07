@@ -8,10 +8,9 @@ import {
 } from '@naija-spell-checker/ui';
 
 import { HEADER_ROUTES } from '@/constants/routes';
+import { ReactNode } from 'react';
 
-import { DesktopLocaleSwitcher } from './locale-switcher/desktop-locale-switcher';
-
-export function DesktopNavigationMenu() {
+export function DesktopNavigationMenu({ children }: { children: ReactNode }) {
   return (
     <NavigationMenu className="tw-hidden md:tw-block">
       <NavigationMenuList>
@@ -42,7 +41,7 @@ export function DesktopNavigationMenu() {
             </NavigationMenuItem>
           )
         )}
-        <DesktopLocaleSwitcher />
+        {children}
       </NavigationMenuList>
     </NavigationMenu>
   );

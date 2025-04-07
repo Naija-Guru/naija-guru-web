@@ -1,0 +1,13 @@
+{
+  "name": "@naija-spell-checker/layout",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@naija-spell-checker/ui": "workspace:^"
+  },
+  "devDependencies": {
+    "@naija-spell-checker/tailwind": "workspace:^"
+  }
+}

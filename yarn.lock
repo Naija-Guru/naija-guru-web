@@ -2124,6 +2124,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@naija-spell-checker/layout@workspace:^, @naija-spell-checker/layout@workspace:packages/layout":
+  version: 0.0.0-use.local
+  resolution: "@naija-spell-checker/layout@workspace:packages/layout"
+  dependencies:
+    "@naija-spell-checker/tailwind": "workspace:^"
+    "@naija-spell-checker/ui": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@naija-spell-checker/tailwind@workspace:^, @naija-spell-checker/tailwind@workspace:packages/tailwind":
   version: 0.0.0-use.local
   resolution: "@naija-spell-checker/tailwind@workspace:packages/tailwind"
@@ -5784,6 +5793,7 @@ __metadata:
   resolution: "editor@workspace:apps/editor"
   dependencies:
     "@formatjs/intl-localematcher": "npm:^0.5.10"
+    "@naija-spell-checker/layout": "workspace:^"
     "@naija-spell-checker/tailwind": "workspace:^"
     "@naija-spell-checker/ui": "workspace:^"
     "@svgr/webpack": "npm:^8.1.0"
