@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -7,8 +8,7 @@ import {
   NavigationMenuTrigger,
 } from '@naija-spell-checker/ui';
 
-import { HEADER_ROUTES } from '@/constants/routes';
-import { ReactNode } from 'react';
+import { HEADER_ROUTES } from '../../constants/routes';
 
 export function DesktopNavigationMenu({ children }: { children: ReactNode }) {
   return (

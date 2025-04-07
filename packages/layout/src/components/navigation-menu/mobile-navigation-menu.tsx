@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import Link from 'next/link';
 import { ChevronRight, MenuIcon, XIcon } from 'lucide-react';
 
@@ -14,8 +15,7 @@ import {
 } from '@naija-spell-checker/ui';
 
 import Logo from '../../assets/images/full-logo.svg';
-import { HEADER_ROUTES } from '@/constants/routes';
-import { ReactNode } from 'react';
+import { HEADER_ROUTES } from '../../constants/routes';
 
 export function MobileNavigationMenu({ children }: { children: ReactNode }) {
   return (

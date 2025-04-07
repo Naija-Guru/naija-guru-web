@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useTranslations } from 'next-intl';
 
 import { Button } from '@naija-spell-checker/ui';
 
@@ -22,7 +21,6 @@ export const Suggestion: FC<SuggestionProps> = ({
   onAccept,
   onIgnoreRuleOrCategory,
 }) => {
-  const t = useTranslations();
   const { dispatch: dispatchPreferences } = usePreferences();
 
   const handleIgnoreCategory = () => {

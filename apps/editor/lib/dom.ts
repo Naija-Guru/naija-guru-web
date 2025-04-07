@@ -384,8 +384,7 @@ export const findTargetElement = (
 ): HTMLDivElement | null => {
   for (const elementId of elementIdS) {
     if (
-      // @ts-ignore
-      e.target?.matches(
+      (e.target as Element)?.matches(
         `div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"], div[${ELEMENT_DATA_ATTRIBUTE_ID}="${elementId}"] *`
       )
     ) {

@@ -65,12 +65,9 @@
 }
 
 @layer base {
-  * {
-    @apply tw-border-border;
-  }
-  body {
-    @apply tw-bg-background tw-text-foreground;
-  }
+  // body {
+  //   // @apply tw-bg-background tw-text-foreground;
+  // }
 }
 
 body {
