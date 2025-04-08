@@ -18,6 +18,8 @@ export * from './sheet';
 export * from './skeleton';
 export * from './spinner';
 export * from './tabs';
+export * from './textarea';
 export * from './toast';
 export * from './toaster';
+export * from './tooltip';
 export * from './utils';

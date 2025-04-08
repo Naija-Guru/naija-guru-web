@@ -1,0 +1,34 @@
+{
+  "name": "translator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "validate": "lint-staged"
+  },
+  "dependencies": {
+    "@naija-spell-checker/layout": "workspace:^",
+    "@naija-spell-checker/tailwind": "workspace:^",
+    "@naija-spell-checker/ui": "workspace:^",
+    "lucide-react": "^0.439.0",
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "sass": "^1.86.3",
+    "typescript": "^5"
+  },
+  "type": "module"
+}

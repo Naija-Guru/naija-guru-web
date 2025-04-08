@@ -25,17 +25,22 @@ export type FloatingButtonProps =
     VariantProps<typeof floatingButtonVariants> &
     ButtonProps;
 
-const FloatingButton = React.forwardRef<HTMLButtonElement, FloatingButtonProps>(
-  ({ className, position, ...props }, ref) => {
-    return (
-      <Button
-        className={cn(floatingButtonVariants({ position, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
+const FloatingButton = ({
+  ref,
+  className,
+  position,
+  ...props
+}: FloatingButtonProps & {
+  ref?: React.RefObject<HTMLButtonElement>;
+}) => {
+  return (
+    <Button
+      className={cn(floatingButtonVariants({ position, className }))}
+      ref={ref}
+      {...props}
+    />
+  );
+};
 FloatingButton.displayName = 'FloatingButton';
 
 export { FloatingButton, floatingButtonVariants };

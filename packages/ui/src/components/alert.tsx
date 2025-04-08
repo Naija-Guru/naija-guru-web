@@ -19,23 +19,31 @@ const alertVariants = cva(
   }
 );
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
+const Alert = ({
+  ref,
+  className,
+  variant,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof alertVariants> & {
+    ref?: React.RefObject<HTMLDivElement>;
+  }) => (
   <div
     ref={ref}
     role="alert"
     className={cn(alertVariants({ variant }), className)}
     {...props}
   />
-));
+);
 Alert.displayName = 'Alert';
 
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+const AlertTitle = ({
+  ref,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement> & {
+  ref?: React.RefObject<HTMLParagraphElement>;
+}) => (
   <h5
     ref={ref}
     className={cn(
@@ -44,19 +52,22 @@ const AlertTitle = React.forwardRef<
     )}
     {...props}
   />
-));
+);
 AlertTitle.displayName = 'AlertTitle';
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+const AlertDescription = ({
+  ref,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement> & {
+  ref?: React.RefObject<HTMLParagraphElement>;
+}) => (
   <div
     ref={ref}
     className={cn('tw-text-sm [&_p]:tw-leading-relaxed', className)}
     {...props}
   />
-));
+);
 AlertDescription.displayName = 'AlertDescription';
 
 export { Alert, AlertTitle, AlertDescription };

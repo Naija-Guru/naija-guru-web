@@ -5,12 +5,14 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
-import { InstallPrompt } from '@/components/install-prompt';
-import '@/styles/global.scss';
+import { Header, Footer } from '@naija-spell-checker/layout';
 import { Toaster } from '@naija-spell-checker/ui';
+
+import { InstallPrompt } from '@/components/install-prompt';
 import { PreferencesProvider } from '@/providers/preferences-provider';
+import { DesktopLocaleSwitcher } from '@/components/locale-switcher/desktop-locale-switcher';
+import { MobileLocaleSwitcher } from '@/components/locale-switcher/mobile-locale-switcher';
+import '@/styles/global.scss';
 
 export const metadata: Metadata = {
   title: 'Naija Spell Checker',
@@ -26,7 +28,7 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
 
-  // Ensure that the incoming `locale` is valid
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -39,9 +41,12 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <PreferencesProvider>
             <div className="tw-flex tw-flex-col tw-min-h-screen">
-              <Header />
+              <Header
+                mobileNavigationItem={<MobileLocaleSwitcher />}
+                desktopNavigationItem={<DesktopLocaleSwitcher />}
+              />
               <div className="tw-flex-1">{children}</div>
-              <Footer />
+              <Footer appName="Naija Spell Checker" />
               <InstallPrompt />
               <Toaster />
             </div>

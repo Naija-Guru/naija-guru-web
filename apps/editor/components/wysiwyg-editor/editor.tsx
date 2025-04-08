@@ -45,7 +45,6 @@ export const Editor: FC<EditorProps> = ({
         }}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        // @ts-ignore
         placeholder="Type or paste your text here"
         disabled={disabled}
       >

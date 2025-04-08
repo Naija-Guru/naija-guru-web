@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import Link from 'next/link';
 import { ChevronRight, MenuIcon, XIcon } from 'lucide-react';
 
@@ -13,12 +14,10 @@ import {
   SheetTrigger,
 } from '@naija-spell-checker/ui';
 
-import Logo from '@/images/full-logo.svg';
-import { HEADER_ROUTES } from '@/constants/routes';
+import Logo from '../../assets/images/full-logo.svg';
+import { HEADER_ROUTES } from '../../constants/routes';
 
-import { MobileLocaleSwitcher } from './locale-switcher/mobile-locale-switcher';
-
-export function MobileNavigationMenu() {
+export function MobileNavigationMenu({ children }: { children: ReactNode }) {
   return (
     <Sheet>
       <SheetTrigger asChild className="md:tw-hidden">
@@ -68,7 +67,7 @@ export function MobileNavigationMenu() {
               </Link>
             )
           )}
-          <MobileLocaleSwitcher />
+          {children}
         </Accordion>
       </SheetContent>
     </Sheet>

@@ -12,7 +12,7 @@ import { routing, usePathname } from '@/i18n/routing';
 import { ISO_2_COUNTRY_CODE_TO_COUNTRY_LABEL } from '@/constants/country';
 import { useLocale } from '@/hooks/use-locale';
 
-import { LocaleFlag } from '../locale-flag';
+import { LocaleFlag } from './locale-flag';
 
 export function MobileLocaleSwitcher() {
   const pathname = usePathname();

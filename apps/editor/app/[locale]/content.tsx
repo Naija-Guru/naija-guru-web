@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { VirtualElement } from '@floating-ui/dom';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 

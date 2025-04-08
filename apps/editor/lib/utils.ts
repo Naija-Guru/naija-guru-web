@@ -7,9 +7,11 @@ import { TSuggestion } from '@/models/suggestion';
  * @param {number} delay - The number of milliseconds to delay.
  * @returns {Function} A new debounced function.
  */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function debounce(func: Function, delay: number) {
   let timeout: NodeJS.Timeout | undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (...args: any) => {
     // Clear the previous timeout
     clearTimeout(timeout);
