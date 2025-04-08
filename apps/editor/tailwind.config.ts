@@ -8,6 +8,7 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     '../../node_modules/@naija-spell-checker/ui/**/*.{js,ts,jsx,tsx}',
+    '../../node_modules/@naija-spell-checker/layout/**/*.{js,ts,jsx,tsx}',
   ],
 };
 export default config;

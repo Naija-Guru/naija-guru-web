@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Footer } from '@naija-spell-checker/layout';
+import { Header, Footer } from '@naija-spell-checker/layout';
 
 import '../styles/global.scss';
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="tw-flex tw-flex-col tw-min-h-screen">
-          {/* <Header /> */}
+          <Header />
           <div className="tw-flex-1">{children}</div>
           <Footer appName="Naija Translator" />
         </div>
