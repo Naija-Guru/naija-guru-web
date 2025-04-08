@@ -26,7 +26,7 @@ const Alert = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> &
   VariantProps<typeof alertVariants> & {
-    ref?: React.RefObject<HTMLDivElement>;
+    ref?: React.Ref<HTMLDivElement>;
   }) => (
   <div
     ref={ref}
@@ -42,7 +42,7 @@ const AlertTitle = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement> & {
-  ref?: React.RefObject<HTMLParagraphElement>;
+  ref?: React.Ref<HTMLParagraphElement>;
 }) => (
   <h5
     ref={ref}
@@ -60,7 +60,7 @@ const AlertDescription = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement> & {
-  ref?: React.RefObject<HTMLParagraphElement>;
+  ref?: React.Ref<HTMLParagraphElement>;
 }) => (
   <div
     ref={ref}

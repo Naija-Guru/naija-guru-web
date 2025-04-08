@@ -2,7 +2,6 @@ export * from './accordion';
 export * from './alert';
 export * from './button';
 export * from './card';
-export * from './carousel';
 export * from './dialog';
 export * from './drawer';
 export * from './dropdown-menu';

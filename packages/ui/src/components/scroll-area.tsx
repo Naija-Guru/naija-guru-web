@@ -11,7 +11,7 @@ const ScrollArea = ({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
-  ref?: React.RefObject<React.ComponentRef<typeof ScrollAreaPrimitive.Root>>;
+  ref?: React.Ref<React.ComponentRef<typeof ScrollAreaPrimitive.Root>>;
 }) => (
   <ScrollAreaPrimitive.Root
     ref={ref}
@@ -35,7 +35,7 @@ const ScrollBar = ({
 }: React.ComponentPropsWithoutRef<
   typeof ScrollAreaPrimitive.ScrollAreaScrollbar
 > & {
-  ref?: React.RefObject<
+  ref?: React.Ref<
     React.ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
   >;
 }) => (
