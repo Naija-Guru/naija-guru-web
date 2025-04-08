@@ -22,37 +22,44 @@ const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose: typeof DrawerPrimitive.Close = DrawerPrimitive.Close;
 
-const DrawerOverlay = React.forwardRef<
-  React.ComponentRef<typeof DrawerPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Overlay
-    ref={ref}
-    className={cn('tw-fixed tw-inset-0 tw-z-50 tw-bg-black/80', className)}
-    {...props}
-  />
-)) as typeof DrawerPrimitive.Overlay;
+const DrawerOverlay = ((
+  {
+    ref,
+    className,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> & {
+    ref: React.RefObject<React.ComponentRef<typeof DrawerPrimitive.Overlay>>;
+  }
+) => (<DrawerPrimitive.Overlay
+  ref={ref}
+  className={cn('tw-fixed tw-inset-0 tw-z-50 tw-bg-black/80', className)}
+  {...props}
+/>)) as typeof DrawerPrimitive.Overlay;
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
-const DrawerContent = React.forwardRef<
-  React.ComponentRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerPrimitive.Content
-      ref={ref}
-      className={cn(
-        'tw-fixed tw-inset-x-0 tw-bottom-0 tw-z-50 tw-mt-24 tw-flex tw-h-auto tw-flex-col tw-rounded-t-[10px] tw-border tw-bg-background',
-        className
-      )}
-      {...props}
-    >
-      <div className="tw-mx-auto tw-mt-4 tw-h-2 tw-w-[100px] tw-rounded-full tw-bg-muted" />
-      {children}
-    </DrawerPrimitive.Content>
-  </DrawerPortal>
-)) as typeof DrawerPrimitive.Content;
+const DrawerContent = ((
+  {
+    ref,
+    className,
+    children,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
+    ref: React.RefObject<React.ComponentRef<typeof DrawerPrimitive.Content>>;
+  }
+) => (<DrawerPortal>
+  <DrawerOverlay />
+  <DrawerPrimitive.Content
+    ref={ref}
+    className={cn(
+      'tw-fixed tw-inset-x-0 tw-bottom-0 tw-z-50 tw-mt-24 tw-flex tw-h-auto tw-flex-col tw-rounded-t-[10px] tw-border tw-bg-background',
+      className
+    )}
+    {...props}
+  >
+    <div className="tw-mx-auto tw-mt-4 tw-h-2 tw-w-[100px] tw-rounded-full tw-bg-muted" />
+    {children}
+  </DrawerPrimitive.Content>
+</DrawerPortal>)) as typeof DrawerPrimitive.Content;
 DrawerContent.displayName = 'DrawerContent';
 
 const DrawerHeader = ({
@@ -80,31 +87,37 @@ const DrawerFooter = ({
 );
 DrawerFooter.displayName = 'DrawerFooter';
 
-const DrawerTitle = React.forwardRef<
-  React.ComponentRef<typeof DrawerPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Title
-    ref={ref}
-    className={cn(
-      'tw-text-lg tw-font-semibold tw-leading-none tw-tracking-tight',
-      className
-    )}
-    {...props}
-  />
-)) as typeof DrawerPrimitive.Title;
+const DrawerTitle = ((
+  {
+    ref,
+    className,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title> & {
+    ref: React.RefObject<React.ComponentRef<typeof DrawerPrimitive.Title>>;
+  }
+) => (<DrawerPrimitive.Title
+  ref={ref}
+  className={cn(
+    'tw-text-lg tw-font-semibold tw-leading-none tw-tracking-tight',
+    className
+  )}
+  {...props}
+/>)) as typeof DrawerPrimitive.Title;
 DrawerTitle.displayName = DrawerPrimitive.Title.displayName;
 
-const DrawerDescription = React.forwardRef<
-  React.ComponentRef<typeof DrawerPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Description
-    ref={ref}
-    className={cn('tw-text-sm tw-text-muted-foreground', className)}
-    {...props}
-  />
-)) as typeof DrawerPrimitive.Description;
+const DrawerDescription = ((
+  {
+    ref,
+    className,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description> & {
+    ref: React.RefObject<React.ComponentRef<typeof DrawerPrimitive.Description>>;
+  }
+) => (<DrawerPrimitive.Description
+  ref={ref}
+  className={cn('tw-text-sm tw-text-muted-foreground', className)}
+  {...props}
+/>)) as typeof DrawerPrimitive.Description;
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 
 export {
