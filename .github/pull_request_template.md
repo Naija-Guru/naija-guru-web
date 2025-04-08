@@ -1,4 +1,5 @@
 ## Description
+
 Please provide a clear and concise description of the changes made in this pull request. Include a summary of what this PR is trying to achieve.
 
 - [ ] Bug fix (non-breaking change)
@@ -6,7 +7,10 @@ Please provide a clear and concise description of the changes made in this pull 
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 
 ## Scope of Change
+
 Which part of the monorepo does this PR affect? (Select all that apply)
+
+- [ ] Translator App
 - [ ] Editor App
 - [ ] UI package
 - [ ] Tailwind package
@@ -14,11 +18,13 @@ Which part of the monorepo does this PR affect? (Select all that apply)
 - [ ] Other
 
 ## Related Issue
+
 Does this pull request address an open issue? If so, please provide the issue number or link.
 
 Closes #[ISSUE_NUMBER]
 
 ## How Has This Been Tested?
+
 Please describe the tests that you ran to verify your changes. Provide instructions so others can reproduce.
 
 - [ ] Unit tests
@@ -28,6 +34,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 If this PR introduces changes to the UI or Chrome extension, please include screenshots of the changes.
 
 ## Checklist:
+
 Please ensure your pull request meets the following criteria:
 
 - [ ] I have read the contribution guidelines.
@@ -38,4 +45,5 @@ Please ensure your pull request meets the following criteria:
 - [ ] This PR does not contain any sensitive or personal information.
 
 ## Additional Notes
+
 Is there anything else you want the reviewer to know? Any additional context or information should be provided here.

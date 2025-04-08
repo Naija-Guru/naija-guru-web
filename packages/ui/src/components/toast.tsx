@@ -9,22 +9,22 @@ import { cn } from './utils';
 
 const ToastProvider = ToastPrimitives.Provider;
 
-const ToastViewport = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport> & {
-    ref: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Viewport>>;
-  }
-) => (<ToastPrimitives.Viewport
-  ref={ref}
-  className={cn(
-    'tw-fixed tw-top-0 tw-z-[100] tw-flex tw-max-h-screen tw-w-full tw-flex-col-reverse tw-p-4 sm:tw-bottom-0 sm:tw-right-0 sm:tw-top-auto sm:tw-flex-col md:tw-max-w-[420px]',
-    className
-  )}
-  {...props}
-/>);
+const ToastViewport = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport> & {
+  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Viewport>>;
+}) => (
+  <ToastPrimitives.Viewport
+    ref={ref}
+    className={cn(
+      'tw-fixed tw-top-0 tw-z-[100] tw-flex tw-max-h-screen tw-w-full tw-flex-col-reverse tw-p-4 sm:tw-bottom-0 sm:tw-right-0 sm:tw-top-auto sm:tw-flex-col md:tw-max-w-[420px]',
+      className
+    )}
+    {...props}
+  />
+);
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
@@ -43,14 +43,15 @@ const toastVariants = cva(
   }
 );
 
-const Toast = (
-  {
-    ref,
-    className,
-    variant,
-    ...props
-  }
-) => {
+const Toast = ({
+  ref,
+  className,
+  variant,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
+  VariantProps<typeof toastVariants> & {
+    ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Root>>;
+  }) => {
   return (
     <ToastPrimitives.Root
       ref={ref}
@@ -61,73 +62,74 @@ const Toast = (
 };
 Toast.displayName = ToastPrimitives.Root.displayName;
 
-const ToastAction = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action> & {
-    ref: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Action>>;
-  }
-) => (<ToastPrimitives.Action
-  ref={ref}
-  className={cn(
-    'tw-inline-flex tw-h-8 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-md tw-border tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-transition-colors hover:tw-bg-secondary focus:tw-outline-none focus:tw-ring-1 focus:tw-ring-ring disabled:tw-pointer-events-none disabled:tw-opacity-50 group-[.destructive]:tw-border-muted/40 group-[.destructive]:tw-hover group-[.destructive]:tw-hover group-[.destructive]:tw-hover group-[.destructive]:tw-focus',
-    className
-  )}
-  {...props}
-/>);
+const ToastAction = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action> &
+  VariantProps<typeof toastVariants> & {
+    ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Action>>;
+  }) => (
+  <ToastPrimitives.Action
+    ref={ref}
+    className={cn(
+      'tw-inline-flex tw-h-8 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-md tw-border tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-transition-colors hover:tw-bg-secondary focus:tw-outline-none focus:tw-ring-1 focus:tw-ring-ring disabled:tw-pointer-events-none disabled:tw-opacity-50 group-[.destructive]:tw-border-muted/40 group-[.destructive]:tw-hover group-[.destructive]:tw-hover group-[.destructive]:tw-hover group-[.destructive]:tw-focus',
+      className
+    )}
+    {...props}
+  />
+);
 ToastAction.displayName = ToastPrimitives.Action.displayName;
 
-const ToastClose = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close> & {
-    ref: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Close>>;
-  }
-) => (<ToastPrimitives.Close
-  ref={ref}
-  className={cn(
-    'tw-absolute tw-right-1 tw-top-1 tw-rounded-md tw-p-1 tw-text-foreground/50 tw-opacity-0 tw-transition-opacity hover:tw-text-foreground focus:tw-opacity-100 focus:tw-outline-none focus:tw-ring-1 group-hover:tw-opacity-100 group-[.destructive]:tw-text-red-300 group-[.destructive]:tw-hover group-[.destructive]:tw-focus group-[.destructive]:tw-focus',
-    className
-  )}
-  toast-close="tw-"
-  {...props}
->
-  <X className="tw-h-4 tw-w-4" />
-</ToastPrimitives.Close>);
+const ToastClose = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close> & {
+  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Close>>;
+}) => (
+  <ToastPrimitives.Close
+    ref={ref}
+    className={cn(
+      'tw-absolute tw-right-1 tw-top-1 tw-rounded-md tw-p-1 tw-text-foreground/50 tw-opacity-0 tw-transition-opacity hover:tw-text-foreground focus:tw-opacity-100 focus:tw-outline-none focus:tw-ring-1 group-hover:tw-opacity-100 group-[.destructive]:tw-text-red-300 group-[.destructive]:tw-hover group-[.destructive]:tw-focus group-[.destructive]:tw-focus',
+      className
+    )}
+    toast-close="tw-"
+    {...props}
+  >
+    <X className="tw-h-4 tw-w-4" />
+  </ToastPrimitives.Close>
+);
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
-const ToastTitle = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title> & {
-    ref: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Title>>;
-  }
-) => (<ToastPrimitives.Title
-  ref={ref}
-  className={cn('tw-text-sm tw-font-semibold [&+div]:tw-text-xs', className)}
-  {...props}
-/>);
+const ToastTitle = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title> & {
+  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Title>>;
+}) => (
+  <ToastPrimitives.Title
+    ref={ref}
+    className={cn('tw-text-sm tw-font-semibold [&+div]:tw-text-xs', className)}
+    {...props}
+  />
+);
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
-const ToastDescription = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description> & {
-    ref: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Description>>;
-  }
-) => (<ToastPrimitives.Description
-  ref={ref}
-  className={cn('tw-text-sm tw-opacity-90', className)}
-  {...props}
-/>);
+const ToastDescription = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description> & {
+  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Description>>;
+}) => (
+  <ToastPrimitives.Description
+    ref={ref}
+    className={cn('tw-text-sm tw-opacity-90', className)}
+    {...props}
+  />
+);
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;

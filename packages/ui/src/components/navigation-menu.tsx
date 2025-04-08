@@ -44,16 +44,16 @@ const NavigationMenuItemProvider: React.FC<{
   );
 };
 
-const NavigationMenu = (
-  {
-    ref,
-    className,
-    children,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>;
-  }
-) => {
+const NavigationMenu = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Root>
+  >;
+}) => {
   const navigationItemPosition = new NavigationItemPositionDefaultContext();
 
   return (
@@ -76,34 +76,36 @@ const NavigationMenu = (
 };
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName;
 
-const NavigationMenuList = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.List>>;
-  }
-) => (<NavigationMenuPrimitive.List
-  ref={ref}
-  className={cn(
-    'tw-group tw-flex tw-flex-1 tw-list-none tw-items-center tw-justify-center tw-space-x-6',
-    className
-  )}
-  {...props}
-/>);
+const NavigationMenuList = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.List>
+  >;
+}) => (
+  <NavigationMenuPrimitive.List
+    ref={ref}
+    className={cn(
+      'tw-group tw-flex tw-flex-1 tw-list-none tw-items-center tw-justify-center tw-space-x-6',
+      className
+    )}
+    {...props}
+  />
+);
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 
-const NavigationMenuItem = (
-  {
-    ref,
-    className,
-    children,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Item>>;
-  }
-) => {
+const NavigationMenuItem = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Item>
+  >;
+}) => {
   const currentNavigationItemPositionContext = React.useContext(
     CurrentNavigationItemPositionContext
   );
@@ -150,66 +152,72 @@ const navigationMenuTriggerStyle = cva(
   'tw-group tw-inline-flex tw-h-9 tw-w-max tw-items-center tw-justify-center disabled:tw-pointer-events-none disabled:tw-opacity-50'
 );
 
-const NavigationMenuTrigger = (
-  {
-    ref,
-    className,
-    children,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>>;
-  }
-) => (<NavigationMenuPrimitive.Trigger
-  ref={ref}
-  className={cn(navigationMenuTriggerStyle(), 'tw-group', className)}
-  {...props}
->
-  {children}
-  <ChevronDown
-    className="tw-relative tw-top-[1px] tw-w-4 tw-h-4 tw-ml-1 tw-transition tw-duration-300 group-data-[state=open]:tw-rotate-180"
-    aria-hidden="true"
-  />
-</NavigationMenuPrimitive.Trigger>);
+const NavigationMenuTrigger = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>
+  >;
+}) => (
+  <NavigationMenuPrimitive.Trigger
+    ref={ref}
+    className={cn(navigationMenuTriggerStyle(), 'tw-group', className)}
+    {...props}
+  >
+    {children}
+    <ChevronDown
+      className="tw-relative tw-top-[1px] tw-w-4 tw-h-4 tw-ml-1 tw-transition tw-duration-300 group-data-[state=open]:tw-rotate-180"
+      aria-hidden="true"
+    />
+  </NavigationMenuPrimitive.Trigger>
+);
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName;
 
-const NavigationMenuContent = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Content>>;
-  }
-) => (<NavigationMenuPrimitive.Content
-  ref={ref}
-  className={cn(
-    'tw-left-0 tw-top-0 tw-grid tw-gap-6 tw-p-4 data-[motion^=from-]:tw-animate-in data-[motion^=to-]:tw-animate-out data-[motion^=from-]:tw-fade-in data-[motion^=to-]:tw-fade-out data-[motion=from-end]:tw-slide-in-from-right-52 data-[motion=from-start]:tw-slide-in-from-left-52 data-[motion=to-end]:tw-slide-out-to-right-52 data-[motion=to-start]:tw-slide-out-to-left-52',
-    className
-  )}
-  {...props}
-/>);
+const NavigationMenuContent = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Content>
+  >;
+}) => (
+  <NavigationMenuPrimitive.Content
+    ref={ref}
+    className={cn(
+      'tw-left-0 tw-top-0 tw-grid tw-gap-6 tw-p-4 data-[motion^=from-]:tw-animate-in data-[motion^=to-]:tw-animate-out data-[motion^=from-]:tw-fade-in data-[motion^=to-]:tw-fade-out data-[motion=from-end]:tw-slide-in-from-right-52 data-[motion=from-start]:tw-slide-in-from-left-52 data-[motion=to-end]:tw-slide-out-to-right-52 data-[motion=to-start]:tw-slide-out-to-left-52',
+      className
+    )}
+    {...props}
+  />
+);
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
-const NavigationMenuLink = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Link>>;
-  }
-) => (<NavigationMenuPrimitive.Link className={className} ref={ref} {...props} />);
+const NavigationMenuLink = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Link>
+  >;
+}) => (
+  <NavigationMenuPrimitive.Link className={className} ref={ref} {...props} />
+);
 NavigationMenuLink.displayName = NavigationMenuPrimitive.Link.displayName;
 
-const NavigationMenuViewport = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>>;
-  }
-) => {
+const NavigationMenuViewport = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>
+  >;
+}) => {
   const currentNavigationItemPositionContext = React.useContext(
     CurrentNavigationItemPositionContext
   );
@@ -248,24 +256,26 @@ const NavigationMenuViewport = (
 NavigationMenuViewport.displayName =
   NavigationMenuPrimitive.Viewport.displayName;
 
-const NavigationMenuIndicator = (
-  {
-    ref,
-    className,
-    ...props
-  }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator> & {
-    ref: React.RefObject<React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>>;
-  }
-) => (<NavigationMenuPrimitive.Indicator
-  ref={ref}
-  className={cn(
-    'tw-top-full tw-z-[1] tw-flex tw-h-1.5 tw-items-end tw-justify-center tw-overflow-hidden data-[state=visible]:tw-animate-in data-[state=hidden]:tw-animate-out data-[state=hidden]:tw-fade-out data-[state=visible]:tw-fade-in',
-    className
-  )}
-  {...props}
->
-  <div className="tw-relative tw-top-[60%] tw-h-2 tw-w-2 tw-rotate-45 tw-bg-border tw-shadow-md" />
-</NavigationMenuPrimitive.Indicator>);
+const NavigationMenuIndicator = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator> & {
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>
+  >;
+}) => (
+  <NavigationMenuPrimitive.Indicator
+    ref={ref}
+    className={cn(
+      'tw-top-full tw-z-[1] tw-flex tw-h-1.5 tw-items-end tw-justify-center tw-overflow-hidden data-[state=visible]:tw-animate-in data-[state=hidden]:tw-animate-out data-[state=hidden]:tw-fade-out data-[state=visible]:tw-fade-in',
+      className
+    )}
+    {...props}
+  >
+    <div className="tw-relative tw-top-[60%] tw-h-2 tw-w-2 tw-rotate-45 tw-bg-border tw-shadow-md" />
+  </NavigationMenuPrimitive.Indicator>
+);
 NavigationMenuIndicator.displayName =
   NavigationMenuPrimitive.Indicator.displayName;
 
