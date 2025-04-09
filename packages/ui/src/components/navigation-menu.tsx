@@ -50,7 +50,9 @@ const NavigationMenu = ({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Root>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Root>
+  >;
 }) => {
   const navigationItemPosition = new NavigationItemPositionDefaultContext();
 
@@ -79,7 +81,9 @@ const NavigationMenuList = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.List>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.List>
+  >;
 }) => (
   <NavigationMenuPrimitive.List
     ref={ref}
@@ -98,7 +102,9 @@ const NavigationMenuItem = ({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Item>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Item>
+  >;
 }) => {
   const currentNavigationItemPositionContext = React.useContext(
     CurrentNavigationItemPositionContext
@@ -127,7 +133,12 @@ const NavigationMenuItem = ({
     <NavigationMenuPrimitive.Item
       ref={(node) => {
         itemRef.current = node;
-        (ref as React.RefObject<HTMLLIElement | null>).current = node;
+        if (typeof ref === 'function') {
+          // @ts-ignore
+          ref(node);
+        } else if (ref) {
+          (ref as React.RefObject<HTMLLIElement | null>).current = node;
+        }
       }}
       className={cn(className)}
       {...props}
@@ -148,7 +159,9 @@ const NavigationMenuTrigger = ({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Trigger>
+  >;
 }) => (
   <NavigationMenuPrimitive.Trigger
     ref={ref}
@@ -169,7 +182,9 @@ const NavigationMenuContent = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Content>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Content>
+  >;
 }) => (
   <NavigationMenuPrimitive.Content
     ref={ref}
@@ -187,7 +202,9 @@ const NavigationMenuLink = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Link>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Link>
+  >;
 }) => (
   <NavigationMenuPrimitive.Link className={className} ref={ref} {...props} />
 );
@@ -198,7 +215,9 @@ const NavigationMenuViewport = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Viewport>
+  >;
 }) => {
   const currentNavigationItemPositionContext = React.useContext(
     CurrentNavigationItemPositionContext
@@ -243,7 +262,9 @@ const NavigationMenuIndicator = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator> & {
-  ref?: React.Ref<React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>>;
+  ref?: React.RefObject<
+    React.ComponentRef<typeof NavigationMenuPrimitive.Indicator>
+  >;
 }) => (
   <NavigationMenuPrimitive.Indicator
     ref={ref}
