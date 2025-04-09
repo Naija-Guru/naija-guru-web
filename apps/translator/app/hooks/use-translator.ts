@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
   translateText,
-  TranslationResponse,
   LanguageCode,
   LanguageCodeSchema,
 } from '../api/translation';

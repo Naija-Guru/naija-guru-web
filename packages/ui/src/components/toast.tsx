@@ -14,7 +14,7 @@ const ToastViewport = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport> & {
-  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Viewport>>;
+  ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Viewport>>;
 }) => (
   <ToastPrimitives.Viewport
     ref={ref}
@@ -50,7 +50,7 @@ const Toast = ({
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
   VariantProps<typeof toastVariants> & {
-    ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Root>>;
+    ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Root>>;
   }) => {
   return (
     <ToastPrimitives.Root
@@ -68,7 +68,7 @@ const ToastAction = ({
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action> &
   VariantProps<typeof toastVariants> & {
-    ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Action>>;
+    ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Action>>;
   }) => (
   <ToastPrimitives.Action
     ref={ref}
@@ -86,7 +86,7 @@ const ToastClose = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close> & {
-  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Close>>;
+  ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Close>>;
 }) => (
   <ToastPrimitives.Close
     ref={ref}
@@ -107,7 +107,7 @@ const ToastTitle = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title> & {
-  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Title>>;
+  ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Title>>;
 }) => (
   <ToastPrimitives.Title
     ref={ref}
@@ -122,7 +122,7 @@ const ToastDescription = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description> & {
-  ref?: React.RefObject<React.ComponentRef<typeof ToastPrimitives.Description>>;
+  ref?: React.Ref<React.ComponentRef<typeof ToastPrimitives.Description>>;
 }) => (
   <ToastPrimitives.Description
     ref={ref}

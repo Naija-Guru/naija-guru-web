@@ -31,7 +31,7 @@ const FloatingButton = ({
   position,
   ...props
 }: FloatingButtonProps & {
-  ref?: React.RefObject<HTMLButtonElement>;
+  ref?: React.Ref<HTMLButtonElement>;
 }) => {
   return (
     <Button
