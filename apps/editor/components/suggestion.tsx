@@ -66,7 +66,9 @@ export const Suggestion: FC<SuggestionProps> = ({
             onClick={() => onAccept(index)}
             disabled={disabled}
           >
-            {replacement.value}
+            {replacement.value.trim().length > 0
+              ? replacement.value
+              : 'Fix whitespace'}
           </Button>
         ))}
       </div>
