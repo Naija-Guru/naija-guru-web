@@ -14,14 +14,14 @@ export const HEADER_ROUTES = [
       },
       {
         label: 'Spell Checker',
-        url: '#',
+        url: 'https://spellchecker.naija.guru',
       },
       {
         label: 'Translator',
         url: 'https://translate.naija.guru',
       },
       {
-        label: 'Grammar guide',
+        label: 'Grammar Guide',
         url: `${MAIN_WEBSITE_DOMAIN}/grammar`,
       },
     ],
@@ -34,7 +34,7 @@ export const HEADER_ROUTES = [
         url: `${MAIN_WEBSITE_DOMAIN}/content/stories`,
       },
       {
-        label: ' LingQ Mini Stories',
+        label: 'Mini Stories (LingQ)',
         url: `${MAIN_WEBSITE_DOMAIN}/content/mini-stories`,
       },
       {

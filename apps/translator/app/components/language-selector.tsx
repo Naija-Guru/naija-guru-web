@@ -15,7 +15,7 @@ export function LanguageSelector({
   onSwitchLanguages,
 }: LanguageSelectorProps) {
   const getLanguageDisplayName = (code: LanguageCode): string => {
-    return code === 'en' ? 'English' : 'Pidgin';
+    return code === 'en' ? 'English' : 'Naija';
   };
 
   return (

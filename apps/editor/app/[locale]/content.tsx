@@ -300,7 +300,7 @@ export default function Content() {
       >
         <div className="tw-max-w-8xl tw-mx-auto">
           <h1 className="tw-text-xl md:tw-text-3xl tw-font-bold tw-mb-6 tw-text-secondary tw-text-center md:tw-text-left">
-            Pidgin English Spell Checker
+            Naija Spell Checker
           </h1>
           <AddSampleContent onAddSampleContent={handleAddSampleContent} />
           <div className="tw-grid tw-grid-cols-3">
