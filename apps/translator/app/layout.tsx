@@ -6,7 +6,7 @@ import '../styles/global.scss';
 
 export const metadata: Metadata = {
   title: 'Naija Translator',
-  description: 'Nigerian Pidgin translator web app',
+  description: 'A Nigerian Pidgin translator by Naija Guru',
 };
 
 export default function RootLayout({
