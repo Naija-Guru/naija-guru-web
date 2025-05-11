@@ -30,7 +30,7 @@ export function SourceTextInput({
         <Button
           variant="ghost"
           onClick={onClear}
-          disabled={isDisabled || !value}
+          disabled={!value}
           title="Clear text"
         >
           <XIcon />
@@ -42,7 +42,6 @@ export function SourceTextInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder="Enter text to translate"
         rows={8}
-        disabled={isDisabled}
       />
       <div className="tw-mt-2">
         <Button

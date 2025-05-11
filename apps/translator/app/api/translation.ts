@@ -23,6 +23,7 @@ export interface TranslateParams {
   targetLanguage: LanguageCode;
   text: string;
   appLanguage: LanguageCode;
+  signal?: AbortSignal;
 }
 
 export async function translateText({
@@ -30,6 +31,7 @@ export async function translateText({
   targetLanguage,
   text,
   appLanguage,
+  signal,
 }: TranslateParams): Promise<TranslationResponse> {
   if (!text.trim()) {
     return {
@@ -48,7 +50,7 @@ export async function translateText({
   url.searchParams.append('text', text);
   url.searchParams.append('app_lang', appLanguage);
 
-  const response = await fetch(url.toString());
+  const response = await fetch(url.toString(), { signal });
 
   if (!response.ok) {
     throw new Error(`Translation failed: ${response.statusText}`);

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { Header, Footer } from '@naija-spell-checker/layout';
 
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body>
         <div className="tw-flex tw-flex-col tw-min-h-screen">
           <Header />
-          <div className="tw-flex-1">{children}</div>
+          <div className="tw-flex-1">
+            <Suspense>{children}</Suspense>
+          </div>
           <Footer appName="Naija Translator" />
         </div>
       </body>
