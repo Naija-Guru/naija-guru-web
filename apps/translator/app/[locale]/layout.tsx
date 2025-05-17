@@ -1,20 +1,17 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { routing } from '@/i18n/routing';
+import { routing } from '../../i18n/routing';
 
 import { Toaster } from '@naija-spell-checker/ui';
 
-import { InstallPrompt } from '@/components/install-prompt';
-import { PreferencesProvider } from '@/providers/preferences-provider';
 import '@/styles/global.scss';
-import { AppLayout } from '@/components/app-layout';
+import { AppLayout } from '../components/app-layout';
 
 export const metadata: Metadata = {
-  title: 'Naija Spell Checker',
-  description: 'Nigerian Pidgin spell checker web app',
+  title: 'Naija Translator',
+  description: 'Nigerian Pidgin translator web app',
 };
 
 export default async function RootLayout({
@@ -37,15 +34,11 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <PreferencesProvider>
-            <AppLayout>
-              <div className="tw-flex-1">{children}</div>
-              <InstallPrompt />
-              <Toaster />
-            </AppLayout>
-          </PreferencesProvider>
+          <AppLayout>
+            <div className="tw-flex-1">{children}</div>
+          </AppLayout>
+          <Toaster />
         </NextIntlClientProvider>
-        <Script src="/service-worker.js" />
       </body>
     </html>
   );

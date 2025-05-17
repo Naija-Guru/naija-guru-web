@@ -170,7 +170,7 @@ const NavigationMenuTrigger = ({
   >
     {children}
     <ChevronDown
-      className="tw-relative tw-top-[1px] tw-w-4 tw-h-4 tw-ml-1 tw-transition tw-duration-300 group-data-[state=open]:tw-rotate-180"
+      className="tw-relative tw-w-4 tw-h-4 tw-ml-1 tw-transition tw-duration-300 group-data-[state=open]:tw-rotate-180"
       aria-hidden="true"
     />
   </NavigationMenuPrimitive.Trigger>

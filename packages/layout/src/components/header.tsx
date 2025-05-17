@@ -1,17 +1,20 @@
 'use client';
 import Link from 'next/link';
-import { ReactNode } from 'react';
 
 import Logo from '../assets/images/full-logo.svg';
 import { MobileNavigationMenu } from './navigation-menu/mobile-navigation-menu';
 import { DesktopNavigationMenu } from './navigation-menu/desktop-navigation-menu';
+import { MobileLocaleSwitcher } from './locale-switcher/mobile-locale-switcher';
+import { DesktopLocaleSwitcher } from './locale-switcher/desktop-locale-switcher';
 
 export function Header({
-  mobileNavigationItem,
-  desktopNavigationItem,
+  pathname,
+  currentLocale,
+  locales,
 }: {
-  mobileNavigationItem?: ReactNode;
-  desktopNavigationItem?: ReactNode;
+  pathname: string;
+  currentLocale: string;
+  locales: string[];
 }) {
   return (
     <div className="tw-border-b">
@@ -19,8 +22,20 @@ export function Header({
         <Link href="/">
           <Logo className="tw-h-8 tw-mr-2" />
         </Link>
-        <MobileNavigationMenu>{mobileNavigationItem}</MobileNavigationMenu>
-        <DesktopNavigationMenu>{desktopNavigationItem}</DesktopNavigationMenu>
+        <MobileNavigationMenu>
+          <MobileLocaleSwitcher
+            pathname={pathname}
+            currentLocale={currentLocale}
+            locales={locales}
+          />
+        </MobileNavigationMenu>
+        <DesktopNavigationMenu>
+          <DesktopLocaleSwitcher
+            pathname={pathname}
+            currentLocale={currentLocale}
+            locales={locales}
+          />
+        </DesktopNavigationMenu>
       </header>
     </div>
   );

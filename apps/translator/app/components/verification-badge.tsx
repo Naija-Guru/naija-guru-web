@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from '@naija-spell-checker/ui';
 import { CheckCircle2Icon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type VerificationStatus = 'FULL' | 'PARTIAL' | 'NONE';
 
@@ -14,15 +15,15 @@ interface VerificationBadgeProps {
 }
 
 export function VerificationBadge({ status }: VerificationBadgeProps) {
+  const t = useTranslations();
+
   if (status === 'NONE') return null;
 
   const colorClass =
     status === 'FULL' ? 'tw-text-green-500' : 'tw-text-yellow-500';
 
   const tooltipText =
-    status === 'FULL'
-      ? 'This translation has been verified by a human'
-      : 'This translation has been partially verified by a human';
+    status === 'FULL' ? t('verification.full') : t('verification.partial');
 
   return (
     <TooltipProvider>

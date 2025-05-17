@@ -8,12 +8,11 @@
     "pcm": "Pidgin"
   },
   "common": {
-    "paste": "Paste",
     "share": "Share",
     "copy": "Copy",
     "clear": "Clear",
-    "copied": "Copied!",
-    "loading": "Translation in progress...",
+    "copied": "Copied to clipboard!",
+    "loading": "Translating...",
     "placeholder": {
       "source": "Enter text to translate",
       "target": "Translation will appear here"
@@ -22,7 +21,7 @@
   "verification": {
     "full": "Verified Translation",
     "partial": "Partially Verified",
-    "none": "Automatic Translation"
+    "none": "Automated Translation"
   },
   "error": {
     "generic": "An error occurred during translation",
