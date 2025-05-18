@@ -7785,7 +7785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-intl@npm:^3.26.3":
+"next-intl@npm:^3.26.3, next-intl@npm:^3.7.0":
   version: 3.26.5
   resolution: "next-intl@npm:3.26.5"
   dependencies:
@@ -9919,6 +9919,7 @@ __metadata:
     eslint-config-next: "npm:15.2.4"
     lucide-react: "npm:^0.439.0"
     next: "npm:15.2.4"
+    next-intl: "npm:^3.7.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     sass: "npm:^1.86.3"
