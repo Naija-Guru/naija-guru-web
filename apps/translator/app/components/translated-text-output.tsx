@@ -49,30 +49,14 @@ export function TranslatedTextOutput({
         <div className="tw-flex tw-items-center">
           <VerificationBadge status={verification} />
         </div>
-        <div className="tw-flex tw-gap-2 tw-relative">
-          {shareLink && (
-            <Button
-              variant="ghost"
-              onClick={handleShare}
-              disabled={!value}
-              title={t('common.share')}
-              className="tw-relative"
-            >
-              <Share className="tw-w-4 tw-h-4" />
-              {showShareMessage && (
-                <span className="tw-text-xs tw-absolute tw-right-0 tw-top-full tw-mt-1 tw-mr-2 tw-bg-black tw-text-white tw-p-1 tw-rounded tw-whitespace-nowrap tw-z-10">
-                  {t('common.copied')}
-                </span>
-              )}
-            </Button>
-          )}
+        <div className="tw-flex tw-justify-end">
           <Button
             variant="ghost"
             onClick={handleCopy}
             disabled={!value}
             title={t('common.copy')}
           >
-            <CopyIcon className="tw-w-4 tw-h-4" />
+            <CopyIcon />
           </Button>
         </div>
       </div>
@@ -83,7 +67,23 @@ export function TranslatedTextOutput({
         rows={8}
         placeholder={t('common.placeholder.target')}
       />
-
+      {shareLink && (
+        <div className="tw-mt-2">
+          <Button
+            variant="ghost"
+            onClick={handleShare}
+            disabled={!value}
+            title={t('common.share')}
+          >
+            <Share />
+            {showShareMessage && (
+              <span className="tw-text-xs tw-absolute tw-right-0 tw-top-full tw-mt-1 tw-mr-2 tw-bg-black tw-text-white tw-p-1 tw-rounded tw-whitespace-nowrap tw-z-10">
+                {t('common.copied')}
+              </span>
+            )}
+          </Button>
+        </div>
+      )}
       {alternateTranslations.length > 0 && (
         <div className="tw-mt-4">
           <h4 className="tw-text-sm tw-font-medium tw-text-gray-500">

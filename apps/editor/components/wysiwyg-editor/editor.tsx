@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   BtnBold,
   BtnBulletList,
@@ -31,6 +32,7 @@ export const Editor: FC<EditorProps> = ({
   setContent,
   disabled,
 }) => {
+  const t = useTranslations();
   return (
     <EditorProvider>
       <WYSIWYGEditor
@@ -45,7 +47,7 @@ export const Editor: FC<EditorProps> = ({
         }}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Type or paste your text here"
+        placeholder={t('editor.placeholder')}
         disabled={disabled}
       >
         <Toolbar>

@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button, ScrollArea, ScrollBar } from '@naija-spell-checker/ui';
 
@@ -9,6 +10,7 @@ import { usePreferences } from '@/providers/preferences-provider';
 import { ListTodoIcon, ListXIcon, Trash2Icon } from 'lucide-react';
 
 export const CategoriesPreferences: FC = () => {
+  const t = useTranslations();
   const { state: preferencesState, dispatch: preferencesDispatch } =
     usePreferences();
 
@@ -30,11 +32,13 @@ export const CategoriesPreferences: FC = () => {
   return (
     <section>
       <header className="tw-flex tw-items-center tw-justify-between">
-        <h2 className="tw-font-bold tw-text-lg tw-my-4">Ignored Categories</h2>
+        <h2 className="tw-font-bold tw-text-lg tw-my-4">
+          {t('preferences.ignored_categories')}
+        </h2>
         {preferencesState.ignoredCategories.length > 0 && (
           <Button variant="outline" onClick={handleClearAllIgnoredCategories}>
             <ListXIcon className="tw-h-4 tw-w-4 tw-mr-1" />
-            Clear all
+            {t('preferences.clear_all')}
           </Button>
         )}
       </header>
@@ -60,7 +64,7 @@ export const CategoriesPreferences: FC = () => {
         <div>
           <ListTodoIcon className="tw-mx-auto tw-h-10 tw-w-10 md:tw-h-20 md:tw-w-20" />
           <p className="tw-p-4 tw-text-center">
-            You don&apos;t have any ignored categories
+            {t('preferences.no_ignored_categories')}
           </p>
         </div>
       )}

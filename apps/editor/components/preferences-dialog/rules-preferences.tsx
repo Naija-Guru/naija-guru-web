@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button, ScrollArea, ScrollBar } from '@naija-spell-checker/ui';
 
@@ -9,6 +10,7 @@ import { usePreferences } from '@/providers/preferences-provider';
 import { ListTodoIcon, ListXIcon, Trash2Icon } from 'lucide-react';
 
 export const RulesPreferences: FC = () => {
+  const t = useTranslations();
   const { state: preferencesState, dispatch: preferencesDispatch } =
     usePreferences();
 
@@ -31,11 +33,13 @@ export const RulesPreferences: FC = () => {
   return (
     <section>
       <header className="tw-flex tw-items-center tw-justify-between">
-        <h2 className="tw-font-bold tw-text-lg tw-my-4">Ignored Rules</h2>
+        <h2 className="tw-font-bold tw-text-lg tw-my-4">
+          {t('preferences.ignored_rules')}
+        </h2>
         {preferencesState.ignoredRules.length > 0 && (
           <Button variant="outline" onClick={handleClearAllIgnoredRules}>
             <ListXIcon className="tw-h-4 tw-w-4 tw-mr-1" />
-            Clear all
+            {t('preferences.clear_all')}
           </Button>
         )}
       </header>
@@ -61,7 +65,7 @@ export const RulesPreferences: FC = () => {
         <div>
           <ListTodoIcon className="tw-mx-auto tw-h-10 tw-w-10 md:tw-h-20 md:tw-w-20" />
           <p className="tw-p-4 tw-text-center">
-            You don&apos;t have any ignored rules
+            {t('preferences.no_ignored_rules')}
           </p>
         </div>
       )}

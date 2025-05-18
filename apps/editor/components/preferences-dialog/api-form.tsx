@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 
 import {
   Button,
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 export const ApiForm: FC = () => {
   const { toast } = useToast();
+  const t = useTranslations();
   const { state: preferencesState, dispatch: preferencesDispatch } =
     usePreferences();
 
@@ -43,7 +45,7 @@ export const ApiForm: FC = () => {
       },
     });
     toast({
-      title: 'Settings saved!',
+      title: t('preferences.settings_saved'),
     });
   }
 
@@ -66,10 +68,10 @@ export const ApiForm: FC = () => {
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Custom Spellcheck API endpoint</FormLabel>
+              <FormLabel>{t('preferences.custom_api_endpoint')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Custom Spellcheck API endpoint"
+                  placeholder={t('preferences.custom_api_endpoint')}
                   {...field}
                 />
               </FormControl>
@@ -79,10 +81,10 @@ export const ApiForm: FC = () => {
         />
         {canResetForm ? (
           <Button type="button" onClick={resetCustomApiEndpoint}>
-            Reset
+            {t('preferences.reset')}
           </Button>
         ) : (
-          <Button type="submit">Save</Button>
+          <Button type="submit">{t('preferences.save')}</Button>
         )}
       </form>
     </Form>

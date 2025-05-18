@@ -1,3 +1,72 @@
 {
+  "app": {
+    "title": "Naija Spell Checker",
+    "description": "Check your text make e no get spelling and grammar errors"
+  },
+  "languages": {
+    "en": "English",
+    "pcm": "Pidgin"
+  },
+  "common": {
+    "paste": "Paste",
+    "share": "Share",
+    "copy": "Copy",
+    "clear": "Clear",
+    "copied": "E don copy!",
+    "loading": "We dey work...",
+    "placeholder": {
+      "source": "Type your text here",
+      "target": "Translation go show here"
+    }
+  },
+  "editor": {
+    "placeholder": "Type or paste your text for here",
+    "sample_content": "Sample content"
+  },
+  "suggestions": {
+    "title": "Suggestions",
+    "empty": "Everything correct!",
+    "fix": "Fix am",
+    "fix_all": "Fix all",
+    "fixing": "We dey fix am...",
+    "fix_whitespace": "Fix space",
+    "ignore_rule": "Ignore dis rule",
+    "ignore_category": "Ignore dis category"
+  },
+  "preferences": {
+    "title": "Settings",
+    "api": "API",
+    "rules": "Rules",
+    "categories": "Categories",
+    "settings_saved": "We don save your settings!",
+    "custom_api_endpoint": "Custom Spellcheck API endpoint",
+    "save": "Save",
+    "reset": "Reset",
+    "ignored_rules": "Rules wey you ignore",
+    "ignored_categories": "Categories wey you ignore",
+    "clear_all": "Clear all",
+    "no_ignored_rules": "You no get any ignored rules",
+    "no_ignored_categories": "You no get any ignored categories"
+  },
+  "install": {
+    "title": "Install Naija Spell Checker",
+    "description": "Install this app for your device so you fit use am anytime. No need for app store. No download wahala.",
+    "tap_share": "Tap the share button",
+    "select_add": "Select Add to Home Screen",
+    "install": "Install",
+    "close": "Close"
+  },
+  "verification": {
+    "full": "Verified Translation",
+    "partial": "Partially Verified",
+    "none": "Automatic Translation"
+  },
+  "error": {
+    "generic": "Wahala happen",
+    "invalid_response": "We no fit understand wetin come back from server"
+  },
+  "alternatives": {
+    "title": "Other ways to talk am:"
+  },
   "accept_suggestion": "Accept dis Suggestion"
 }

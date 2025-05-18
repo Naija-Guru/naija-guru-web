@@ -4,7 +4,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface ErrorAlertProps {
-  message: string | null;
+  message?: string | null;
 }
 
 export function ErrorAlert({ message }: ErrorAlertProps) {

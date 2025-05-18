@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Button,
   Drawer,
@@ -17,6 +18,7 @@ import { isAndroid, isIOS, isSafari, isStandalone } from '@/lib/device';
 const INSTALL_BANNER_SHOWN_ON_IOS_KEY = `install-banner-shown-on-ios`;
 
 export function InstallPrompt() {
+  const t = useTranslations();
   const [isBannerOpen, setIsBannerOpen] = useState(true);
   const [isIOSDevice, setIsIOSDevice] = useState(false);
   const [isAndroidDevice, setIsAndroidDevice] = useState(false);
@@ -84,23 +86,19 @@ export function InstallPrompt() {
         <div className="tw-mx-auto tw-w-full tw-max-w-sm">
           <DrawerHeader>
             <DrawerTitle className="tw-text-secondary">
-              Install Naija Spell Checker
+              {t('install.title')}
             </DrawerTitle>
-            <DrawerDescription>
-              Install the app on your device to easily access it anytime. No app
-              store. No download. No hassle.
-            </DrawerDescription>
+            <DrawerDescription>{t('install.description')}</DrawerDescription>
           </DrawerHeader>
           <div className="tw-px-10">
             {isIOSDevice && (
               <ol>
                 <li className="tw-mb-4">
-                  Tap on the share button{' '}
+                  {t('install.tap_share')}{' '}
                   <ShareIcon className="tw-inline tw-mx-2 tw-text-secondary" />
                 </li>
                 <li className="tw-mb-4">
-                  Select{' '}
-                  <span className="tw-text-secondary">Add to Home Screen</span>{' '}
+                  {t('install.select_add')}{' '}
                   <PlusSquareIcon className="tw-inline tw-mx-2 tw-text-secondary" />
                 </li>
               </ol>
@@ -114,11 +112,11 @@ export function InstallPrompt() {
                 onClick={onInstallApp}
               >
                 <PlusSquareIcon className="tw-mr-2" />
-                Install
+                {t('install.install')}
               </Button>
             )}
             <Button variant="outline" onClick={closeBanner}>
-              Close
+              {t('install.close')}
             </Button>
           </DrawerFooter>
         </div>
