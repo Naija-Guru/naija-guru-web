@@ -1,3 +1,71 @@
 {
-  "accept_suggestion": "Accept Suggestion"
+  "app": {
+    "title": "Naija Spell Checker",
+    "description": "Check your text for spelling and grammar errors"
+  },
+  "languages": {
+    "en": "English",
+    "pcm": "Pidgin"
+  },
+  "common": {
+    "paste": "Paste",
+    "share": "Share",
+    "copy": "Copy",
+    "clear": "Clear",
+    "copied": "Copied!",
+    "loading": "Translation in progress...",
+    "placeholder": {
+      "source": "Enter text to translate",
+      "target": "Translation will appear here"
+    }
+  },
+  "editor": {
+    "placeholder": "Type or paste your text here",
+    "sample_content": "Sample content"
+  },
+  "suggestions": {
+    "title": "Suggestions",
+    "empty": "You are all good here!",
+    "fix": "Fix",
+    "fix_all": "Fix all",
+    "fixing": "Fixing...",
+    "fix_whitespace": "Fix whitespace",
+    "ignore_rule": "Ignore rule",
+    "ignore_category": "Ignore category"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "api": "API",
+    "rules": "Rules",
+    "categories": "Categories",
+    "settings_saved": "Settings saved!",
+    "custom_api_endpoint": "Custom Spellcheck API endpoint",
+    "save": "Save",
+    "reset": "Reset",
+    "ignored_rules": "Ignored Rules",
+    "ignored_categories": "Ignored Categories",
+    "clear_all": "Clear all",
+    "no_ignored_rules": "You don't have any ignored rules",
+    "no_ignored_categories": "You don't have any ignored categories"
+  },
+  "install": {
+    "title": "Install Naija Spell Checker",
+    "description": "Install the app on your device to easily access it anytime. No app store. No download. No hassle.",
+    "tap_share": "Tap on the share button",
+    "select_add": "Select Add to Home Screen",
+    "install": "Install",
+    "close": "Close"
+  },
+  "verification": {
+    "full": "Verified Translation",
+    "partial": "Partially Verified",
+    "none": "Automatic Translation"
+  },
+  "error": {
+    "generic": "An error occurred during translation",
+    "invalid_response": "Invalid response from translation service"
+  },
+  "alternatives": {
+    "title": "Alternative translations:"
+  }
 }

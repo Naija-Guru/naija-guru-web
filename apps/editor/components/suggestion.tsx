@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@naija-spell-checker/ui';
 
@@ -22,6 +23,7 @@ export const Suggestion: FC<SuggestionProps> = ({
   onIgnoreRuleOrCategory,
 }) => {
   const { dispatch: dispatchPreferences } = usePreferences();
+  const t = useTranslations();
 
   const handleIgnoreCategory = () => {
     dispatchPreferences({
@@ -56,7 +58,7 @@ export const Suggestion: FC<SuggestionProps> = ({
             onClick={() => onAccept()}
             disabled={disabled}
           >
-            Fix
+            {t('suggestions.fix')}
           </Button>
         )}
         {suggestion.replacements.map((replacement, index) => (
@@ -68,7 +70,7 @@ export const Suggestion: FC<SuggestionProps> = ({
           >
             {replacement.value.trim().length > 0
               ? replacement.value
-              : 'Fix whitespace'}
+              : t('suggestions.fix_whitespace')}
           </Button>
         ))}
       </div>
@@ -81,7 +83,7 @@ export const Suggestion: FC<SuggestionProps> = ({
             disabled={disabled}
           >
             <span>
-              Ignore rule{' '}
+              {t('suggestions.ignore_rule')}{' '}
               <span className="tw-text-secondary">
                 {formatEnumToText(suggestion.rule.id)}
               </span>
@@ -94,7 +96,7 @@ export const Suggestion: FC<SuggestionProps> = ({
             disabled={disabled}
           >
             <span>
-              Ignore category{' '}
+              {t('suggestions.ignore_category')}{' '}
               <span className="tw-text-secondary">
                 {formatEnumToText(suggestion.rule.category.id)}
               </span>

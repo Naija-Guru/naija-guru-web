@@ -1,0 +1,33 @@
+{
+  "app": {
+    "title": "English to Pidgin Translator",
+    "description": "Translate between English and Pidgin language"
+  },
+  "languages": {
+    "en": "English",
+    "pcm": "Pidgin"
+  },
+  "common": {
+    "share": "Share",
+    "copy": "Copy",
+    "clear": "Clear",
+    "copied": "Copied to clipboard!",
+    "loading": "Translating...",
+    "placeholder": {
+      "source": "Enter text to translate",
+      "target": "Translation will appear here"
+    }
+  },
+  "verification": {
+    "full": "Verified Translation",
+    "partial": "Partially Verified",
+    "none": "Automated Translation"
+  },
+  "error": {
+    "generic": "An error occurred during translation",
+    "invalid_response": "Invalid response from translation service"
+  },
+  "alternatives": {
+    "title": "Alternative translations:"
+  }
+}

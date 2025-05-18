@@ -9,6 +9,7 @@ import {
 } from '../api/translation';
 import { z } from 'zod';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from '@/hooks/use-locale';
 
 interface UseTranslatorResult {
   sourceText: string;
@@ -32,6 +33,7 @@ export function useTranslatorWithUrl(
   // Get URL search params and router for updating URL
   const searchParams = useSearchParams();
   const router = useRouter();
+  const currentLocale = useLocale();
 
   // Parse URL parameters with fallbacks to defaults
   const initialSourceLang = parseLanguageCode(
@@ -122,7 +124,7 @@ export function useTranslatorWithUrl(
         sourceLanguage,
         targetLanguage,
         text: sourceText,
-        appLanguage: 'en', // Hard-coded to English
+        appLanguage: currentLocale as LanguageCode, // Hard-coded to English
         signal, // Pass the abort signal
       });
 

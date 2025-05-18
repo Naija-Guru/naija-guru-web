@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Textarea } from '@naija-spell-checker/ui';
 import { ClipboardPasteIcon, XIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface SourceTextInputProps {
   value: string;
@@ -15,6 +16,8 @@ export function SourceTextInput({
   onClear,
   isDisabled = false,
 }: SourceTextInputProps) {
+  const t = useTranslations();
+
   const handlePaste = async () => {
     try {
       const clipboardText = await navigator.clipboard.readText();
@@ -31,7 +34,7 @@ export function SourceTextInput({
           variant="ghost"
           onClick={onClear}
           disabled={!value}
-          title="Clear text"
+          title={t('common.clear')}
         >
           <XIcon />
         </Button>
@@ -40,7 +43,7 @@ export function SourceTextInput({
         className="tw-border-none tw-resize-none tw-shadow-none md:tw-text-xl"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Enter text to translate"
+        placeholder={t('common.placeholder.source')}
         rows={8}
       />
       <div className="tw-mt-2">
@@ -48,7 +51,7 @@ export function SourceTextInput({
           variant="ghost"
           onClick={handlePaste}
           disabled={isDisabled}
-          title="Paste from clipboard"
+          title={t('common.paste')}
         >
           <ClipboardPasteIcon />
         </Button>

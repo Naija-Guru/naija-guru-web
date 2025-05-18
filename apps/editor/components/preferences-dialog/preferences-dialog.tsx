@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 
 import {
   Dialog,
@@ -17,18 +18,22 @@ import { RulesPreferences } from './rules-preferences';
 import { CategoriesPreferences } from './category-preferences';
 
 export const PreferencesDialog: FC<{ trigger: ReactNode }> = ({ trigger }) => {
+  const t = useTranslations();
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="tw-w-min-[500px]">
         <DialogHeader>
-          <DialogTitle>Preferences</DialogTitle>
+          <DialogTitle>{t('preferences.title')}</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="api">
           <TabsList className="tw-grid tw-grid-cols-3">
-            <TabsTrigger value="api">API</TabsTrigger>
-            <TabsTrigger value="rules">Rules</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="api">{t('preferences.api')}</TabsTrigger>
+            <TabsTrigger value="rules">{t('preferences.rules')}</TabsTrigger>
+            <TabsTrigger value="categories">
+              {t('preferences.categories')}
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="api">
             <ApiForm />

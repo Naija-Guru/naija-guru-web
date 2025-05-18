@@ -1,10 +1,10 @@
 'use client';
 
-import { useTranslatorWithUrl } from './hooks/use-translator-with-url';
-import { LanguageSelector } from './components/language-selector';
-import { SourceTextInput } from './components/source-text-input';
-import { TranslatedTextOutput } from './components/translated-text-output';
-import { ErrorAlert } from './components/error-alert';
+import { useTranslatorWithUrl } from '../hooks/use-translator-with-url';
+import { LanguageSelector } from '../components/language-selector';
+import { SourceTextInput } from '../components/source-text-input';
+import { TranslatedTextOutput } from '../components/translated-text-output';
+import { ErrorAlert } from '../components/error-alert';
 
 export default function Home() {
   const {

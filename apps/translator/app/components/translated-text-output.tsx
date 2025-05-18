@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Textarea } from '@naija-spell-checker/ui';
 import { CopyIcon, Share } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { VerificationBadge } from './verification-badge';
 
 interface TranslatedTextOutputProps {
@@ -15,10 +16,12 @@ interface TranslatedTextOutputProps {
 export function TranslatedTextOutput({
   value,
   verification,
+  alternateTranslations = [],
   isLoading = false,
   shareLink,
   onShare,
 }: TranslatedTextOutputProps) {
+  const t = useTranslations();
   const [showShareMessage, setShowShareMessage] = useState(false);
 
   const handleCopy = async () => {
@@ -31,12 +34,25 @@ export function TranslatedTextOutput({
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (shareLink) {
-      navigator.clipboard.writeText(shareLink);
-      setShowShareMessage(true);
-      setTimeout(() => setShowShareMessage(false), 2000);
-      if (onShare) onShare();
+      try {
+        // Check if the Web Share API is available
+        if (navigator.share) {
+          await navigator.share({
+            title: document.title,
+            url: shareLink,
+          });
+        } else {
+          // Fallback to clipboard if Web Share API is not available
+          await navigator.clipboard.writeText(shareLink);
+          setShowShareMessage(true);
+          setTimeout(() => setShowShareMessage(false), 2000);
+        }
+        if (onShare) onShare();
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
     }
   };
 
@@ -46,12 +62,12 @@ export function TranslatedTextOutput({
         <div className="tw-flex tw-items-center">
           <VerificationBadge status={verification} />
         </div>
-        <div className="tw-flex">
+        <div className="tw-flex tw-justify-end">
           <Button
             variant="ghost"
             onClick={handleCopy}
             disabled={!value}
-            title="Copy to clipboard"
+            title={t('common.copy')}
           >
             <CopyIcon />
           </Button>
@@ -59,10 +75,10 @@ export function TranslatedTextOutput({
       </div>
       <Textarea
         className="tw-border-none tw-resize-none tw-shadow-none md:tw-text-xl tw-bg-transparent"
-        value={isLoading ? 'Translating...' : value}
+        value={isLoading ? t('common.loading') : value}
         readOnly
         rows={8}
-        placeholder="Translation will appear here"
+        placeholder={t('common.placeholder.target')}
       />
       {shareLink && (
         <div className="tw-mt-2">
@@ -70,16 +86,32 @@ export function TranslatedTextOutput({
             variant="ghost"
             onClick={handleShare}
             disabled={!value}
-            title="Share translation"
-            className="tw-relative"
+            title={t('common.share')}
           >
             <Share />
             {showShareMessage && (
-              <span className="tw-text-xs tw-absolute tw-left-0 tw-top-full tw-mt-1 tw-mr-2 tw-bg-black tw-text-white tw-p-1 tw-rounded tw-whitespace-nowrap tw-z-10">
-                Copied to clipboard!
+              <span className="tw-text-xs tw-absolute tw-right-0 tw-top-full tw-mt-1 tw-mr-2 tw-bg-black tw-text-white tw-p-1 tw-rounded tw-whitespace-nowrap tw-z-10">
+                {t('common.copied')}
               </span>
             )}
           </Button>
+        </div>
+      )}
+      {alternateTranslations.length > 0 && (
+        <div className="tw-mt-4">
+          <h4 className="tw-text-sm tw-font-medium tw-text-gray-500">
+            {t('alternatives.title')}
+          </h4>
+          <ul className="tw-mt-1 tw-space-y-1">
+            {alternateTranslations.map((text, index) => (
+              <li
+                key={index}
+                className="tw-text-sm tw-bg-white tw-p-2 tw-rounded"
+              >
+                {text}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { PenLineIcon } from 'lucide-react';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import {
   Button,
@@ -21,6 +22,7 @@ export const AddSampleContent: FC<AddSampleContentProps> = ({
   onAddSampleContent,
 }) => {
   const isMobile = useIsMobile();
+  const t = useTranslations();
 
   return (
     <DropdownMenu>
@@ -40,7 +42,7 @@ export const AddSampleContent: FC<AddSampleContentProps> = ({
             className="tw-mb-4 tw-hidden md:tw-inline-flex"
           >
             <PenLineIcon className="tw-h-4 tw-w-4 tw-mr-1" />
-            Sample content
+            {t('editor.sample_content')}
           </Button>
         )}
       </DropdownMenuTrigger>
