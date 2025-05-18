@@ -34,12 +34,25 @@ export function TranslatedTextOutput({
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (shareLink) {
-      navigator.clipboard.writeText(shareLink);
-      setShowShareMessage(true);
-      setTimeout(() => setShowShareMessage(false), 2000);
-      if (onShare) onShare();
+      try {
+        // Check if the Web Share API is available
+        if (navigator.share) {
+          await navigator.share({
+            title: document.title,
+            url: shareLink,
+          });
+        } else {
+          // Fallback to clipboard if Web Share API is not available
+          await navigator.clipboard.writeText(shareLink);
+          setShowShareMessage(true);
+          setTimeout(() => setShowShareMessage(false), 2000);
+        }
+        if (onShare) onShare();
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
     }
   };
 
