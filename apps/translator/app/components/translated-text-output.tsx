@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Textarea } from '@naija-spell-checker/ui';
-import { CopyIcon, Share } from 'lucide-react';
+import { CopyIcon, Share2Icon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { VerificationBadge } from './verification-badge';
 
@@ -62,41 +62,39 @@ export function TranslatedTextOutput({
         <div className="tw-flex tw-items-center">
           <VerificationBadge status={verification} />
         </div>
-        <div className="tw-flex tw-justify-end">
-          <Button
-            variant="ghost"
-            onClick={handleCopy}
-            disabled={!value}
-            title={t('common.copy')}
-          >
-            <CopyIcon />
-          </Button>
-        </div>
       </div>
       <Textarea
         className="tw-border-none tw-resize-none tw-shadow-none md:tw-text-xl tw-bg-transparent"
         value={isLoading ? t('common.loading') : value}
         readOnly
-        rows={8}
+        rows={4}
         placeholder={t('common.placeholder.target')}
       />
-      {shareLink && (
-        <div className="tw-mt-2">
+      <div className="tw-flex tw-justify-end tw-mt-2">
+        {shareLink && (
           <Button
             variant="ghost"
             onClick={handleShare}
             disabled={!value}
             title={t('common.share')}
           >
-            <Share />
+            <Share2Icon />
             {showShareMessage && (
               <span className="tw-text-xs tw-absolute tw-right-0 tw-top-full tw-mt-1 tw-mr-2 tw-bg-black tw-text-white tw-p-1 tw-rounded tw-whitespace-nowrap tw-z-10">
                 {t('common.copied')}
               </span>
             )}
           </Button>
-        </div>
-      )}
+        )}
+        <Button
+          variant="ghost"
+          onClick={handleCopy}
+          disabled={!value}
+          title={t('common.copy')}
+        >
+          <CopyIcon />
+        </Button>
+      </div>
       {alternateTranslations.length > 0 && (
         <div className="tw-mt-4">
           <h4 className="tw-text-sm tw-font-medium tw-text-gray-500">

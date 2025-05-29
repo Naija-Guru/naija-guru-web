@@ -5,6 +5,7 @@ import { LanguageSelector } from '../components/language-selector';
 import { SourceTextInput } from '../components/source-text-input';
 import { TranslatedTextOutput } from '../components/translated-text-output';
 import { ErrorAlert } from '../components/error-alert';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 export default function Home() {
   const {
@@ -22,6 +23,9 @@ export default function Home() {
     shareLink,
   } = useTranslatorWithUrl();
 
+  const isMobile = useIsMobile();
+  const showTranslatedTextUi = !(isMobile && !translatedText);
+
   return (
     <div className="tw-p-6 tw-mx-auto tw-max-w-[1280px]">
       <div className="tw-flex tw-justify-center">
@@ -38,13 +42,15 @@ export default function Home() {
           onClear={clearText}
           isDisabled={isLoading}
         />
-        <TranslatedTextOutput
-          value={translatedText}
-          verification={verification}
-          alternateTranslations={alternateTranslations}
-          isLoading={isLoading}
-          shareLink={shareLink}
-        />
+        {showTranslatedTextUi && (
+          <TranslatedTextOutput
+            value={translatedText}
+            verification={verification}
+            alternateTranslations={alternateTranslations}
+            isLoading={isLoading}
+            shareLink={shareLink}
+          />
+        )}
       </div>
       <ErrorAlert message={error} />
     </div>
