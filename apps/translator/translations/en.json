@@ -8,6 +8,7 @@
     "pcm": "Pidgin"
   },
   "common": {
+    "paste": "Paste",
     "share": "Share",
     "copy": "Copy",
     "clear": "Clear",

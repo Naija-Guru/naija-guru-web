@@ -29,22 +29,21 @@ export function SourceTextInput({
 
   return (
     <div className="tw-border tw-rounded-md tw-p-4 tw-relative">
-      <div className="tw-flex tw-justify-end">
-        <Button
-          variant="ghost"
-          onClick={onClear}
-          disabled={!value}
-          title={t('common.clear')}
-        >
-          <XIcon />
-        </Button>
-      </div>
+      <Button
+        className="tw-absolute tw-right-0"
+        variant="ghost"
+        onClick={onClear}
+        disabled={!value}
+        title={t('common.clear')}
+      >
+        <XIcon />
+      </Button>
       <Textarea
         className="tw-border-none tw-resize-none tw-shadow-none md:tw-text-xl"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={t('common.placeholder.source')}
-        rows={8}
+        rows={4}
       />
       <div className="tw-mt-2">
         <Button
