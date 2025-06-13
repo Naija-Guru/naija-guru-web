@@ -1,22 +1,22 @@
 {
   "app": {
-    "title": "English to Pidgin Translator",
-    "description": "Translate between English and Pidgin language"
+    "title": "English to Naija Translator",
+    "description": "Translate between English and Naija."
   },
   "languages": {
     "en": "English",
-    "pcm": "Pidgin"
+    "pcm": "Naija"
   },
   "common": {
-    "paste": "Paste am",
-    "share": "Share am",
-    "copy": "Copy am",
-    "clear": "Clear am",
+    "paste": "Paste",
+    "share": "Share",
+    "copy": "Copy",
+    "clear": "Clear",
     "copied": "E don copy!",
-    "loading": "Translation dey process...",
+    "loading": "E dey translate...",
     "placeholder": {
-      "source": "Enter text wey you wan translate",
-      "target": "Translation go show here"
+      "source": "Enter text wey you want translate",
+      "target": "Translation go show for yer"
     }
   },
   "verification": {
@@ -25,10 +25,10 @@
     "none": "Automatic Translation"
   },
   "error": {
-    "generic": "Error happen when we dey translate",
-    "invalid_response": "Translation service no give correct response"
+    "generic": "Error occur wen we bin dey try translate.",
+    "invalid_response": "Translation service give response wey we no sabi."
   },
   "alternatives": {
-    "title": "Other ways to translate am:"
+    "title": "Oda ways to translate am:"
   }
 }

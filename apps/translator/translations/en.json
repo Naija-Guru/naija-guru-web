@@ -1,11 +1,11 @@
 {
   "app": {
-    "title": "English to Pidgin Translator",
-    "description": "Translate between English and Pidgin language"
+    "title": "English to Nigerian Pidgin Translator",
+    "description": "Translate between English and Nigerian Pidgin."
   },
   "languages": {
     "en": "English",
-    "pcm": "Pidgin"
+    "pcm": "Nigerian Pidgin"
   },
   "common": {
     "paste": "Paste",

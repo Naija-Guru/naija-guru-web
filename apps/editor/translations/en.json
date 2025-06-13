@@ -1,11 +1,11 @@
 {
   "app": {
     "title": "Naija Spell Checker",
-    "description": "Check your text for spelling and grammar errors"
+    "description": "Check your text for spelling and grammar errors."
   },
   "languages": {
     "en": "English",
-    "pcm": "Pidgin"
+    "pcm": "Nigerian Pidgin"
   },
   "common": {
     "paste": "Paste",
@@ -20,7 +20,7 @@
     }
   },
   "editor": {
-    "placeholder": "Type or paste your text here",
+    "placeholder": "Type or paste your text here...",
     "sample_content": "Sample content"
   },
   "suggestions": {
@@ -52,7 +52,7 @@
     "title": "Install Naija Spell Checker",
     "description": "Install the app on your device to easily access it anytime. No app store. No download. No hassle.",
     "tap_share": "Tap on the share button",
-    "select_add": "Select Add to Home Screen",
+    "select_add": "Select \"Add to Home Screen\"",
     "install": "Install",
     "close": "Close"
   },
@@ -62,8 +62,8 @@
     "none": "Automatic Translation"
   },
   "error": {
-    "generic": "An error occurred during translation",
-    "invalid_response": "Invalid response from translation service"
+    "generic": "An error occurred during translation.",
+    "invalid_response": "Invalid response from translation service."
   },
   "alternatives": {
     "title": "Alternative translations:"

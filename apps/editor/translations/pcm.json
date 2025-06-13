@@ -1,11 +1,11 @@
 {
   "app": {
     "title": "Naija Spell Checker",
-    "description": "Check your text make e no get spelling and grammar errors"
+    "description": "Check to make sure sey yor text no get spelling and grammar errors."
   },
   "languages": {
     "en": "English",
-    "pcm": "Pidgin"
+    "pcm": "Naija"
   },
   "common": {
     "paste": "Paste",
@@ -13,46 +13,46 @@
     "copy": "Copy",
     "clear": "Clear",
     "copied": "E don copy!",
-    "loading": "We dey work...",
+    "loading": "Translation dey in progress...",
     "placeholder": {
-      "source": "Type your text here",
-      "target": "Translation go show here"
+      "source": "Enter text wey yu want translate",
+      "target": "Translation go show for yer"
     }
   },
   "editor": {
-    "placeholder": "Type or paste your text for here",
+    "placeholder": "Type or paste yor text for yer...",
     "sample_content": "Sample content"
   },
   "suggestions": {
     "title": "Suggestions",
     "empty": "Everything correct!",
-    "fix": "Fix am",
+    "fix": "Fix",
     "fix_all": "Fix all",
     "fixing": "We dey fix am...",
-    "fix_whitespace": "Fix space",
-    "ignore_rule": "Ignore dis rule",
-    "ignore_category": "Ignore dis category"
+    "fix_whitespace": "Fix whitespace",
+    "ignore_rule": "Fashi dis rule",
+    "ignore_category": "Fashi dis category"
   },
   "preferences": {
     "title": "Settings",
     "api": "API",
     "rules": "Rules",
     "categories": "Categories",
-    "settings_saved": "We don save your settings!",
+    "settings_saved": "Yor settings don save!",
     "custom_api_endpoint": "Custom Spellcheck API endpoint",
     "save": "Save",
     "reset": "Reset",
-    "ignored_rules": "Rules wey you ignore",
-    "ignored_categories": "Categories wey you ignore",
+    "ignored_rules": "Rules wey yu fashi",
+    "ignored_categories": "Categories wey yu fashi",
     "clear_all": "Clear all",
-    "no_ignored_rules": "You no get any ignored rules",
-    "no_ignored_categories": "You no get any ignored categories"
+    "no_ignored_rules": "Yu neva fashi any rule",
+    "no_ignored_categories": "Yu neva fashi any category"
   },
   "install": {
     "title": "Install Naija Spell Checker",
-    "description": "Install this app for your device so you fit use am anytime. No need for app store. No download wahala.",
-    "tap_share": "Tap the share button",
-    "select_add": "Select Add to Home Screen",
+    "description": "Install dis app for yor device so dat yu go fit use am anytime. No need for app store. No download wahala.",
+    "tap_share": "Tap di share button",
+    "select_add": "Select \"Add to Home Screen\"",
     "install": "Install",
     "close": "Close"
   },
@@ -62,11 +62,11 @@
     "none": "Automatic Translation"
   },
   "error": {
-    "generic": "Wahala happen",
-    "invalid_response": "We no fit understand wetin come back from server"
+    "generic": "Error occur wen we bin dey try translate.",
+    "invalid_response": "Translation service give response wey we no sabi."
   },
   "alternatives": {
-    "title": "Other ways to talk am:"
+    "title": "Oda ways to translate am:"
   },
-  "accept_suggestion": "Accept dis Suggestion"
+  "accept_suggestion": "Accept dis suggestion"
 }
