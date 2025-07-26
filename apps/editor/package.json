@@ -14,6 +14,7 @@
     "@naija-spell-checker/layout": "workspace:^",
     "@naija-spell-checker/tailwind": "workspace:^",
     "@naija-spell-checker/ui": "workspace:^",
+    "@next/third-parties": "^15.4.4",
     "lucide-react": "^0.439.0",
     "negotiator": "^1.0.0",
     "next": "15.2.4",

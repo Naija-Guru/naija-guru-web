@@ -13,6 +13,7 @@
     "@naija-spell-checker/layout": "workspace:^",
     "@naija-spell-checker/tailwind": "workspace:^",
     "@naija-spell-checker/ui": "workspace:^",
+    "@next/third-parties": "^15.4.4",
     "lucide-react": "^0.439.0",
     "next": "15.2.4",
     "next-intl": "^3.7.0",

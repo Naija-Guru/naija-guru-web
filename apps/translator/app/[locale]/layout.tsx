@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { routing } from '../../i18n/routing';
 
 import { Toaster } from '@naija-spell-checker/ui';
@@ -40,6 +41,8 @@ export default async function RootLayout({
           <Toaster />
         </NextIntlClientProvider>
       </body>
+
+      <GoogleAnalytics gaId="G-N74M9WP9G7" />
     </html>
   );
 }

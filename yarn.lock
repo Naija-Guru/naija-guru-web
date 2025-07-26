@@ -2086,6 +2086,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/third-parties@npm:^15.4.4":
+  version: 15.4.4
+  resolution: "@next/third-parties@npm:15.4.4"
+  dependencies:
+    third-party-capital: "npm:1.0.20"
+  peerDependencies:
+    next: ^13.0.0 || ^14.0.0 || ^15.0.0
+    react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
+  checksum: 10c0/5c69b15bbdd9a6c345ed6a51c39ec04cd35dcfb34d20040fe0efd00fb910d3420849bf0b3e6bc8a0e91280d831851f2097e92447b7c9e7108e624c886365455e
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -5461,6 +5473,7 @@ __metadata:
     "@naija-spell-checker/layout": "workspace:^"
     "@naija-spell-checker/tailwind": "workspace:^"
     "@naija-spell-checker/ui": "workspace:^"
+    "@next/third-parties": "npm:^15.4.4"
     "@svgr/webpack": "npm:^8.1.0"
     "@types/negotiator": "npm:^0.6.3"
     "@types/node": "npm:^20"
@@ -9874,6 +9887,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"third-party-capital@npm:1.0.20":
+  version: 1.0.20
+  resolution: "third-party-capital@npm:1.0.20"
+  checksum: 10c0/7f45ff156ec9d7e2957a5b39061be22b780ffbd2d93c127252d908e2bff6cdd09f827a95909d457c8096e036f155006a38e355a06ee11cb6d63c7f4b150bbfb0
+  languageName: node
+  linkType: hard
+
 "through2@npm:^2.0.1":
   version: 2.0.5
   resolution: "through2@npm:2.0.5"
@@ -9911,6 +9931,7 @@ __metadata:
     "@naija-spell-checker/layout": "workspace:^"
     "@naija-spell-checker/tailwind": "workspace:^"
     "@naija-spell-checker/ui": "workspace:^"
+    "@next/third-parties": "npm:^15.4.4"
     "@svgr/webpack": "npm:^8.1.0"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"

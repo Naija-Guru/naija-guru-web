@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { routing } from '@/i18n/routing';
 
 import { Toaster } from '@naija-spell-checker/ui';
@@ -47,6 +48,8 @@ export default async function RootLayout({
         </NextIntlClientProvider>
         <Script src="/service-worker.js" />
       </body>
+
+      <GoogleAnalytics gaId="G-HNC16XYVG2" />
     </html>
   );
 }
