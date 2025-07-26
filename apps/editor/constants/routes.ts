@@ -27,19 +27,19 @@ export const HEADER_ROUTES = [
     ],
   },
   {
-    label: 'Content',
+    label: 'Literature',
     routes: [
       {
         label: 'Stories',
-        url: `${MAIN_WEBSITE_DOMAIN}/content/stories`,
+        url: `${MAIN_WEBSITE_DOMAIN}/literature/stories`,
       },
       {
         label: 'Mini Stories (LingQ)',
-        url: `${MAIN_WEBSITE_DOMAIN}/content/mini-stories`,
+        url: `${MAIN_WEBSITE_DOMAIN}/literature/mini-stories`,
       },
       {
         label: 'Poems',
-        url: `${MAIN_WEBSITE_DOMAIN}/content/poems`,
+        url: `${MAIN_WEBSITE_DOMAIN}/literature/poems`,
       },
     ],
   },
